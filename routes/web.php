@@ -68,8 +68,17 @@ Route::group(['prefix' => 'admin'], function(){
 
     # METHOD GET
     Route::get('/', 'Admin\BerandaController@index')->name('beranda_admin');
-    Route::get('profile/{id_admin}', 'Admin\ProfileController@index')->name('profile_admin');
     Route::get('sidebar_counter', 'Admin\BerandaController@sidebar_counter'); // AJAX
+
+
+
+    /** Halaman Beranda Utama */
+
+    # METHOD GET
+    Route::get('profile/{id_admin}', 'Admin\ProfileController@index')->name('profile_admin');
+
+    # METHOD PUT
+    Route::put('profile/ganti_password/{id_admin}', 'Admin\ProfileController@ganti_password')->name('ganti_password_admin');
 
 
 

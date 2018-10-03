@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -32,7 +33,7 @@ class ProfileController extends Controller
             $validasi = Validator::make($request->all(), [
                 'password_lama'         => 'required|alpha_num|max:18',
                 'password_baru'         => 'required|alpha_num|max:18|confirmed',
-                'password_confirmation' => 'required|alpha_num|max:18'
+                'password_baru_confirmation' => 'required|alpha_num|max:18'
             ]);
 
             $data = DB::table('tbl_admin')->where('id_admin', session('id_admin'))->first();
@@ -43,7 +44,8 @@ class ProfileController extends Controller
 
             }
 
-            if($data->password === $request->input('password_lama')) {
+            if(Hash::check($request->input('password_lama'), $data->password) &&
+              !Hash::check($request->input('password_baru'), $data->password)) {
 
                 DB::table('tbl_admin')->where('id_admin', $id_admin)->update([
                     'password'  => Hash::make($request->input('password_baru'), [
@@ -53,11 +55,11 @@ class ProfileController extends Controller
                     ]),
                 ]);
 
-                return redirect()->route('profile_admin')->with('success', 'Password Berhasil Di Ganti');
+                return redirect()->route('profile_admin', session('id_admin'))->with('success', 'Password Berhasil Di Ganti');
 
             } else {
 
-                return back()->withErrors('Password Lama Yang Anda Masukan Salah!');
+                return back()->withErrors('Password Yang Anda Masukan Tidak Memenuhi Ketentuan!');
 
             }
 

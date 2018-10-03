@@ -100,7 +100,9 @@
             <div class="box-header">
                 <h3 class="box-title">Informasi Detail</h3>
                 <div class="box-tools pull-right">
-                    <button class="btn btn-sm btn-warning btn-flat"><i class="fa fa-key fa-fw"></i> Ganti Password</button>
+                    <button type="button" class="btn btn-sm btn-warning btn-flat" data-toggle="modal" data-target="#ganti_password">
+                        <i class="fa fa-key fa-fw"></i> Ganti Password
+                    </button>
                 </div>
             </div>
             <div class="box-body row">
@@ -129,21 +131,37 @@
 @endsection
 
 @section('modal')
-<div class="modal modal-default fade" id="hapus_admin">
+<div class="modal modal-default fade" id="ganti_password">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Anda Yakin Ingin Lanjutkan ?</h4>
+                    <h4 class="modal-title">Ganti Password Akun</h4>
                 </div>
-                {!! Form::open(['id' => 'form_hapus_admin']) !!}
-                    <div class="modal-footer">
-                        @csrf
-                        <button type="button" class="btn pull-left" data-dismiss="modal">Batal</button>
-                        <button type="submit" name="simpan" value="true" class="btn btn-danger"><i class="fa fa-trash fa-fw"></i> Hapus admin</button>
+                <div class="modal-body">
+                {!! Form::open(['route' => ['ganti_password_admin', session('id_admin')], 'method' => 'PUT']) !!}
+                    <div class="form-group has-feedback">
+                        {!! Form::label('inp_password_lama', 'Password Lama') !!}
+                        {!! Form::password('password_lama', ['id' => 'inp_password_lama', 'class' => 'form-control']) !!}
+                        <span class="help-block"><small>Silahkan masukan password admin tanpa karakter khusus</small></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        {!! Form::label('inp_password_baru', 'Password Sementara') !!}
+                        {!! Form::password('password_baru', ['id' => 'inp_password_baru', 'class' => 'form-control']) !!}
+                        <span class="help-block"><small>Silahkan masukan password admin tanpa karakter khusus</small></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        {!! Form::label('inp_password_konfirmasi', 'Password Sementara') !!}
+                        {!! Form::password('password_baru_confirmation', ['id' => 'inp_password_konfirmasi', 'class' => 'form-control']) !!}
+                        <span class="help-block"><small>Silahkan masukan password admin tanpa karakter khusus</small></span>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" name="simpan" value="true" class="btn btn-primary btn-flat">Simpan</button>
+                        <button type="reset" class="btn btn-danger btn-flat pull-right">Reset</button>
                     </div>
                 {!! Form::close() !!}
+                </div>
             </div>
             <!-- /.modal-content -->
         </div>
