@@ -6,6 +6,15 @@
 
     {{ Html::style('admin_assets/component/datatables.net-bs/css/dataTables.bootstrap.min.css') }}
 
+    <style>
+    .profile-user-img {
+        margin: 0 auto;
+        width: 200px;
+        padding: 3px;
+        border: 3px solid #d2d6de;
+    }
+    </style>
+
 @endsection
 
 @section('content-header')
@@ -57,7 +66,7 @@
                             <th>ID Admin</th>
                             <th>Nama Admin</th>
                             <th>SuperAdmin</th>
-                            <th>Di Blokir</th>
+                            <th>Status Blokir</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -71,14 +80,14 @@
                                     @if ($item->superadmin == true)
                                         <span class="label bg-green"><i class="fa fa-check fa-fw"></i> SuperAdmin</span>
                                     @else
-                                        <span class="label bg-red"><i class="fa fa-close fa-fw"> Bukan SuperAdmin</i></span>
+                                        <span class="label bg-red"><i class="fa fa-close fa-fw"></i> SuperAdmin</span>
                                     @endif
                                 </td>
                                 <td>
                                     @if ($item->diblokir == true)
-                                        <span class="label bg-red"><i class="fa fa-ban fa-fw"></i> Di Blokir</span>
+                                        <span class="label bg-green"><i class="fa fa-check fa-fw"></i> Ya</span>
                                     @else
-                                        <span class="label bg-green"><i class="fa fa-check fa-fw"></i> Tidak Di Blokir</span>
+                                        <span class="label bg-red"><i class="fa fa-close fa-fw"></i> Tidak</span>
                                     @endif
                                 </td>
                                 <td>
@@ -88,13 +97,30 @@
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <a href="#" class="detail_admin"><i class="fa fa-user fa-fw"></i> Lihat Profile </a>
+                                                <a href="#" class="detail_admin" data-toggle="modal" data-target="#detail_admin" id="{{ $counter }}">
+                                                    <i class="fa fa-user fa-fw"></i> Detail Akun
+                                                </a>
                                             </li>
+                                            @if(session('id_admin') != $item->id_admin)
                                             <li>
                                                 <a href="#" class="hapus_admin" data-toggle="modal" data-target="#hapus_admin" id="{{ $counter }}">
                                                     <i class="fa fa-trash fa-fw"></i> Hapus Akun
                                                 </a>
                                             </li>
+                                                @if($item->diblokir)
+                                                    <li>
+                                                        <a href="{{ route('blokir', ['id_admin' => $item->id_admin]) }}">
+                                                            <i class="fa fa-unlock fa-fw"></i> Lepas Blokir
+                                                        </a>
+                                                    </li>
+                                                @else
+                                                    <li>
+                                                        <a href="{{ route('blokir', ['id_admin' => $item->id_admin]) }}">
+                                                            <i class="fa fa-lock fa-fw"></i> Blokir Akun
+                                                        </a>
+                                                    </li>
+                                                @endif
+                                            @endif
                                         </ul>
                                     </div>
                                 </td>
@@ -126,12 +152,7 @@
                         <div class="form-group has-feedback">
                             {!! Form::label('inp_nama_admin', 'Nama Lengkap Admin') !!}
                             {!! Form::text('nama_lengkap',  null, ['id' => 'inp_nama_admin', 'class' => 'form-control']) !!}
-                            <span class="help-block"><small>Masukan nama admin tanpa karakter khusus dan angka</small></span>
-                        </div>
-                        <div class="form-group has-feedback">
-                            {!! Form::label('inp_email_aktif', 'Email Aktif') !!}
-                            {!! Form::email('email',  null, ['id' => 'inp_email_aktif', 'class' => 'form-control']) !!}
-                            <span class="help-block"><small>Silahkan masukan email aktif </small></span>
+                            <span class="help-block"><small>Masukan nama tanpa karakter khusus dan angka</small></span>
                         </div>
                         <div class="form-group has-feedback">
                             {!! Form::label('inp_foto_admin', 'Foto Admin') !!}
@@ -141,13 +162,15 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group has-feedback">
+                            {!! Form::label('inp_email_aktif', 'Email Aktif') !!}
+                            {!! Form::email('email',  null, ['id' => 'inp_email_aktif', 'class' => 'form-control']) !!}
+                            <span class="help-block"><small>Silahkan masukan email aktif </small></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
                             {!! Form::label('inp_password', 'Password Sementara') !!}
                             {!! Form::password('password', ['id' => 'inp_password', 'class' => 'form-control']) !!}
                             <span class="help-block"><small>Silahkan masukan password admin tanpa karakter khusus</small></span>
-                        </div>
-                        <div class="form-group has-feedback">
-                            <button type="button" class="btn btn-primary" id="password_generator">Dapatkan Password Default</button>
-                            <span class="help-block"><small>Silahkan ulangi password admin di atas</small></span>
                         </div>
                     </div>
                 </div>
@@ -176,6 +199,38 @@
                     <button type="submit" name="simpan" value="true" class="btn btn-danger"><i class="fa fa-trash fa-fw"></i> Hapus admin</button>
                 </div>
             {!! Form::close() !!}
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<div class="modal modal-default fade" id="detail_admin">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body row">
+                <div class="col-md-6">
+                    <h4 class="text-center">Foto Admin</h4>
+                    <img src="" id="foto" class="profile-user-img img-responsive img-circle">
+                </div>
+                <div class="col-md-6">
+                    <h4>Nama Lengkap</h4>
+                    <p class="text-muted" id="nama_lengkap"></p>
+                    <h4>SuperAdmin</h4>
+                    <p><span class="label" id="superadmin"></span></p>
+                    <h4>Alamat Email</h4>
+                    <p class="text-muted" id="email"></p>
+                    <h4>Status Blokir</h4>
+                    <p><span class="label" id="blokir"></span></p>
+                    <h4>Tanggal Bergabung</h4>
+                    <p class="text-muted" id="tanggal"></p>
+                </div>
+            </div>
         </div>
         <!-- /.modal-content -->
     </div>

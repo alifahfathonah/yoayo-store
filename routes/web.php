@@ -127,13 +127,15 @@ Route::group(['prefix' => 'admin'], function(){
 
     # METHOD GET
     Route::get('superadmin/admin', 'Admin\Superadmin\AdminController@index')->name('superadmin_admin');
+    Route::get('superadmin/blokir_admin/{id_admin}', 'Admin\Superadmin\AdminController@blokir_admin')->name('blokir');
+    Route::get('superadmin/get_admin/{id_admin}', 'Admin\Superadmin\AdminController@get_admin'); // AJAX
 
     # METHOD POST
-    Route::post('superadmin/admin/tambah_admin', 'Admin\Superadmin\AdminController@tambah_admin')->name('tambah_admin');
-    Route::post('superadmin/admin/edit_admin/}id_admin}', 'Admin\Superadmin\AdminController@edit_admin'); // AJAX
-    Route::post('superadmin/admin/hapus_admin/{id_admin}', 'Admin\Superadmin\AdminController@hapus_admin'); // AJAX
-    Route::post('superadmin/admin/ubah_status_admin/{id_admin}', 'Admin\Superadmin\AdminController@ubah_status_admin'); // AJAX
-    Route::post('superadmin/admin/blokir_admin/{id_admin}', 'Admin\Superadmin\AdminController@blokir_admin'); // AJAX
+    Route::post('superadmin/tambah_admin', 'Admin\Superadmin\AdminController@tambah_admin')->name('tambah_admin');
+    Route::post('superadmin/edit_admin/}id_admin}', 'Admin\Superadmin\AdminController@edit_admin'); // AJAX
+    Route::post('superadmin/hapus_admin/{id_admin}', 'Admin\Superadmin\AdminController@hapus_admin'); // AJAX
+    Route::post('superadmin/ubah_status_admin/{id_admin}', 'Admin\Superadmin\AdminController@ubah_status_admin'); // AJAX
+
 
 
 });

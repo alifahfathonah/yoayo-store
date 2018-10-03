@@ -34,9 +34,8 @@ class AdminController extends Controller
 
             $validasi = Validator::make($request->all(), [
                 'nama_lengkap'  => 'required|regex:/^[a-zA-Z\s]*$/|max:40',
-                'email'         => 'required|email',
-                'password'      => 'required|alpha_num|max:18|confirmed',
-                'password_confirmation' => 'required|alpha_num',
+                'email'         => 'required|email|unique:tbl_admin|max:30',
+                'password'      => 'required|alpha_num|max:18',
                 'foto'          => 'nullable|iamge|mimes:jpg,jpeg,png'
             ]);
 
@@ -61,7 +60,7 @@ class AdminController extends Controller
 
 
             DB::table('tbl_admin')->insert([
-                'id_admin'      => $id_admin,
+                'id_admin'      => $this->set_id_admin(),
                 'nama_lengkap'  => $request->input('nama_lengkap'),
                 'email'         => $request->input('email'),
                 'password'      => Hash::make($request->input('password'), [
@@ -87,7 +86,7 @@ class AdminController extends Controller
 
             $validasi = Validator::make($request->all(), [
                 'nama_lengkap'  => 'required|regex:/^[a-zA-Z\s]*$/|max:40',
-                'email'         => 'required|email',
+                'email'         => 'required|email|unique:tbl_admin|max:30',
                 'foto'          => 'nullable|iamge|mimes:jpg,jpeg,png'
             ]);
 
@@ -163,7 +162,11 @@ class AdminController extends Controller
 
             $data = DB::table('tbl_admin')->where('id_admin', $id_admin);
 
-            Storage::delete('public/avatars/admin/'.$data->first()->foto);
+            if($data->first()->foto != 'default.png') {
+
+                Storage::delete('public/avatars/admin/'.$data->first()->foto);
+
+            }
 
             $data->delete();
 
@@ -179,23 +182,13 @@ class AdminController extends Controller
 
     public function blokir_admin(Request $request, $id_admin) {
 
-        if ($request->has('simpan') && session('superadmin') == true) {
+        if (session('superadmin') == true) {
 
-            $validasi = Validator::make($request->all(), [
-                'blokir_admin'  => 'required|boolean',
-            ]);
+            $data = DB::table('tbl_admin')->where('id_admin', $id_admin);
 
-            if ($validasi->fails()) {
+            $data->update([ 'diblokir' => $data->first()->diblokir ? 0 : 1]);
 
-                return back()->withErrors($validasi);
-
-            }
-
-            DB::table('tbl_admin')->where('id_admin', $id_admin)->update([
-                'diblokir' => $request->input('blokir_admin'),
-            ]);
-
-            $request->input('blokir_admin') == 1 ? $status = 'Admin Di Blokir' : $status = 'Blokir Admin DI Cabut';
+            $data->first()->diblokir == 1 ? $status = 'Admin Di Blokir' : $status = 'Blokir Admin DI Cabut';
 
             return redirect()->route('superadmin_admin')->with('success', 'Berhasil '.$status);
 
@@ -204,6 +197,18 @@ class AdminController extends Controller
             return back()->withErrors('Terjadi Kesalahan Saat Menyimpan Data');
 
         }
+
+    }
+
+    public function get_admin(Request $request, $id_admin) {
+
+        $data = DB::table('tbl_admin')
+            ->select(
+                'id_admin', 'nama_lengkap', 'email',
+                'foto', 'superadmin', 'diblokir', 'tanggal_bergabung'
+            )->where('id_admin', $id_admin)->first();
+
+        return response()->json($data);
 
     }
 

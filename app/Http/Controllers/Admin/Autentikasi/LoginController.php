@@ -30,7 +30,19 @@ class LoginController extends Controller
                 'password'  => 'required|alpha_num'
             ]);
 
-            ($validasi->fails()) ? redirect()->route('login_admin')->with('fail', 'Email Atau Password Salah') : false;
+            $status = DB::table('tbl_admin')->where('email', $request->input('email'))->first();
+
+            if ($validasi->fails()) {
+
+                return redirect()->route('login_admin')->with('fail', 'Email Atau Password Salah');
+
+            }
+
+            if($status->diblokir) {
+
+                return redirect()->route('login_admin')->with('fail', 'Akun Telah Di Blokir');
+
+            }
 
             $data = DB::table('tbl_admin')->where('email', $request->input('email'))->first();
 

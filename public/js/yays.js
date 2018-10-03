@@ -56,8 +56,8 @@ $('a.edit_produk').click(function(){
         if($('option#merk_'+id).val() == data['id_merk']){
             $('option#merk_'+id).attr('selected', 'selected')
         }
-        let foto_url = $('img#foto_barang').attr('src')
-        $('img#foto_barang').attr('src', foto_url+'/'+data['foto_barang'])
+        let foto_url = 'http://127.0.0.1:8000/storage/avatars/admin/'
+        $('img#foto_barang').attr('src', foto_url+data['foto_barang'])
         $('img#foto_barang').attr('alt', data['nama_barang'])
         $('input#inp_edit_berat_barang').val(data['berat_barang'])
         $('input#inp_edit_harga_satuan').val(data['harga_satuan'])
@@ -155,6 +155,7 @@ $('a.edit_kategori').click(function(){
 })
 
 //** Hapus kategori */
+
 $('a.hapus_kategori').click(function(){
     $('form#form_hapus_kategori').attr('action','http://127.0.0.1:8000/admin/hapus_kategori/'+$('#id_'+this.id).html())
 })
@@ -164,8 +165,40 @@ $('a.hapus_kategori').click(function(){
 
 //** SUPERADMIN : ADMIN *///////////////////////////////////////////////////////////////////////////
 
-//** Default Password Generator */
+//** Hapus kategori */
 
-$('button#password_generator').click(function(){
-    $('input#inp_password').val()
+$('a.hapus_admin').click(function(){
+    $('form#form_hapus_admin').attr('action','http://127.0.0.1:8000/admin/superadmin/hapus_admin/'+$('#id_'+this.id).html())
+})
+
+//** Profile Admin */
+$('a.detail_admin').click(function(){
+    let id_admin = $('td#id_'+this.id).html()
+    $.get('http://127.0.0.1:8000/admin/superadmin/get_admin/'+id_admin).done(function(data){
+        $('h4.modal-title').html('Detail Akun '+data['nama_lengkap'])
+        $('img#foto').attr('src', 'http://127.0.0.1:8000/storage/avatars/admin/'+data['foto'])
+        $('img#foto').attr('alt', data['nama_lengkap'])
+        $('p#nama_lengkap').html(data['nama_lengkap'])
+        $('p#email').html(data['email'])
+        $('p#tanggal').html(data['tanggal_bergabung'])
+        if(data['diblokir']){
+            $('span#blokir').addClass('bg-green').html(
+                '<i class="fa fa-check fa-fw"></i> Ya'
+            )
+        } else {
+            $('span#blokir').addClass('bg-red').html(
+                '<i class="fa fa-close fa-fw"></i> Tidak'
+            )
+        }
+        if(data['superadmin']){
+            $('span#superadmin').addClass('bg-green').html(
+                '<i class="fa fa-check fa-fw"></i> Superadmin'
+            )
+        } else {
+            $('span#superadmin').addClass('bg-red').html(
+                '<i class="fa fa-close fa-fw"></i> Bukan Superadmin'
+            )
+        }
+
+    })
 })
