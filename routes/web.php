@@ -127,8 +127,12 @@ Route::group(['prefix' => 'admin'], function(){
 
     # METHOD POST
     Route::post('tambah_merk', 'Admin\Produk\MerkController@tambah_merk')->name('tambah_merk');
-    Route::post('edit_merk/{id_merk}', 'Admin\Produk\MerkController@edit_merk'); // AJAX
-    Route::post('hapus_merk/{id_merk}', 'Admin\Produk\MerkController@hapus_merk'); // AJAX
+
+    # METHOD PUT
+    Route::put('edit_merk/{id_merk}', 'Admin\Produk\MerkController@edit_merk'); // AJAX
+
+    # METHOD DELETE
+    Route::delete('hapus_merk/{id_merk}', 'Admin\Produk\MerkController@hapus_merk'); // AJAX
 
 
 

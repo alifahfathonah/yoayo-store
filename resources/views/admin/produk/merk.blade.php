@@ -127,9 +127,8 @@
                     <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Edit Merk Produk</h4>
             </div>
-            {!! Form::open(['id' => 'form_edit_merk']) !!}
+            {!! Form::open(['id' => 'form_edit_merk', 'method' => 'PUT']) !!}
                 <div class="modal-body">
-                    @csrf
                     <div class="form-group has-feedback">
                         {!! Form::label('text_id_merk', 'ID Merk') !!}
                         {!! Form::text('id_merk', null, ['class' => 'form-control id_merk', 'disabled' => '']) !!}
@@ -158,7 +157,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Anda Yakin Ingin Lanjutkan ?</h4>
                 </div>
-                {!! Form::open(['id' => 'form_hapus_merk']) !!}
+                {!! Form::open(['id' => 'form_hapus_merk', 'method' => 'DELETE']) !!}
                     <div class="modal-footer">
                         @csrf
                         <button type="button" class="btn pull-left" data-dismiss="modal">Batal</button>
