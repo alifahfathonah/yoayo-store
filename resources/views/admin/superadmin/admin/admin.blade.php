@@ -150,7 +150,7 @@
                     <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Tambah Admin</h4>
             </div>
-            {!! Form::open(['route' => 'tambah_admin', 'id' => 'form_tambah_admin', 'enctype' => 'multipart/form-data']) !!}
+            {!! Form::open(['route' => 'tambah_admin', 'id' => 'form_tambah_admin', 'files' => true]) !!}
                 <div class="modal-body row">
                     @csrf
                     <div class="col-md-6">
@@ -260,7 +260,7 @@
                     <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Anda Yakin Ingin Lanjutkan ?</h4>
             </div>
-            {!! Form::open(['id' => 'form_hapus_admin']) !!}
+            {!! Form::open(['method' => 'DELETE', 'id' => 'form_hapus_admin']) !!}
                 <div class="modal-footer">
                     @csrf
                     <button type="button" class="btn pull-left" data-dismiss="modal">Batal</button>

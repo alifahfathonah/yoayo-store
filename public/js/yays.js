@@ -51,7 +51,7 @@ $('a.edit_produk').click(function(){
         $('input#inp_edit_nama_barang').val(data['nama_barang'])
         $('select#inp_edit_id_kategori option[value*="'+data['id_kategori']+'"]').attr('selected', 'selected')
         $('select#inp_edit_id_merk option[value*="'+data['id_merk']+'"]').attr('selected', 'selected')
-        let foto_url = 'http://127.0.0.1:8000/storage/avatars/admin/'
+        let foto_url = 'http://127.0.0.1:8000/storage/admin/image/produk/'
         $('img#foto_barang').attr('src', foto_url+data['foto_barang'])
         $('img#foto_barang').attr('alt', data['nama_barang'])
         $('input#inp_edit_berat_barang').val(data['berat_barang'])

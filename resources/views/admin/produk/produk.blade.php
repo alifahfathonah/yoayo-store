@@ -44,7 +44,7 @@
                     Form Input Produk
                 </h3>
             </div>
-            {!! Form::open(['route' => 'tambah_produk', 'enctype' => 'multipart/form-data']) !!}
+            {!! Form::open(['route' => 'tambah_produk', 'files' => true]) !!}
                 @csrf
                 <div class="box-body row">
                     <div class="col-sm-6">
@@ -99,7 +99,7 @@
                 </div>
                 <div class="box-footer">
                     <button type="submit" id="simpan" name="simpan" value="true" class="btn btn-primary btn-flat">Simpan kategori</button>
-                    <button type="button" id="batal" class="btn btn-danger btn-flat pull-right">Batal</button>
+                    <button type="reset" class="btn btn-danger btn-flat pull-right">Batal</button>
                 </div>
             {!! Form::close() !!}
         </div>
@@ -182,7 +182,7 @@
                     <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Edit Produk</h4>
             </div>
-            {!! Form::open(['id' => 'form_edit_produk', 'enctype' => 'multipart/form-data']) !!}
+            {!! Form::open(['id' => 'form_edit_produk', 'method' => 'PUT', 'files' => true]) !!}
                 <div class="modal-body row">
                     @csrf
                     <div class="col-md-6">
@@ -240,7 +240,7 @@
                     </div>
                     <div class="col-md-12">
                         <h3 class="text-center">Foto Produk</h3>
-                        {{ Html::image(asset('storage/admin/image/produk/'), '', ['id' => 'foto_barang', 'class' => 'img-responsive', 'style' => 'margin: 0 auto;']) }}
+                        {{ Html::image(null, null, ['id' => 'foto_barang', 'class' => 'img-responsive', 'style' => 'margin: 0 auto;']) }}
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -262,7 +262,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Anda Yakin Ingin Lanjutkan ?</h4>
                 </div>
-                {!! Form::open(['id' => 'form_hapus_produk']) !!}
+                {!! Form::open(['id' => 'form_hapus_produk', 'method' => 'DELETE']) !!}
                     <div class="modal-footer">
                         @csrf
                         <button type="button" class="btn pull-left" data-dismiss="modal">Batal</button>

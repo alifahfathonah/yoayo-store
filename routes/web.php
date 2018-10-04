@@ -101,8 +101,12 @@ Route::group(['prefix' => 'admin'], function(){
 
     # METHOD POST
     Route::post('produk', 'Admin\Produk\ProdukController@tambah_produk')->name('tambah_produk');
-    Route::post('edit_produk/{id_barang}', 'Admin\Produk\ProdukController@edit_produk'); // AJAX
-    Route::post('hapus_produk/{id_barang}', 'Admin\Produk\ProdukController@hapus_produk'); // AJAX
+
+    # METHOD PUT
+    Route::put('edit_produk/{id_barang}', 'Admin\Produk\ProdukController@edit_produk');
+
+    # METHOD DELETE
+    Route::delete('hapus_produk/{id_barang}', 'Admin\Produk\ProdukController@hapus_produk');
 
 
 
@@ -116,10 +120,10 @@ Route::group(['prefix' => 'admin'], function(){
     Route::post('kategori', 'Admin\Produk\KategoriController@tambah_kategori')->name('tambah_kategori');
 
     # METHOD PUT
-    Route::put('edit_kategori/{id_kategori}', 'Admin\Produk\KategoriController@edit_kategori'); // AJAX
+    Route::put('edit_kategori/{id_kategori}', 'Admin\Produk\KategoriController@edit_kategori');
 
     # METHOD DELETE
-    Route::delete('hapus_kategori/{id_kategori}', 'Admin\Produk\KategoriController@hapus_kategori'); // AJAX
+    Route::delete('hapus_kategori/{id_kategori}', 'Admin\Produk\KategoriController@hapus_kategori');
 
 
 
@@ -133,10 +137,10 @@ Route::group(['prefix' => 'admin'], function(){
     Route::post('tambah_merk', 'Admin\Produk\MerkController@tambah_merk')->name('tambah_merk');
 
     # METHOD PUT
-    Route::put('edit_merk/{id_merk}', 'Admin\Produk\MerkController@edit_merk'); // AJAX
+    Route::put('edit_merk/{id_merk}', 'Admin\Produk\MerkController@edit_merk');
 
     # METHOD DELETE
-    Route::delete('hapus_merk/{id_merk}', 'Admin\Produk\MerkController@hapus_merk'); // AJAX
+    Route::delete('hapus_merk/{id_merk}', 'Admin\Produk\MerkController@hapus_merk');
 
 
 
@@ -149,11 +153,13 @@ Route::group(['prefix' => 'admin'], function(){
 
     # METHOD POST
     Route::post('superadmin/tambah_admin', 'Admin\Superadmin\AdminController@tambah_admin')->name('tambah_admin');
-    Route::post('superadmin/edit_admin/}id_admin}', 'Admin\Superadmin\AdminController@edit_admin'); // AJAX
-    Route::post('superadmin/hapus_admin/{id_admin}', 'Admin\Superadmin\AdminController@hapus_admin'); // AJAX
 
     # METHOD PUT
-    Route::put('superadmin/ubah_status_admin/{id_admin}', 'Admin\Superadmin\AdminController@ubah_status_admin'); // AJAX
+    Route::put('superadmin/edit_admin/}id_admin}', 'Admin\Superadmin\AdminController@edit_admin');
+    Route::put('superadmin/ubah_status_admin/{id_admin}', 'Admin\Superadmin\AdminController@ubah_status_admin');
+
+    # METHOD DELETE
+    Route::delete('superadmin/hapus_admin/{id_admin}', 'Admin\Superadmin\AdminController@hapus_admin');
 
 
 
