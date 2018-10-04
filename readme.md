@@ -9,6 +9,6 @@
  - User = miqbal.pengguna@email.com
  - Pass = pengguna123
 
-## Halaman Pengguna
+## Halaman Admin
  - User = miqbal.admin@email.com
  - Pass = admin123
