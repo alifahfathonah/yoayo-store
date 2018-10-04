@@ -114,8 +114,12 @@ Route::group(['prefix' => 'admin'], function(){
 
     # METHOD POST
     Route::post('kategori', 'Admin\Produk\KategoriController@tambah_kategori')->name('tambah_kategori');
-    Route::post('edit_kategori/{id_kategori}', 'Admin\Produk\KategoriController@edit_kategori'); // AJAX
-    Route::post('hapus_kategori/{id_kategori}', 'Admin\Produk\KategoriController@hapus_kategori'); // AJAX
+
+    # METHOD PUT
+    Route::put('edit_kategori/{id_kategori}', 'Admin\Produk\KategoriController@edit_kategori'); // AJAX
+
+    # METHOD DELETE
+    Route::delete('hapus_kategori/{id_kategori}', 'Admin\Produk\KategoriController@hapus_kategori'); // AJAX
 
 
 
