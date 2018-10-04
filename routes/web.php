@@ -143,7 +143,9 @@ Route::group(['prefix' => 'admin'], function(){
     Route::post('superadmin/tambah_admin', 'Admin\Superadmin\AdminController@tambah_admin')->name('tambah_admin');
     Route::post('superadmin/edit_admin/}id_admin}', 'Admin\Superadmin\AdminController@edit_admin'); // AJAX
     Route::post('superadmin/hapus_admin/{id_admin}', 'Admin\Superadmin\AdminController@hapus_admin'); // AJAX
-    Route::post('superadmin/ubah_status_admin/{id_admin}', 'Admin\Superadmin\AdminController@ubah_status_admin'); // AJAX
+
+    # METHOD PUT
+    Route::put('superadmin/ubah_status_admin/{id_admin}', 'Admin\Superadmin\AdminController@ubah_status_admin'); // AJAX
 
 
 

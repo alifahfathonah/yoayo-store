@@ -36,7 +36,7 @@ class AdminController extends Controller
                 'nama_lengkap'  => 'required|regex:/^[a-zA-Z\s]*$/|max:40',
                 'email'         => 'required|email|unique:tbl_admin|max:30',
                 'password'      => 'required|alpha_num|max:18',
-                'foto'          => 'nullable|iamge|mimes:jpg,jpeg,png'
+                'foto'          => 'nullable|image|mimes:jpg,jpeg,png'
             ]);
 
             if ($validasi->fails()) {
@@ -87,7 +87,7 @@ class AdminController extends Controller
             $validasi = Validator::make($request->all(), [
                 'nama_lengkap'  => 'required|regex:/^[a-zA-Z\s]*$/|max:40',
                 'email'         => 'required|email|unique:tbl_admin|max:30',
-                'foto'          => 'nullable|iamge|mimes:jpg,jpeg,png'
+                'foto'          => 'nullable|image|mimes:jpg,jpeg,png'
             ]);
 
             if ($validasi->fails()) {

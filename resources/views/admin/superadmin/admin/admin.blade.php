@@ -107,6 +107,11 @@
                                                     <i class="fa fa-trash fa-fw"></i> Hapus Akun
                                                 </a>
                                             </li>
+                                            <li>
+                                                <a href="#" class="ubah_status_admin" data-toggle="modal" data-target="#ubah_status_admin" id="{{ $counter }}">
+                                                    <i class="fa fa-info-circle fa-fw"></i> Ubah Status Akun
+                                                </a>
+                                            </li>
                                                 @if($item->diblokir)
                                                     <li>
                                                         <a href="{{ route('blokir', ['id_admin' => $item->id_admin]) }}">
@@ -184,27 +189,6 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
-<div class="modal modal-default fade" id="hapus_admin">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Anda Yakin Ingin Lanjutkan ?</h4>
-            </div>
-            {!! Form::open(['id' => 'form_hapus_admin']) !!}
-                <div class="modal-footer">
-                    @csrf
-                    <button type="button" class="btn pull-left" data-dismiss="modal">Batal</button>
-                    <button type="submit" name="simpan" value="true" class="btn btn-danger"><i class="fa fa-trash fa-fw"></i> Hapus admin</button>
-                </div>
-            {!! Form::close() !!}
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-<!-- /.modal -->
 <div class="modal modal-default fade" id="detail_admin">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -231,6 +215,58 @@
                     <p class="text-muted" id="tanggal"></p>
                 </div>
             </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<div class="modal modal-default fade" id="ubah_status_admin">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Ubah Status Admin</h4>
+            </div>
+            {!! Form::open(['method' => 'PUT', 'id' => 'form_edit_status_admin']) !!}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="inp_edit_status_admin">Status Admin</label>
+                        <select name="superadmin" class="form-control" id="inp_edit_status_admin">
+                            <option value="1">Superadmin</option>
+                            <option value="0">Admin</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn pull-left" data-dismiss="modal">Batal</button>
+                    <button type="submit" name="simpan" value="true" class="btn btn-primary">
+                        <i class="fa fa-refresh fa-fw"></i> Ganti Status admin
+                    </button>
+                </div>
+            {!! Form::close() !!}
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<div class="modal modal-default fade" id="hapus_admin">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Anda Yakin Ingin Lanjutkan ?</h4>
+            </div>
+            {!! Form::open(['id' => 'form_hapus_admin']) !!}
+                <div class="modal-footer">
+                    @csrf
+                    <button type="button" class="btn pull-left" data-dismiss="modal">Batal</button>
+                    <button type="submit" name="simpan" value="true" class="btn btn-danger"><i class="fa fa-trash fa-fw"></i> Hapus admin</button>
+                </div>
+            {!! Form::close() !!}
         </div>
         <!-- /.modal-content -->
     </div>

@@ -49,13 +49,8 @@ $('a.edit_produk').click(function(){
         $('h4.modal-title').html('Edit Produk - #'+data['id_barang'])
         $('form#form_edit_produk').attr('action','http://127.0.0.1:8000/admin/edit_produk/'+data['id_barang'])
         $('input#inp_edit_nama_barang').val(data['nama_barang'])
-        console.log($('#kategori_'+id).val())
-        if($('option#kategori_'+id).val() == data['id_kategori']){
-            $('option#kategori_'+id).attr('selected', 'selected')
-        }
-        if($('option#merk_'+id).val() == data['id_merk']){
-            $('option#merk_'+id).attr('selected', 'selected')
-        }
+        $('select#inp_edit_id_kategori option[value*="'+data['id_kategori']+'"]').attr('selected', 'selected')
+        $('select#inp_edit_id_merk option[value*="'+data['id_merk']+'"]').attr('selected', 'selected')
         let foto_url = 'http://127.0.0.1:8000/storage/avatars/admin/'
         $('img#foto_barang').attr('src', foto_url+data['foto_barang'])
         $('img#foto_barang').attr('alt', data['nama_barang'])
@@ -165,6 +160,16 @@ $('a.hapus_kategori').click(function(){
 
 //** SUPERADMIN : ADMIN *///////////////////////////////////////////////////////////////////////////
 
+//** Edit Status Admin */
+
+$('a.ubah_status_admin').click(function(){
+    $('form#form_edit_status_admin').attr('action','http://127.0.0.1:8000/admin/superadmin/ubah_status_admin/'+$('#id_'+this.id).html())
+    let id_admin = $('td#id_'+this.id).html()
+    $.get('http://127.0.0.1:8000/admin/superadmin/get_admin/'+id_admin).done(function(data){
+        $('select#inp_edit_status_admin option[value*="'+data['superadmin']+'"]').attr('selected', 'selected')
+    })
+})
+
 //** Hapus kategori */
 
 $('a.hapus_admin').click(function(){
@@ -172,6 +177,7 @@ $('a.hapus_admin').click(function(){
 })
 
 //** Profile Admin */
+
 $('a.detail_admin').click(function(){
     let id_admin = $('td#id_'+this.id).html()
     $.get('http://127.0.0.1:8000/admin/superadmin/get_admin/'+id_admin).done(function(data){
