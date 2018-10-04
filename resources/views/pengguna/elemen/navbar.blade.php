@@ -9,7 +9,7 @@
                         @if (session('email'))
 
                             <li style="color: white;">
-                                <i class="fa fa-user fa-fw"></i> Welcome, 
+                                <i class="fa fa-user fa-fw"></i> Welcome,
                                 <a href="{{ route('akun_pengguna', ['nama_pengguna'=> str_replace(' ', '_', strtolower(session('nama_lengkap')))]) }}">
                                     {{ session('nama_lengkap') }}
                                 </a>
@@ -20,14 +20,14 @@
                                     Keranjang ( {{ (new App\Http\Controllers\Pengguna\Keranjang\KeranjangController)::count_keranjang() }} )
                                 </a>
                             </li>
-                            <li><a href="{{ route('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>   
-                              
+                            <li><a href="{{ route('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
+
                         @else
 
                             <li><a href="/login"><i class="fa fa-sign-in fa-fw"></i> Login</a></li>
-                        
+
                         @endif
-                        
+
                     </ul>
                 </div>
             </div>
@@ -49,12 +49,7 @@
                             Kategori Item <i class="fa fa-angle-down" aria-hidden="true"></i>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="nav-item"><a class="nav-link" href="compare.html">Compare</a></li>
-                                <li class="nav-item"><a class="nav-link" href="checkout.html">Checkout Method</a></li>
-                                <li class="nav-item"><a class="nav-link" href="register.html">Checkout Register</a></li>
-                                <li class="nav-item"><a class="nav-link" href="track.html">Track</a></li>
-                                <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
-                                <li class="nav-item"><a class="nav-link" href="404.html">404</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#">Comming Soon</a></li>
                             </ul>
                         </li>
                         <li class="nav-item"><a class="nav-link" href="#">Tentang Kami</a></li>
