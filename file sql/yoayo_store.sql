@@ -44,7 +44,7 @@ CREATE TABLE `tbl_admin` (
 --
 
 INSERT INTO `tbl_admin` (`id_admin`, `nama_lengkap`, `email`, `password`, `foto`, `superadmin`, `diblokir`, `tanggal_bergabung`) VALUES
-('ADM1809251', 'Muhammad Iqbal', 'miqbal.admin@oemail.com', '$2y$10$mzlS/DKNHNc8q.K8HO3NHO/DLcBMa7i5YrQ2b2HIDcM5ydvWu2QiO', 'muhammad_iqbal.jpg', 1, 0, '2018-09-25 20:28:55');
+('ADM1809251', 'Muhammad Iqbal', 'miqbal.admin@email.com', '$2y$10$mzlS/DKNHNc8q.K8HO3NHO/DLcBMa7i5YrQ2b2HIDcM5ydvWu2QiO', 'muhammad_iqbal.jpg', 1, 0, '2018-09-25 20:28:55');
 
 -- --------------------------------------------------------
 
