@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 03, 2018 at 07:09 PM
+-- Generation Time: Oct 04, 2018 at 05:12 AM
 -- Server version: 10.1.35-MariaDB
 -- PHP Version: 7.2.9
 
@@ -44,8 +44,7 @@ CREATE TABLE `tbl_admin` (
 --
 
 INSERT INTO `tbl_admin` (`id_admin`, `nama_lengkap`, `email`, `password`, `foto`, `superadmin`, `diblokir`, `tanggal_bergabung`) VALUES
-('ADM1809251', 'Muhammad Iqbal', 'miqbal.1997@outlook.com', '$2y$10$f07oWs/4prF.OjvyyfEOtezqySLo6mYk5ABPyhKpkcLurDz.Bz.pe', 'muhammad_iqbal.jpg', 1, 0, '2018-09-25 20:28:55'),
-('ADM1810032', 'Dimas Wahyu Pamungkas', 'dimas@email.com', '$2y$10$zHfrkco5MAtjaKRo3o60E.I10TYJ6I8QeOcMdmla6xJ6cX2F04GYC', 'default.png', 0, 0, '2018-10-03 20:14:39');
+('ADM1809251', 'Muhammad Iqbal', 'miqbal.admin@oemail.com', '$2y$10$mzlS/DKNHNc8q.K8HO3NHO/DLcBMa7i5YrQ2b2HIDcM5ydvWu2QiO', 'muhammad_iqbal.jpg', 1, 0, '2018-09-25 20:28:55');
 
 -- --------------------------------------------------------
 
@@ -64,13 +63,6 @@ CREATE TABLE `tbl_barang` (
   `foto_barang` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `tanggal_masuk` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `tbl_barang`
---
-
-INSERT INTO `tbl_barang` (`id_barang`, `nama_barang`, `id_kategori`, `id_merk`, `berat_barang`, `harga_satuan`, `stok_barang`, `foto_barang`, `tanggal_masuk`) VALUES
-('BRG1810031', 'asdadasd', 'KTG1810031', 'MRK1810031', 123, 123, 123, 'BRG1810031.jpg', '2018-10-03 08:34:06');
 
 -- --------------------------------------------------------
 
@@ -91,8 +83,7 @@ CREATE TABLE `tbl_detail_pengguna` (
 --
 
 INSERT INTO `tbl_detail_pengguna` (`id_pengguna`, `nama_lengkap`, `alamat_rumah`, `no_telepon`, `foto`) VALUES
-('PGN1809201', 'Muhammad Iqbal', 'Citayam, Jawabarat', '082298277709', NULL),
-('PGN1809212', 'Dimas Wahyu Pamungkas', NULL, '082298277709', NULL);
+('PGN1809201', 'Muhammad Iqbal', 'Citayam, Jawabarat', '082298277709', NULL);
 
 -- --------------------------------------------------------
 
@@ -203,8 +194,7 @@ CREATE TABLE `tbl_pengguna` (
 --
 
 INSERT INTO `tbl_pengguna` (`id_pengguna`, `email`, `password`, `tanggal_bergabung`) VALUES
-('PGN1809201', 'miqbal.1337@gmail.com', '$2y$10$g0/uyAsGtTSLepUs4iGbje74KRb5YPf2abGHjS1p/k2BBPVnMg3AK', '2018-09-20 19:00:58'),
-('PGN1809212', 'dimas@email.com', '$2y$10$Z74eJjpX4zmdIxzM/oGrXe30.J725Jw2bCcl4X5gbo3d3Jknzag12', '2018-09-21 22:06:15');
+('PGN1809201', 'miqbal.pengguna@email.com', '$2y$10$g0/uyAsGtTSLepUs4iGbje74KRb5YPf2abGHjS1p/k2BBPVnMg3AK', '2018-09-20 19:00:58');
 
 -- --------------------------------------------------------
 
@@ -331,7 +321,7 @@ ALTER TABLE `tbl_barang`
 -- Constraints for table `tbl_detail_pengguna`
 --
 ALTER TABLE `tbl_detail_pengguna`
-  ADD CONSTRAINT `tbl_detail_pengguna_ibfk_1` FOREIGN KEY (`id_pengguna`) REFERENCES `tbl_pengguna` (`id_pengguna`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `tbl_detail_pengguna_ibfk_1` FOREIGN KEY (`id_pengguna`) REFERENCES `tbl_pengguna` (`id_pengguna`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `tbl_detail_pesanan`
@@ -344,8 +334,8 @@ ALTER TABLE `tbl_detail_pesanan`
 -- Constraints for table `tbl_keranjang`
 --
 ALTER TABLE `tbl_keranjang`
-  ADD CONSTRAINT `tbl_keranjang_ibfk_1` FOREIGN KEY (`id_barang`) REFERENCES `tbl_barang` (`id_barang`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_keranjang_ibfk_2` FOREIGN KEY (`id_pengguna`) REFERENCES `tbl_pengguna` (`id_pengguna`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `tbl_keranjang_ibfk_1` FOREIGN KEY (`id_barang`) REFERENCES `tbl_barang` (`id_barang`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_keranjang_ibfk_2` FOREIGN KEY (`id_pengguna`) REFERENCES `tbl_pengguna` (`id_pengguna`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `tbl_pembayaran`
@@ -357,7 +347,7 @@ ALTER TABLE `tbl_pembayaran`
 -- Constraints for table `tbl_pesanan`
 --
 ALTER TABLE `tbl_pesanan`
-  ADD CONSTRAINT `tbl_pesanan_ibfk_1` FOREIGN KEY (`id_pengguna`) REFERENCES `tbl_pengguna` (`id_pengguna`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `tbl_pesanan_ibfk_1` FOREIGN KEY (`id_pengguna`) REFERENCES `tbl_pengguna` (`id_pengguna`) ON DELETE NO ACTION ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
