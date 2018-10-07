@@ -28,6 +28,10 @@ class ProdukController extends Controller
                                                 'data_merk'     => $merk,
                                                 'data_kategori' => $kategori]);
 
+        } else {
+
+            return redirect()->route('login_admin');
+
         }
 
     }
@@ -37,11 +41,12 @@ class ProdukController extends Controller
         if($request->has('simpan')) {
 
             $validasi = Validator::make($request->all(), [
-                'nama_barang'   => 'required|regex:/^[a-zA-Z\s]*$/|max:20',
-                'berat_barang'  => 'required|integer',
-                'harga_satuan'  => 'required|integer',
-                'stok_barang'   => 'required|integer',
-                'foto_barang'   => 'required|mimes:jpg,jpeg,png'
+                'nama_barang'       => 'required|regex:/^[a-zA-Z\s]*$/|max:20',
+                'deskripsi_barang'  => 'required',
+                'berat_barang'      => 'required|integer',
+                'harga_satuan'      => 'required|integer',
+                'stok_barang'       => 'required|integer',
+                'foto_barang'       => 'required|mimes:jpg,jpeg,png'
             ]);
 
             if ($validasi->fails()) {
@@ -62,14 +67,15 @@ class ProdukController extends Controller
                 );
 
                 DB::table('tbl_barang')->insert([
-                    'id_barang'     => $id_barang,
-                    'nama_barang'   => $request->input('nama_barang'),
-                    'id_kategori'   => $request->input('id_kategori'),
-                    'id_merk'       => $request->input('id_merk'),
-                    'berat_barang'  => $request->input('berat_barang'),
-                    'harga_satuan'  => $request->input('harga_satuan'),
-                    'stok_barang'   => $request->input('stok_barang'),
-                    'foto_barang'   => basename($foto_produk),
+                    'id_barang'         => $id_barang,
+                    'nama_barang'       => $request->input('nama_barang'),
+                    'id_kategori'       => $request->input('id_kategori'),
+                    'id_merk'           => $request->input('id_merk'),
+                    'deskripsi_barang'  => $request->input('deskripsi_barang'),
+                    'berat_barang'      => $request->input('berat_barang'),
+                    'harga_satuan'      => $request->input('harga_satuan'),
+                    'stok_barang'       => $request->input('stok_barang'),
+                    'foto_barang'       => basename($foto_produk),
                 ]);
 
                 return redirect()->route('list_produk')->with('success', 'Produk Berhasil DI Simpan');

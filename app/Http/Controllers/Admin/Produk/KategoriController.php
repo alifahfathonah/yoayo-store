@@ -18,6 +18,10 @@ class KategoriController extends Controller
 
             return view('admin.produk.kategori', ['data_kategori' => $data]);
 
+        } else {
+
+            return redirect()->route('login_admin');
+
         }
     }
 
