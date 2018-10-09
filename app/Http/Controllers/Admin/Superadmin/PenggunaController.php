@@ -13,39 +13,56 @@ class PenggunaController extends Controller
 
         if($request->session()->exists('email_admin') && session('superadmin') == true) {
 
-            $data = DB::table('tbl_pengguna')->get();
+            $data = DB::table('tbl_pengguna as akun')
+                ->join('tbl_detail_pengguna as detail', 'detail.id_pengguna', 'akun.id_pengguna')
+                ->select('akun.id_pengguna', 'akun.email', 'akun.tanggal_bergabung', 'detail.*')
+                ->get();
 
             return view('admin.superadmin.pengguna.pengguna', ['data_pengguna' => $data]);
+
+        } else {
+
+            return redirect()->route('beranda_admin');
 
         }
 
     }
 
-    public function block_pengguna(Request $request) {
+    public function hapus_pengguna(Request $request, $id_pengguna) {
 
-        if($request->has('simpan') && session('superadmin') == false) {
+        if($request->has('simpan') && session('superadmin') == true) {
 
-            $validasi = Validator::make($request->all(), [
-                'block' > 'required|boolean'
-            ]);
+            $data = DB::table('tbl_pengguna')->where('id_pengguna', $id_pengguna);
 
-            if($validasi->fails()) {
+            $data->delete();
 
-                return back()->withErrors($validasi);
+            return redirect()->route('superadmin_admin')->with('success', 'Akun Pengguna Berhasil Di Hapus');
 
-            }
+        } else  {
 
-            DB::table('tbl_admin')->where('id_admin', $id_admin)->update([
-                'diblokir' => $request->input('blokir_admin'),
-            ]);
+            return back()->withErrors('Terjadi Kesalahan Saat Menyimpan Data');
 
-            $request->input('blokir_admin') == 1 ? $status = 'Admin Di Blokir' : $status = 'Blokir Admin DI Cabut';
+        }
+    }
 
-            return redirect()->route('superadmin_admin')->with('success', 'Berhasil '.$status);
+    public function get_pengguna(Request $request, $id_pengguna) {
+
+        if($request->session()->exists('email_admin') && session('superadmin') == true) {
+
+            $data = DB::table('tbl_pengguna as akun')
+                ->join('tbl_detail_pengguna as detail', 'detail.id_pengguna', 'akun.id_pengguna')
+                ->select('akun.id_pengguna', 'akun.email', 'akun.tanggal_bergabung', 'detail.*')
+                ->where('akun.id_pengguna', $id_pengguna)
+                ->first();
+
+            return response()->json($data);
+
+        } else {
+
+            return redirect()->route('beranda_admin');
 
         }
 
-        return false;
     }
 
 }
