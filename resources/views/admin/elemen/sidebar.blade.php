@@ -9,7 +9,7 @@
     <li><a href="{{ route('merk_produk') }}"><i class="fa fa-tags"></i> <span>Merk <span class="label bg-primary pull-right" id="jml_merk"></span></span></a></li>
     @if (session('superadmin') == true)
     <li class="header">SUPERADMIN</li>
-    <li><a href="#"><i class="fa fa-users"></i> <span>Pengguna <span class="label bg-purple pull-right" id="jml_pengguna"></span></span></a></li>
+    <li><a href="{{ route('superadmin_pengguna') }}"><i class="fa fa-users"></i> <span>Pengguna <span class="label bg-purple pull-right" id="jml_pengguna"></span></span></a></li>
     <li><a href="{{ route('superadmin_admin') }}"><i class="fa fa-users"></i> <span>Admin <span class="label bg-purple pull-right" id="jml_admin"></span></span></a></li>
     @endif
     <li class="header">TRANSAKSI</li>
