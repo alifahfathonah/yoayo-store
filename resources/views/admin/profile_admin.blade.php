@@ -1,6 +1,6 @@
 @extends('admin.master')
 
-@section('title', 'Manajemen Admin')
+@section('title', 'Profile Admin')
 
 @section('extra_css')
 
