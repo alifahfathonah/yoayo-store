@@ -163,6 +163,15 @@ Route::group(['prefix' => 'admin'], function(){
 
 
 
+    /** Halaman Superadmin : Pengguna */
+
+    # METHOD GET
+    Route::get('superadmin/pengguna', 'Admin\Superadmin\PenggunaController@index')->name('superadmin_pengguna');
+    Route::get('superadmin/get_pengguna/{id_pengguna}', 'Admin\Superadmin\PenggunaController@get_pengguna'); // AJAX
+
+    # METHOD DELETE
+    Route::delete('superadmin/hapus_pengguna/{id_pengguna}', 'Admin\Superadmin\PenggunaController@hapus_pengguna');
+
 });
 
 
@@ -178,6 +187,7 @@ Route::get('test', 'Test\TestingController@index');
 Route::get('test/ajax', function(){
     return view('test');
 });
+
 # METHOD POST
 Route::post('test', 'Test\TestingController@test')->name('test_form');
 Route::post('/send', 'Email\EmailController@send');
