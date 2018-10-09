@@ -20,7 +20,7 @@ class ProfileController extends Controller
 
         } else {
 
-            return redirect()->route('login_admin');
+            return redirect()->route('login_admin')->with('fail', 'Harap Login Terlebih Dahulu');
 
         }
 
