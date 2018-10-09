@@ -57,11 +57,13 @@
                     <div class="form-group has-feedback {{ session()->has('fail') ? 'has-error' : '' }}">
                         {!! Form::email('email', null, ['class' => 'form-control', 'placeholder' => 'Enter Email']) !!}
                         <span class="fa fa-user form-control-feedback"></span>
+                        @if(session()->has('fail')) <span clas="help-block">Masukan Email</span> @endif
                     </div>
 
                     <div class="form-group has-feedback {{ session()->has('fail') ? 'has-error' : '' }}">
                         {!! Form::password('password', ['class' => 'form-control', 'placeholder' => 'Enter Password']) !!}
                         <span class="fa fa-lock form-control-feedback"></span>
+                        @if(session()->has('fail')) <span clas="help-block">Masukan Password</span> @endif
                     </div>
 
                     <div class="row">
