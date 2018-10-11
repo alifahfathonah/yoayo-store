@@ -172,6 +172,24 @@ Route::group(['prefix' => 'admin'], function(){
     # METHOD DELETE
     Route::delete('superadmin/hapus_pengguna/{id_pengguna}', 'Admin\Superadmin\PenggunaController@hapus_pengguna');
 
+
+
+    /** Halaman Transaksi : Pesanan */
+
+    # METHOD GET
+    Route::get('transaksi/pesanan', 'Admin\Transaksi\PesananController@index')->name('pesanan_admin');
+    Route::get('transaksi/pesanan/detail/{id_pesanan}', 'Admin\Transaksi\PesananController@detail_pesanan')->name('detail_pesanan_admin');
+
+
+    /** Halaman Transaksi : Pembayaran */
+
+    # METHOD GET
+    Route::get('transaksi/pembayaran', 'Admin\Transaksi\PembayaranController@index')->name('pembayaran_admin');
+    Route::get('transaksi/get_pembayaran/{id_pesanan}', 'Admin\Transaksi\PembayaranController@get_pembayaran'); // AJAX
+
+    # METHOD PUT
+    Route::put('transaksi/pembayaran/status/{id_pesanan}', 'Admin\Transaksi\PembayaranController@rubah_status')->name('rubah_status_pembayaran');
+
 });
 
 

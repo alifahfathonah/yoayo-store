@@ -74,9 +74,9 @@
                             <span class="help-block"><small>Silahkan pilih merk produk yang sesuai</small></span>
                         </div>
                         <div class="form-group has-feedback">
-                            {!! Form::label('inp_foto_barang', 'Foto Product') !!}
-                            {!! Form::file('foto_barang', ['id' => 'inp_foto_barang', 'class' => 'form-control' , 'style' => 'border: none;', 'accept' => '.jpg, .jpeg, .png']) !!}
-                            <span class="help-block"><small>Silahkan pilih foto product</small></span>
+                            {!! Form::label('inp_deskripsi_barang', 'Deskripsi Barang') !!}
+                            {!! Form::textarea('deskripsi_barang', null, ['id' => 'inp_deskripsi_barang', 'class' => 'form-control']) !!}
+                            <span class="help-block"><small>Silahkan Masukan Deskripsi Produk</small></span>
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -94,6 +94,11 @@
                             {!! Form::label('inp_stok_barang', 'Stok Barang') !!}
                             {!! Form::number('stok_barang',  null, ['id' => 'inp_stok_barang', 'class' => 'form-control']) !!}
                             <span class="help-block"><small>Silahkan masukan stok produk yanpa karakter khusus dan alphabet</small></span>
+                        </div>
+                        <div class="form-group has-feedback">
+                            {!! Form::label('inp_foto_barang', 'Foto Product') !!}
+                            {!! Form::file('foto_barang', ['id' => 'inp_foto_barang', 'class' => 'form-control' , 'style' => 'border: none;', 'accept' => '.jpg, .jpeg, .png']) !!}
+                            <span class="help-block"><small>Silahkan pilih foto product</small></span>
                         </div>
                     </div>
                 </div>
@@ -239,6 +244,11 @@
                         </div>
                     </div>
                     <div class="col-md-12">
+                        <div class="form-group has-feedback">
+                            {!! Form::label('inp_edit_deskripsi_barang', 'Deskripsi Barang') !!}
+                            {!! Form::textarea('deskripsi_barang', null, ['id' => 'inp_edit_deskripsi_barang', 'class' => 'form-control']) !!}
+                            <span class="help-block"><small>Silahkan Masukan Deskripsi Produk</small></span>
+                        </div>
                         <h3 class="text-center">Foto Produk</h3>
                         {{ Html::image(null, null, ['id' => 'foto_barang', 'class' => 'img-responsive', 'style' => 'margin: 0 auto;']) }}
                     </div>
@@ -281,6 +291,7 @@
 
     {{ Html::script('admin_assets/component/datatables.net/js/jquery.dataTables.min.js') }}
     {{ Html::script('admin_assets/component/datatables.net-bs/js/dataTables.bootstrap.min.js') }}
+    {{ Html::script('admin_assets/component/ckeditor/ckeditor.js') }}
 
     <script>
         $(document).ready(function() {
@@ -290,6 +301,9 @@
                 'searching': false
             })
         })
+        CKEDITOR.replace('inp_deskripsi_barang')
+        CKEDITOR.replace('inp_edit_deskripsi_barang')
+
     </script>
 
 @endsection

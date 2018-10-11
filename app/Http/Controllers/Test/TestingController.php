@@ -89,9 +89,17 @@ class TestingController extends Controller
         // $data = 'test123';
         // echo \str_replace('[0-9]', '', $data);
 
-        $data = DB::table('tbl_admin')->where('id_admin', 'ADM1809251');
+        // $data = DB::table('tbl_admin')->where('id_admin', 'ADM1809251');
 
-        dd([$data->first()->foto, $data->get()]);
+        // dd([$data->first()->foto, $data->get()]);
+
+        // $data = DB::table('tbl_pengguna as akun')
+        //         ->join('tbl_detail_pengguna as detail', 'detail.id_pengguna', 'akun.id_pengguna')
+        //         ->select('akun.id_pengguna', 'akun.email', 'akun.tanggal_bergabung', 'detail.*')
+        //         ->where('akun.id_pengguna', 'PGN1809201')->first();
+        // dd($data);
+        echo (new DateTime)->format('Y-m-d H:m:s');
+        // return view('sample_email', ['user' => 'muhammad iqbal', 'email' => 'miqbal.1337@gmail.com', 'password' => str_random(13)]);
     }
 
     public function test(Request $request) {

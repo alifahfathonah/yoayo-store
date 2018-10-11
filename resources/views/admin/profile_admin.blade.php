@@ -96,7 +96,7 @@
         <!-- /.box -->
     </div>
     <div class="col-md-9">
-        <div class="box box-primary box-solid">
+        <div class="box box-primary">
             <div class="box-header">
                 <h3 class="box-title">Informasi Detail</h3>
                 <div class="box-tools pull-right">
