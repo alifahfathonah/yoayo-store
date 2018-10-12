@@ -214,6 +214,8 @@ $('a.detail_admin').click(function(){
 
 //** SUPERADMIN : PENGGUNA *///////////////////////////////////////////////////////////////////////////
 
+
+
 //** Hapus Pengguna */
 
 $('a.hapus_pengguna').click(function(){
@@ -241,9 +243,10 @@ $('a.detail_pengguna').click(function(){
 
 $('button.proses_pembayaran').click(function(){
     $('form#form_proses_pembayaran').attr('action','http://127.0.0.1:8000/admin/transaksi/pembayaran/status/'+$('td#id_'+this.id).html())
-    $.get('http://127.0.0.1:8000/admin/transaksi/get_pembayaran/'+$('td#id_'+this.id).html())
-        .done(function(data) {
-            console.log(data)
-            $('select#inp_status_pembayaran option[value*="'+data['status_pembayaran']+'"]').attr('selected', 'selected')
-        })
+})
+
+//** Lihat Bukti Pembayaran */
+
+$('button.lihat_foto').click(function(){
+    $('img#foto_bukti').attr('src', 'http://127.0.0.1:8000/storage/pembayaran/'+$('td#id_'+this.id).html()+'.jpg')
 })

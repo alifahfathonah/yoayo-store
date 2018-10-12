@@ -36,25 +36,13 @@ class PembayaranController extends Controller
 
         if($request->has('simpan') == true) {
 
-            $validasi = Validator::make($request->all(), [
-
-                'status_pesanan' => 'required|integer|max:1'
-
-            ]);
-
-            if($validasi->fails()) {
-
-                return back()->withErrors($validasi);
-
-            }
-
             $update_pembayaran = DB::table('tbl_pembayaran')->where('id_pesanan', $id_pesanan);
             $update_pembayaran->update(['status_pembayaran' => $update_pembayaran->first()->status_pembayaran == 0 ? 1 : 0]);
 
             $update_pesanan = DB::table('tbl_pesanan')->where('id_pesanan', $id_pesanan);
             $update_pesanan->update(['status_pesanan' => $update_pesanan->first()->status_pesanan == 0 ? 1 : 0]);
 
-            return redirect()->route('pembayaran_admin')->with('success', 'Pembayaran Dengan ID $id_pesanan Berhasil Di Update');
+            return redirect()->route('pembayaran_admin')->with('success', 'Pembayaran Dengan ID '.$id_pesanan.' Berhasil Di Update');
 
         } else {
 

@@ -111,7 +111,7 @@
                             <tr>
                                 <td id="id_{{ $counter }}">{{ $item->id_pesanan }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#lihat_foto" id="{{ $counter }}">
+                                    <button type="button" class="btn btn-warning btn-xs lihat_foto" data-toggle="modal" data-target="#lihat_foto" id="{{ $counter }}">
                                         <i class="fa fa-search fa-fw"></i> Lihat Foto Bukti
                                     </button>
                                 </td>
@@ -119,8 +119,8 @@
                                 <td>{{ $item->tanggal_upload  }}</td>
                                 <td>{{ $item->batas_pembayaran }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#proses_pesanan" id="{{ $counter }}">
-                                        <i class="fa fa-refresh fa-fw"></i> Proses Pesanan
+                                    <button type="button" class="btn btn-danger btn-xs proses_pembayaran" data-toggle="modal" data-target="#proses_pembayaran" id="{{ $counter }}">
+                                        <i class="fa fa-close fa-fw"></i> Batalkan Verifikasi
                                     </button>
                                 </td>
                             </tr>
@@ -136,27 +136,36 @@
 @endsection
 
 @section('modal')
+<div class="modal modal-default fade" id="lihat_foto">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Anda Yakin Ingin Lanjutkan ?</h4>
+            </div>
+            <div class="modal-body">
+                {{ Html::image(null, null, ['class' => 'img-responsive', 'id' => 'foto_bukti']) }}
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 <div class="modal modal-default fade" id="proses_pembayaran">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Veifikasi Pesanan</h4>
+                <h4 class="modal-title">Rubah Status Pembayaran ?</h4>
             </div>
             {!! Form::open(['method' => 'PUT', 'id' => 'form_proses_pembayaran']) !!}
-                <div class="modal-body">
-                    <div class="form-group">
-                        <select class="form-control" name="status_pesanan" id="inp_status_pembayaran">
-                            <option value="0">Belum Di Verifikasi</option>
-                            <option value="1">Verifikasi Pesanan</option>
-                        </select>
-                    </div>
-                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn pull-left" data-dismiss="modal">Batal</button>
                     <button type="submit" name="simpan" value="true" class="btn btn-primary">
-                        <i class="fa fa-refresh fa-fw"></i> Proses pesanan
+                        <i class="fa fa-refresh fa-fw"></i> Proses
                     </button>
                 </div>
             {!! Form::close() !!}
