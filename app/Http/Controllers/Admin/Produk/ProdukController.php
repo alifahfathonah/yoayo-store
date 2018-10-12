@@ -30,7 +30,7 @@ class ProdukController extends Controller
 
         } else {
 
-            return redirect()->route('login_admin');
+            return redirect()->route('login_admin')->with('fail', 'Harap Login Terlebih Dahulu');
 
         }
 
@@ -62,7 +62,7 @@ class ProdukController extends Controller
                 $extension = $request->file('foto_barang')->getClientOriginalExtension();
 
                 $foto_produk = Storage::putFileAs(
-                    'public/admin/image/produk',
+                    'public/produk/',
                     $request->file('foto_barang'), $id_barang.'.'.$extension
                 );
 
@@ -114,12 +114,12 @@ class ProdukController extends Controller
 
             if($request->hasFile('foto_barang')) {
 
-                Storage::delete('public/admin/image/produk'.$data->foto_barang);
+                Storage::delete('public/produk/'.$data->foto_barang);
 
                 $extension = $request->file('foto_barang')->getClientOriginalExtension();
 
                 $save_foto = Storage::putFileAs(
-                    'public/admin/image/produk',
+                    'public/produk/',
                     $request->file('foto_barang'), $id_barang.'.'.$extension
                 );
 
@@ -159,7 +159,7 @@ class ProdukController extends Controller
 
         $data = DB::table('tbl_barang')->where('id_barang', $id_barang);
 
-        Storage::delete('public/admin/image/produk/'.$data->first()->foto_barang);
+        Storage::delete('public/produk//'.$data->first()->foto_barang);
 
         $data->delete();
 

@@ -28,13 +28,17 @@
         <div class="login-box">
 
             @if (session()->has('fail'))
-
                 <div class="alert alert-danger alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     <h4><i class="icon fa fa-ban"></i> ERROR!</h4>
                     {{ session('fail') }}
                 </div>
-
+            @elseif (session()->has('success'))
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-check"></i> Success!</h4>
+                    {{ session('success') }}
+                </div>
             @endif
 
             <div class="login-box-body">
@@ -53,11 +57,13 @@
                     <div class="form-group has-feedback {{ session()->has('fail') ? 'has-error' : '' }}">
                         {!! Form::email('email', null, ['class' => 'form-control', 'placeholder' => 'Enter Email']) !!}
                         <span class="fa fa-user form-control-feedback"></span>
+                        @if(session()->has('fail')) <span clas="help-block">Masukan Email</span> @endif
                     </div>
 
                     <div class="form-group has-feedback {{ session()->has('fail') ? 'has-error' : '' }}">
                         {!! Form::password('password', ['class' => 'form-control', 'placeholder' => 'Enter Password']) !!}
                         <span class="fa fa-lock form-control-feedback"></span>
+                        @if(session()->has('fail')) <span clas="help-block">Masukan Password</span> @endif
                     </div>
 
                     <div class="row">

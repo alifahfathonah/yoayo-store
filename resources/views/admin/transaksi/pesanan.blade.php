@@ -1,38 +1,25 @@
 @extends('admin.master')
 
-@section('title', 'Manajemen Pengguna')
+@section('title', 'Manajemen Pesanan')
 
 @section('extra_css')
 
     {{ Html::style('admin_assets/component/datatables.net-bs/css/dataTables.bootstrap.min.css') }}
 
-    <style>
-
-    .profile-user-img {
-        margin: 0 auto;
-        width: 200px;
-        padding: 3px;
-        border: 3px solid #d2d6de;
-    }
-
-    </style>
-
 @endsection
 
 @section('content-header')
 <h1>
-    Manajamen Akun Pengguna
-    <small>Halaman manajemen akun pengguna</small>
+    Manajamen Pesanan
+    <small>Halaman manajemen segala pesanan</small>
 </h1>
 <ol class="breadcrumb">
     <li><a href="{{ route('beranda_admin') }}"><i class="fa fa-home"></i> Beranda</a></li>
-    <li><i class="fa fa-terminal fa-fw"></i> superadmin</li>
-    <li class="active"><i class="fa fa-users fa-fw"></i> pengguna</li>
+    <li><i class="fa fa-shopping-cart fa-fw"></i> pesanan</li>
 </ol>
 @endsection
 
 @section('content')
-
 <div class="row">
     <div class="col-md-12 col-sm-12">
         @if ($errors->any())
@@ -53,48 +40,61 @@
         <div class="box box-solid box-success">
             <div class="box-header">
                 <h3 class="box-title">
-                    Table Akun Pengguna
+                    Table Pesanan Yang Sedang Di Proses
                 </h3>
             </div>
             <div class="box-body">
-                <table class="table table-bordered table-hover" id="table_pengguna">
+                <table class="table table-bordered table-hover" id="table_pesanan">
                     <thead>
                         <tr>
-                            <th>ID Pengguna</th>
-                            <th>Nama Pengguna</th>
-                            <th>Email</th>
+                            <th>ID Pesanan</th>
+                            <th>Nama Penerima</th>
                             <th>No Telepon</th>
+                            <th>Status Pesanan</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="values">
                         <?php $counter = 1; ?>
-                        @foreach ($data_pengguna as $item)
+                        @foreach ($data_pesanan as $item)
+                            @if($item->status_pesanan <= 2)
                             <tr>
-                                <td id="id_{{ $counter }}">{{ $item->id_pengguna }}</td>
-                                <td>{{ $item->nama_lengkap  }}</td>
-                                <td>{{ $item->email }}</td>
+                                <td id="id_{{ $counter }}">{{ $item->id_pesanan }}</td>
+                                <td>{{ $item->nama_penerima  }}</td>
                                 <td>{{ $item->no_telepon  }}</td>
                                 <td>
+                                    <span class="label {{ $stat_label[$item->status_pesanan] }}">
+                                        {{ $stat_notif[$item->status_pesanan] }}
+                                    </span>
+                                </td>
+                                <td>
+                                    @if($item->status_pesanan == 1)
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
                                             Action <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <a href="#" class="detail_pengguna" data-toggle="modal" data-target="#detail_pengguna" id="{{ $counter }}">
-                                                    <i class="fa fa-user fa-fw"></i> Detail Pengguna
+                                                <a href="{{ route('detail_pesanan_admin', [$id_pesanan, $item->id_pesanan]) }}"><i class="fa fa-user fa-fw"></i> Detail pesanan</a>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="proses_pesanan" data-toggle="modal" data-target="#proses_pesanan" id="{{ $counter }}">
+                                                    <i class="fa fa-trash fa-fw"></i> Proses Pesanan
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="#" class="hapus_pengguna" data-toggle="modal" data-target="#hapus_pengguna" id="{{ $counter }}">
-                                                    <i class="fa fa-trash fa-fw"></i> Hapus Pengguna
+                                                <a href="#" class="hapus_pesanan" data-toggle="modal" data-target="#hapus_pesanan" id="{{ $counter }}">
+                                                    <i class="fa fa-trash fa-fw"></i> Hapus pesanan
                                                 </a>
                                             </li>
                                         </ul>
                                     </div>
+                                    @else
+                                        <span class="label bg-red">Menunggu Pembayaran</span>
+                                    @endif
                                 </td>
                             </tr>
+                        @endif
                         <?php $counter++; ?>
                         @endforeach
                     </tbody>
@@ -107,40 +107,35 @@
 @endsection
 
 @section('modal')
-<div class="modal modal-default fade" id="detail_pengguna">
+<div class="modal modal-default fade" id="proses_pesanan">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Detail Informasi Pengguna</h4>
+                <h4 class="modal-title">Ingin Memproses Pesanan ?</h4>
             </div>
-            <div class="modal-body row">
-                <div class="col-md-6">
-                    <h4>ID Pengguna</h4>
-                    <p class="text-muted" id="id_pengguna"></p>
-                    <h4>Nama Lengkap</h4>
-                    <p class="text-muted" id="nama_lengkap"></p>
-                    <h4>Jenis Kelamin</h4>
-                    <p class="text-muted" id="jenis_kelamin"></p>
-                    <h4>Tanggal Bergabung</h4>
-                    <p class="text-muted" id="tanggal"></p>
+            {!! Form::open(['method' => 'PUT', 'id' => 'form_proses_pesanan']) !!}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <select class="form-control" name="status_pesanan">
+                            <option value="0">Belum Di Verifikasi</option>
+                            <option value="1">Telah Di Verifikasi</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <h4>Alamat Email</h4>
-                    <p class="text-muted" id="email"></p>
-                    <h4>No Telepon</h4>
-                    <p class="text-muted" id="no_telepon"></p>
-                    <h4>Alamat Rumah</h4>
-                    <p class="text-muted" id="alamat_rumah"></p>
+                <div class="modal-footer">
+                    <button type="button" class="btn pull-left" data-dismiss="modal">Batal</button>
+                    <button type="submit" name="simpan" value="true" class="btn btn-danger"><i class="fa fa-trash fa-fw"></i> Proses pesanan</button>
                 </div>
-            </div>
+            {!! Form::close() !!}
         </div>
         <!-- /.modal-content -->
     </div>
     <!-- /.modal-dialog -->
 </div>
-<div class="modal modal-default fade" id="hapus_pengguna">
+<!-- /.modal -->
+<div class="modal modal-default fade" id="hapus_pesanan">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -148,10 +143,10 @@
                     <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Anda Yakin Ingin Lanjutkan ?</h4>
             </div>
-            {!! Form::open(['method' => 'DELETE', 'id' => 'form_hapus_pengguna']) !!}
+            {!! Form::open(['method' => 'DELETE', 'id' => 'form_hapus_pesanan']) !!}
                 <div class="modal-footer">
                     <button type="button" class="btn pull-left" data-dismiss="modal">Batal</button>
-                    <button type="submit" name="simpan" value="true" class="btn btn-danger"><i class="fa fa-trash fa-fw"></i> Hapus pengguna</button>
+                    <button type="submit" name="simpan" value="true" class="btn btn-danger"><i class="fa fa-trash fa-fw"></i> Hapus pesanan</button>
                 </div>
             {!! Form::close() !!}
         </div>
@@ -169,7 +164,7 @@
 
     <script>
         $(document).ready(function() {
-            $('#table_pengguna').DataTable({
+            $('#table_pesanan').DataTable({
                 'lengthChange': false,
                 'length': 10,
                 'searching': false

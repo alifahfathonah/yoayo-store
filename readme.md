@@ -1,5 +1,5 @@
 ## PROJECT TUGAS YOAYO STORE (In-Progress)
- - Halaman Admin Progress `60%`
+ - Halaman Admin Progress `79%`
  - Halaman Pengguna Progress `12%`
 
 ## Demo User

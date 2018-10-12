@@ -13,7 +13,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     @include('admin.elemen.static_css')
     @yield('extra_css')
 </head>
-<body class="hold-transition skin-green-light sidebar-mini">
+<body class="hold-transition skin-purple-light sidebar-mini">
 <div class="wrapper">
     <!-- Main Header -->
     <header class="main-header">

@@ -163,6 +163,33 @@ Route::group(['prefix' => 'admin'], function(){
 
 
 
+    /** Halaman Superadmin : Pengguna */
+
+    # METHOD GET
+    Route::get('superadmin/pengguna', 'Admin\Superadmin\PenggunaController@index')->name('superadmin_pengguna');
+    Route::get('superadmin/get_pengguna/{id_pengguna}', 'Admin\Superadmin\PenggunaController@get_pengguna'); // AJAX
+
+    # METHOD DELETE
+    Route::delete('superadmin/hapus_pengguna/{id_pengguna}', 'Admin\Superadmin\PenggunaController@hapus_pengguna');
+
+
+
+    /** Halaman Transaksi : Pesanan */
+
+    # METHOD GET
+    Route::get('transaksi/pesanan', 'Admin\Transaksi\PesananController@index')->name('pesanan_admin');
+    Route::get('transaksi/pesanan/detail/{id_pesanan}', 'Admin\Transaksi\PesananController@detail_pesanan')->name('detail_pesanan_admin');
+
+
+    /** Halaman Transaksi : Pembayaran */
+
+    # METHOD GET
+    Route::get('transaksi/pembayaran', 'Admin\Transaksi\PembayaranController@index')->name('pembayaran_admin');
+    Route::get('transaksi/get_pembayaran/{id_pesanan}', 'Admin\Transaksi\PembayaranController@get_pembayaran'); // AJAX
+
+    # METHOD PUT
+    Route::put('transaksi/pembayaran/status/{id_pesanan}', 'Admin\Transaksi\PembayaranController@rubah_status')->name('rubah_status_pembayaran');
+
 });
 
 
@@ -178,6 +205,7 @@ Route::get('test', 'Test\TestingController@index');
 Route::get('test/ajax', function(){
     return view('test');
 });
+
 # METHOD POST
 Route::post('test', 'Test\TestingController@test')->name('test_form');
 Route::post('/send', 'Email\EmailController@send');

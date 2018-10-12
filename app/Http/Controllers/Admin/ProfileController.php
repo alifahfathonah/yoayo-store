@@ -20,7 +20,7 @@ class ProfileController extends Controller
 
         } else {
 
-            return redirect()->route('login_admin');
+            return redirect()->route('login_admin')->with('fail', 'Harap Login Terlebih Dahulu');
 
         }
 
@@ -55,7 +55,15 @@ class ProfileController extends Controller
                     ]),
                 ]);
 
-                return redirect()->route('profile_admin', session('id_admin'))->with('success', 'Password Berhasil Di Ganti');
+                $request->session()->forget([
+                    'id_admin',
+                    'email_admin',
+                    'nama_admin',
+                    'foto_admin',
+                    'superadmin'
+                ]);
+
+                return redirect()->route('login_admin')->with('success', 'Silahkan Login Kembali!');
 
             } else {
 

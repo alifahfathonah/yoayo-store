@@ -1,7 +1,13 @@
 @extends('pengguna.master')
 
 @section('title', 'Register')
-    
+
+@section('extra_css')
+
+    {{ Html::style('user_assets/vendors/bootstrap-selector/css/bootstrap-select.min.css') }}
+
+@endsection
+
 @section('content')
 <div class="container">
     <div class="login_inner">
@@ -26,7 +32,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                
+
                 @elseif (session()->has('success'))
 
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -37,23 +43,28 @@
                     </div>
 
                 @endif
-                
-                <form action="{{ route('proses_regis') }}" method="POST" class="login_form row">
-                    @csrf
+
+                {{ Form::open(['route' => 'proses_regis', 'method' => 'POST', 'class' => 'login_form calculate_shoping_form row']) }}
                     <div class="col-lg-6 form-group">
-                        <input class="form-control" type="text" name="nama_lengkap" placeholder="Nama Lengkap">
+                        {{ Form::text('nama_lengkap', null, ['class' => 'form-control', 'placeholder' => 'Nama lengkap']) }}
                     </div>
                     <div class="col-lg-6 form-group">
-                        <input class="form-control" type="email" name="email" placeholder="Email">
+                        {{ Form::email('email', null, ['class' => 'form-control', 'placeholder' => 'Email']) }}
                     </div>
                     <div class="col-lg-6 form-group">
-                        <input class="form-control" type="text" name="no_telepon" placeholder="No. Telepon">
+                        {{ Form::text('no_telepon', null, ['class' => 'form-control', 'placeholder' => 'No. Telepon']) }}
                     </div>
                     <div class="col-lg-6 form-group">
-                        <input class="form-control" type="password" name="password" placeholder="Password">
+                        {{ Form::password('password', ['class' => 'form-control', 'placeholder' => 'Password']) }}
                     </div>
                     <div class="col-lg-6 form-group">
-                        <input class="form-control" type="password" name="password_confirmation" placeholder="Ulangi Password">
+                        {{ Form::password('password_confirmation', ['class' => 'form-control', 'placeholder' => 'Ulangi Password']) }}
+                    </div>
+                    <div class="col-lg-6 form-group">
+                        <select name="jenis_kelamin" class="selectpicker">
+                            <option value="Laki-laki">Laki - Laki</option>
+                            <option value="Perempuan">Perempuan</option>
+                        </select>
                     </div>
                     <div class="col-lg-6 form-group">
                         <button type="submit" name="simpan" value="true" class="btn subs_btn form-control">register now</button>
@@ -61,9 +72,15 @@
                     <div class="col-lg-6 form-group">
                         Sudah punya akun ? <a href="{{ route('login') }}">Login Sekarang</a>
                     </div>
-                </form>
+                {{ Form::close() }}
             </div>
         </div>
     </div>
 </div>
+@endsection
+
+@section('extra_js')
+
+    {{ Html::script('user_assets/vendors/bootstrap-selector/js/bootstrap-select.min.js') }}
+
 @endsection

@@ -1,6 +1,6 @@
 @extends('admin.master')
 
-@section('title', 'Manajemen Admin')
+@section('title', 'Profile Admin')
 
 @section('extra_css')
 
@@ -96,7 +96,7 @@
         <!-- /.box -->
     </div>
     <div class="col-md-9">
-        <div class="box box-primary box-solid">
+        <div class="box box-primary">
             <div class="box-header">
                 <h3 class="box-title">Informasi Detail</h3>
                 <div class="box-tools pull-right">
@@ -107,10 +107,10 @@
             </div>
             <div class="box-body row">
                 <div class="col-md-6">
-                    <h3 class="profile-username">#ID Admin</h3>
-                    <p class="text-muted">{{ $data_admin->id_admin }}</p>
+                    <h3 class="profile-username">ID Admin</h3>
+                    <h4 class="text-muted">{{ $data_admin->id_admin }}</h4>
                     <h3 class="profile-username">Nama lengkap</h3>
-                    <p class="text-muted">{{ $data_admin->nama_lengkap }}</p>
+                    <h4 class="text-muted">{{ $data_admin->nama_lengkap }}</h4>
                     <h3 class="profile-username">Superadmin</h3>
                     @if ($data_admin->superadmin == true)
                         <p><span class="label bg-green"><i class="fa fa-check"></i> Superadmin</span></p>
@@ -120,9 +120,9 @@
                 </div>
                 <div class="col-md-6">
                     <h3 class="profile-username">Email Admin</h3>
-                    <p class="text-muted">{{ $data_admin->email }}</p>
+                    <h4 class="text-muted">{{ $data_admin->email }}</h4>
                     <h3 class="profile-username">Tanggal Bergabung</h3>
-                    <p class="text-muted">{{ $data_admin->tanggal_bergabung }}</p>
+                    <h4 class="text-muted">{{ $data_admin->tanggal_bergabung }}</h4>
                 </div>
             </div>
         </div>
@@ -147,12 +147,12 @@
                         <span class="help-block"><small>Silahkan masukan password admin tanpa karakter khusus</small></span>
                     </div>
                     <div class="form-group has-feedback">
-                        {!! Form::label('inp_password_baru', 'Password Sementara') !!}
+                        {!! Form::label('inp_password_baru', 'Password Baru') !!}
                         {!! Form::password('password_baru', ['id' => 'inp_password_baru', 'class' => 'form-control']) !!}
                         <span class="help-block"><small>Silahkan masukan password admin tanpa karakter khusus</small></span>
                     </div>
                     <div class="form-group has-feedback">
-                        {!! Form::label('inp_password_konfirmasi', 'Password Sementara') !!}
+                        {!! Form::label('inp_password_konfirmasi', 'Ulangi Password') !!}
                         {!! Form::password('password_baru_confirmation', ['id' => 'inp_password_konfirmasi', 'class' => 'form-control']) !!}
                         <span class="help-block"><small>Silahkan masukan password admin tanpa karakter khusus</small></span>
                     </div>

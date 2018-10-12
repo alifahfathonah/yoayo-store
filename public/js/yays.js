@@ -51,12 +51,13 @@ $('a.edit_produk').click(function(){
         $('input#inp_edit_nama_barang').val(data['nama_barang'])
         $('select#inp_edit_id_kategori option[value*="'+data['id_kategori']+'"]').attr('selected', 'selected')
         $('select#inp_edit_id_merk option[value*="'+data['id_merk']+'"]').attr('selected', 'selected')
-        let foto_url = 'http://127.0.0.1:8000/storage/admin/image/produk/'
+        let foto_url = 'http://127.0.0.1:8000/storage/produk/'
         $('img#foto_barang').attr('src', foto_url+data['foto_barang'])
         $('img#foto_barang').attr('alt', data['nama_barang'])
         $('input#inp_edit_berat_barang').val(data['berat_barang'])
         $('input#inp_edit_harga_satuan').val(data['harga_satuan'])
         $('input#inp_edit_stok_barang').val(data['stok_barang'])
+        window.CKEDITOR.instances.inp_edit_deskripsi_produk.setData(data['deskripsi_barang'])
     })
 })
 
@@ -78,7 +79,7 @@ $('button#check_merk').click(function(){
     $('span.help-block').remove()
     if(value != '') {
         $.get('http://127.0.0.1:8000/admin/check_merk', {nama_merk: value}, function(data) {
-            // console.log($.parseJSON(data))
+            console.log($.parseJSON(data))
             if ($.parseJSON(data) == false) {
                 $('button#simpan').removeClass('disabled').attr('type', 'submit')
                 $('input#inp_nama_merk').parent().removeClass().addClass('form-group has-success')
@@ -170,7 +171,7 @@ $('a.ubah_status_admin').click(function(){
     })
 })
 
-//** Hapus kategori */
+//** Hapus Admin */
 
 $('a.hapus_admin').click(function(){
     $('form#form_hapus_admin').attr('action','http://127.0.0.1:8000/admin/superadmin/hapus_admin/'+$('#id_'+this.id).html())
@@ -207,4 +208,45 @@ $('a.detail_admin').click(function(){
         }
 
     })
+})
+
+
+
+//** SUPERADMIN : PENGGUNA *///////////////////////////////////////////////////////////////////////////
+
+
+
+//** Hapus Pengguna */
+
+$('a.hapus_pengguna').click(function(){
+    $('form#form_hapus_pengguna').attr('action','http://127.0.0.1:8000/admin/superadmin/hapus_pengguna/'+$('#id_'+this.id).html())
+})
+
+//** Profile Pengguna */
+
+$('a.detail_pengguna').click(function(){
+    let id_admin = $('td#id_'+this.id).html()
+    $.get('http://127.0.0.1:8000/admin/superadmin/get_pengguna/'+id_admin).done(function(data){
+        $('p#id_pengguna').html(data['id_pengguna'])
+        $('p#nama_lengkap').html(data['nama_lengkap'])
+        $('p#jenis_kelamin').html(data['jenis_kelamin'])
+        $('p#email').html(data['email'])
+        $('p#tanggal').html(data['tanggal_bergabung'])
+        $('p#no_telepon').html(data['no_telepon'])
+        $('p#alamat_rumah').html(data['alamat_rumah'])
+    })
+})
+
+//** ADMIN PEMBAYARAN *///////////////////////////////////////////////////////////////////////////
+
+//** Proses Pembayaran */
+
+$('button.proses_pembayaran').click(function(){
+    $('form#form_proses_pembayaran').attr('action','http://127.0.0.1:8000/admin/transaksi/pembayaran/status/'+$('td#id_'+this.id).html())
+})
+
+//** Lihat Bukti Pembayaran */
+
+$('button.lihat_foto').click(function(){
+    $('img#foto_bukti').attr('src', 'http://127.0.0.1:8000/storage/pembayaran/'+$('td#id_'+this.id).html()+'.jpg')
 })
