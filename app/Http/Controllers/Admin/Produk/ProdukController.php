@@ -41,7 +41,7 @@ class ProdukController extends Controller
         if($request->has('simpan')) {
 
             $validasi = Validator::make($request->all(), [
-                'nama_barang'       => 'required|regex:/^[a-zA-Z\s]*$/|max:20',
+                'nama_barang'       => 'required|regex:/^[a-zA-Z\s]*$/|max:50',
                 'deskripsi_barang'  => 'required',
                 'berat_barang'      => 'required|integer',
                 'harga_satuan'      => 'required|integer',
