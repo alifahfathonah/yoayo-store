@@ -13,7 +13,10 @@ class PembayaranController extends Controller
 
         if($request->session()->exists('email_admin')) {
 
-            $data = DB::table('tbl_pembayaran')->get();
+            $data = DB::table('tbl_pembayaran as pembayaran')
+                ->join('tbl_pesanan as pesanan', 'pesanan.id_pesanan', 'pembayaran.id_pesanan')
+                ->select('pembayaran.*', 'pesanan.status_pesanan')
+                ->get();
 
             return view('admin.transaksi.pembayaran', ['data_pembayaran' => $data]);
 
