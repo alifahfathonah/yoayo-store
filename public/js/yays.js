@@ -57,7 +57,7 @@ $('a.edit_produk').click(function(){
         $('input#inp_edit_berat_barang').val(data['berat_barang'])
         $('input#inp_edit_harga_satuan').val(data['harga_satuan'])
         $('input#inp_edit_stok_barang').val(data['stok_barang'])
-        window.CKEDITOR.instances.inp_edit_deskripsi_produk.setData(data['deskripsi_barang'])
+        CKEDITOR.instances['inp_edit_deskripsi_barang'].setData(data['deskripsi_barang'])
     })
 })
 
@@ -214,8 +214,6 @@ $('a.detail_admin').click(function(){
 
 //** SUPERADMIN : PENGGUNA *///////////////////////////////////////////////////////////////////////////
 
-
-
 //** Hapus Pengguna */
 
 $('a.hapus_pengguna').click(function(){
@@ -237,12 +235,59 @@ $('a.detail_pengguna').click(function(){
     })
 })
 
+
+
 //** ADMIN PEMBAYARAN *///////////////////////////////////////////////////////////////////////////
 
 //** Proses Pembayaran */
 
 $('button.proses_pembayaran').click(function(){
     $('form#form_proses_pembayaran').attr('action','http://127.0.0.1:8000/admin/transaksi/pembayaran/status/'+$('td#id_'+this.id).html())
+})
+
+//** Lihat Bukti Pembayaran */
+
+$('button.lihat_foto').click(function(){
+    $('img#foto_bukti').attr('src', 'http://127.0.0.1:8000/storage/pembayaran/'+$('td#id_'+this.id).html()+'.jpg')
+})
+
+
+
+//** ADMIN PESANAN *///////////////////////////////////////////////////////////////////////////
+
+//** Proses Pesanan */
+
+$('a.proses_pesanan').click(function(){
+    $('form#form_proses_pesanan').attr('action','http://127.0.0.1:8000/admin/transaksi/proses_pesanan/'+$('td#id_'+this.id).html())
+})
+
+//** Rubah Infomasi Penerima */
+$('a.edit_pesanan').click(function() {
+    $('form#form_edit_pesanan').attr('action','http://127.0.0.1:8000/admin/transaksi/edit_pesanan/'+$('td#id_'+this.id).html())
+    $.get('http://127.0.0.1:8000/admin/transaksi/get_penerima/'+$('td#id_'+this.id).html())
+    .done(function(data){
+        console.log(data)
+    })
+})
+
+//** Kirim Pesanan */
+
+$('a.kirim_pesanan').click(function(){
+    $('form#form_kirim_pesanan').attr('action','http://127.0.0.1:8000/admin/transaksi/kirim_pesanan/'+$('td#id_'+this.id).html())
+})
+
+//** Batalkan Pesanan */
+
+$('a.batalkan_pesanan').click(function(){
+    $('form#form_batalkan_pesanan').attr('action','http://127.0.0.1:8000/admin/transaksi/batalkan_pesanan/'+$('td#id_'+this.id).html())
+
+})
+
+//** Hapus Pesanan */
+
+$('a.hapus_pesanan').click(function(){
+    $('form#form_hapus_pesanan').attr('action','http://127.0.0.1:8000/admin/transaksi/hapus_pesanan/'+$('td#id_'+this.id).html())
+
 })
 
 //** Lihat Bukti Pembayaran */
