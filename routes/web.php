@@ -174,13 +174,6 @@ Route::group(['prefix' => 'admin'], function(){
 
 
 
-    /** Halaman Transaksi : Pesanan */
-
-    # METHOD GET
-    Route::get('transaksi/pesanan', 'Admin\Transaksi\PesananController@index')->name('pesanan_admin');
-    Route::get('transaksi/pesanan/detail/{id_pesanan}', 'Admin\Transaksi\PesananController@detail_pesanan')->name('detail_pesanan_admin');
-
-
     /** Halaman Transaksi : Pembayaran */
 
     # METHOD GET
@@ -190,8 +183,33 @@ Route::group(['prefix' => 'admin'], function(){
     # METHOD PUT
     Route::put('transaksi/pembayaran/status/{id_pesanan}', 'Admin\Transaksi\PembayaranController@rubah_status')->name('rubah_status_pembayaran');
 
-});
 
+
+    /** Halaman Transaksi : Pesanan */
+
+    # METHOD GET
+    Route::get('transaksi/pesanan', 'Admin\Transaksi\PesananController@index')->name('pesanan_admin');
+    Route::get('transaksi/pesanan/detail/{id_pesanan}', 'Admin\Transaksi\PesananController@detail_pesanan')->name('detail_pesanan_admin');
+    Route::get('transaksi/get_penerima/{id_pesanan}', 'Admin\Transaksi\PesananController@get_info_penerima'); // AJAX
+
+    # METHOD PUT
+    Route::put('transaksi/proses_pesanan/{id_pesanan}', 'Admin\Transaksi\PesananController@proses_pesanan');
+    Route::put('transaksi/kirim_pesanan/{id_pesanan}', 'Admin\Transaksi\PesananController@kirim_pesanan');
+    Route::put('transaksi/batalkan_pesanan/{id_pesanan}', 'Admin\Transaksi\PesananController@batalkan_pesanan');
+    Route::put('transaksi/edit_pesanan/{id_pesanan}', 'Admin\Transaksi\PesananController@edit_pesanan');
+
+    # METHOD DELETE
+    Route::delete('transaksi/hapus_pesanan/{id_pesanan}', 'Admin\Transaksi\PesananController@hapus_pesanan');
+
+
+
+    /** Halaman Transaksi : Pengiriman */
+
+    # METHOD GET
+    Route::get('transaksi/pengiriman', 'Admin\Transaksi\PengirimanController@index')->name('pengiriman_admin');
+
+
+});
 
 /**
  * --------------------------------------------------------------------------
