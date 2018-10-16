@@ -44,7 +44,7 @@
                 </h3>
             </div>
             <div class="box-body">
-                <table class="table table-bordered table-hover" id="table_pesanan">
+                <table class="table table-bordered table-hover" id="table_pesanan_di_proses">
                     <thead>
                         <tr>
                             <th>ID Pesanan</th>
@@ -55,47 +55,150 @@
                         </tr>
                     </thead>
                     <tbody id="values">
-                        <?php $counter = 1; ?>
+                        <?php $counter1 = 1; ?>
                         @foreach ($data_pesanan as $item)
-                            @if($item->status_pesanan <= 2)
+                            @if($item->status_pesanan <= 1)
                             <tr>
-                                <td id="id_{{ $counter }}">{{ $item->id_pesanan }}</td>
+                                <td id="id_{{ $counter1 }}">{{ $item->id_pesanan }}</td>
                                 <td>{{ $item->nama_penerima  }}</td>
                                 <td>{{ $item->no_telepon  }}</td>
+                                <td>
+                                    @if($item->dibatalkan == 0)
+                                        <span class="label {{ $stat_label[$item->status_pesanan] }}">
+                                            {{ $stat_notif[$item->status_pesanan] }}
+                                        </span>
+                                    @else
+                                        <span class="label bg-red">
+                                            Dibatalkan
+                                        </span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($item->dibatalkan == 0)
+                                        @if($item->status_pesanan == 1)
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
+                                                    Action <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a href="{{ route('detail_pesanan_admin', [$item->id_pesanan]) }}"><i class="fa fa-user fa-fw"></i> Detail pesanan</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" class="proses_pesanan" data-toggle="modal" data-target="#proses_pesanan" id="{{ $counter1 }}">
+                                                            <i class="fa fa-refresh fa-fw"></i> Proses Pesanan
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" class="edit_pesanan" data-toggle="modal" data-target="#edit_pesanan" id="{{ $counter1 }}">
+                                                            <i class="fa fa-trash fa-fw"></i> Rubah Data Penerima
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" class="batalkan_pesanan" data-toggle="modal" data-target="#batalkan_pesanan" id="{{ $counter1 }}">
+                                                            <i class="fa fa-ban fa-fw"></i> Batalkan pesanan
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" class="hapus_pesanan" data-toggle="modal" data-target="#hapus_pesanan" id="{{ $counter1 }}">
+                                                            <i class="fa fa-trash fa-fw"></i> Hapus pesanan
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        @else
+                                            <span class="label bg-red">Menunggu Pembayaran</span>
+                                        @endif
+                                    @else
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-danger btn-xs dropdown-toggle" data-toggle="dropdown">
+                                                Action <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a href="{{ route('detail_pesanan_admin', [$item->id_pesanan]) }}"><i class="fa fa-user fa-fw"></i> Detail pesanan</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="batalkan_pesanan" data-toggle="modal" data-target="#batalkan_pesanan" id="{{ $counter1 }}">
+                                                        <i class="fa fa-reply fa-fw"></i> Cabut Status Batal
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="hapus_pesanan" data-toggle="modal" data-target="#hapus_pesanan" id="{{ $counter1 }}">
+                                                        <i class="fa fa-trash fa-fw"></i> Hapus pesanan
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endif
+                        <?php $counter1++; ?>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12">
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                <h3 class="box-title">
+                    Table Pesanan Yang Siap Di Kirim
+                </h3>
+            </div>
+            <div class="box-body">
+                <table class="table table-bordered table-hover" id="table_pesanan_siap_kirim">
+                    <thead>
+                        <tr>
+                            <th>ID Pesanan</th>
+                            <th>Nama Penerima</th>
+                            <th>No Telepon</th>
+                            <th>Layanan</th>
+                            <th>Status Pesanan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $counter2 = 1; ?>
+                        @foreach ($data_pesanan as $item)
+                            @if($item->status_pesanan == 2)
+                            <tr>
+                                <td id="id_{{ $counter2 }}">{{ $item->id_pesanan }}</td>
+                                <td>{{ $item->nama_penerima  }}</td>
+                                <td>{{ $item->no_telepon  }}</td>
+                                <td>JNE ({{ $item->layanan }})</td>
                                 <td>
                                     <span class="label {{ $stat_label[$item->status_pesanan] }}">
                                         {{ $stat_notif[$item->status_pesanan] }}
                                     </span>
                                 </td>
                                 <td>
-                                    @if($item->status_pesanan == 1)
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
                                             Action <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <a href="{{ route('detail_pesanan_admin', [$id_pesanan, $item->id_pesanan]) }}"><i class="fa fa-user fa-fw"></i> Detail pesanan</a>
+                                                <a href="{{ route('detail_pesanan_admin', [$item->id_pesanan]) }}"><i class="fa fa-user fa-fw"></i> Detail pesanan</a>
                                             </li>
                                             <li>
-                                                <a href="#" class="proses_pesanan" data-toggle="modal" data-target="#proses_pesanan" id="{{ $counter }}">
-                                                    <i class="fa fa-trash fa-fw"></i> Proses Pesanan
+                                                <a href="#" class="kirim_pesanan" data-toggle="modal" data-target="#kirim_pesanan" id="{{ $counter2 }}">
+                                                    <i class="fa fa-truck fa-fw"></i> Kirim Pesanan
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="#" class="hapus_pesanan" data-toggle="modal" data-target="#hapus_pesanan" id="{{ $counter }}">
-                                                    <i class="fa fa-trash fa-fw"></i> Hapus pesanan
+                                                <a href="#" class="proses_pesanan" data-toggle="modal" data-target="#proses_pesanan" id="{{ $counter2 }}">
+                                                    <i class="fa fa-trash fa-fw"></i> Batal Proses
                                                 </a>
                                             </li>
                                         </ul>
                                     </div>
-                                    @else
-                                        <span class="label bg-red">Menunggu Pembayaran</span>
-                                    @endif
                                 </td>
                             </tr>
                         @endif
-                        <?php $counter++; ?>
+                        <?php $counter2++; ?>
                         @endforeach
                     </tbody>
                 </table>
@@ -107,26 +210,98 @@
 @endsection
 
 @section('modal')
+<div class="modal modal-default fade" id="kirim_pesanan">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Kirim Pesanan</h4>
+            </div>
+            {!! Form::open(['method' => 'PUT', 'id' => 'form_kirim_pesanan']) !!}
+                <div class="modal-body">
+                    <div class="form-group">
+                        {{ Form::label('inp_resi', 'Input Resi Pesanan') }}
+                        {{ Form::text('resi', null, ['id' => 'inp_resi', 'class' => 'form-control']) }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn pull-left" data-dismiss="modal">Batal</button>
+                    <button type="submit" name="simpan" value="true" class="btn btn-success"><i class="fa fa-paper-plane fa-fw"></i> Kirim pesanan</button>
+                </div>
+            {!! Form::close() !!}
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<div class="modal modal-default fade" id="edit_pesanan">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Rubah Informasi Penerima</h4>
+            </div>
+            {!! Form::open(['method' => 'PUT', 'id' => 'form_edit_pesanan']) !!}
+                <div class="modal-body">
+                    <div class="form-group">
+                        {{ Form::label('inp_nama_penerima', 'Nama Penerima') }}
+                        {{ Form::text('nama_penerima', null, ['id' => 'inp_nama_penerima', 'class' => 'form-control']) }}
+                    </div>
+                    <div class="form-group">
+                        {{ Form::label('inp_alamat_tujuan', 'Alamat Tujuan') }}
+                        {{ Form::textarea('alamat_tujuan', null, ['id' => 'inp_alamat_tujuan', 'class' => 'form-control']) }}
+                    </div>
+                    <div class="form-group">
+                        {{ Form::label('inp_no_telepon', 'No. Telepon') }}
+                        {{ Form::text('no_telepon', null, ['id' => 'inp_no_telepon', 'class' => 'form-control']) }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn pull-left" data-dismiss="modal">Batal</button>
+                    <button type="submit" name="simpan" value="true" class="btn btn-primary"> Simpan Perubahan</button>
+                </div>
+            {!! Form::close() !!}
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 <div class="modal modal-default fade" id="proses_pesanan">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Ingin Memproses Pesanan ?</h4>
+                <h4 class="modal-title">Proses Pesanan ?</h4>
             </div>
             {!! Form::open(['method' => 'PUT', 'id' => 'form_proses_pesanan']) !!}
-                <div class="modal-body">
-                    <div class="form-group">
-                        <select class="form-control" name="status_pesanan">
-                            <option value="0">Belum Di Verifikasi</option>
-                            <option value="1">Telah Di Verifikasi</option>
-                        </select>
-                    </div>
-                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn pull-left" data-dismiss="modal">Batal</button>
-                    <button type="submit" name="simpan" value="true" class="btn btn-danger"><i class="fa fa-trash fa-fw"></i> Proses pesanan</button>
+                    <button type="submit" name="simpan" value="true" class="btn btn-primary"><i class="fa fa-refresh fa-fw"></i> Proses pesanan</button>
+                </div>
+            {!! Form::close() !!}
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<div class="modal modal-default fade" id="batalkan_pesanan">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Ganti Status Pembatalan Pesanan ?</h4>
+            </div>
+            {!! Form::open(['method' => 'PUT', 'id' => 'form_batalkan_pesanan']) !!}
+                <div class="modal-footer">
+                    <button type="button" class="btn pull-left" data-dismiss="modal">Batal</button>
+                    <button type="submit" name="simpan" value="true" class="btn btn-primary"><i class="fa fa-refresh fa-fw"></i> Proses</button>
                 </div>
             {!! Form::close() !!}
         </div>
@@ -141,7 +316,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Anda Yakin Ingin Lanjutkan ?</h4>
+                <h4 class="modal-title">Anda Yakin Ingin Menghapus Pesanan ?</h4>
             </div>
             {!! Form::open(['method' => 'DELETE', 'id' => 'form_hapus_pesanan']) !!}
                 <div class="modal-footer">
@@ -164,10 +339,13 @@
 
     <script>
         $(document).ready(function() {
-            $('#table_pesanan').DataTable({
+            $('#table_pesanan_di_proses').DataTable({
                 'lengthChange': false,
                 'length': 10,
-                'searching': false
+            })
+            $('#table_pesanan_siap_kirim').DataTable({
+                'lengthChange': false,
+                'length': 10,
             })
         })
     </script>
