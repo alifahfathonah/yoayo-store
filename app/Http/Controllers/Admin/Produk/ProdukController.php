@@ -159,7 +159,7 @@ class ProdukController extends Controller
 
         $data = DB::table('tbl_barang')->where('id_barang', $id_barang);
 
-        Storage::delete('public/produk//'.$data->first()->foto_barang);
+        Storage::delete('public/produk/'.$data->first()->foto_barang);
 
         $data->delete();
 
