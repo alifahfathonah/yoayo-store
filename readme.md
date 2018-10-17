@@ -2,6 +2,12 @@
  - Halaman Admin Progress `96%`
  - Halaman Pengguna Progress `20%`
 
+## Cara Installasi
+ - Pastikan GIT sudah terinstall dan siap pakai.
+ - Clone repository ini dengan link `https://github.com/miqbal97/yoayo-store.git`
+ - Buka CMD atau Terminal dan pastikan sudah terinstall composer
+ - Ketik `composer install` dan tekan Enter.
+
 ## Demo User
 `Pastikan Database Sudah Di Update Sesuai Yang Ada Di Repository`
 
