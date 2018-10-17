@@ -127,7 +127,7 @@ class ProdukController extends Controller
 
             }
 
-            if(DB::table('tbl_barang')->where('nama_barang', $id_barang)->exists() == false) {
+            if(DB::table('tbl_barang')->where('id_barang', $id_barang)->exists() == false) {
 
                 DB::table('tbl_barang')->where('id_barang', $id_barang)
                     ->update([
