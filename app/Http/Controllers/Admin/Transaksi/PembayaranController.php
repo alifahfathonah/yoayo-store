@@ -16,6 +16,7 @@ class PembayaranController extends Controller
             $data = DB::table('tbl_pembayaran as pembayaran')
                 ->join('tbl_pesanan as pesanan', 'pesanan.id_pesanan', 'pembayaran.id_pesanan')
                 ->select('pembayaran.*', 'pesanan.status_pesanan')
+                ->where('pembayaran.selesai', 0)
                 ->get();
 
             return view('admin.transaksi.pembayaran', ['data_pembayaran' => $data]);
