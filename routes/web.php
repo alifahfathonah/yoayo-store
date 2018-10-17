@@ -8,6 +8,7 @@
 
 /** Halaman Beranda Utama */
 
+# METHOD GET
 Route::get('/', 'Pengguna\BerandaController@index')->name('beranda');
 
 
@@ -15,10 +16,8 @@ Route::get('/', 'Pengguna\BerandaController@index')->name('beranda');
 /** Halaman Autentikasi Pengguna */
 
 # METHOD GET
-Route::group(['middleware' => 'guest'], function() {
-    Route::get('login', 'Pengguna\Autentikasi\LoginController@index')->name('login');
-    Route::get('register', 'Pengguna\Autentikasi\RegisterController@index')->name('register');
-});
+Route::get('login', 'Pengguna\Autentikasi\LoginController@index')->name('login');
+Route::get('register', 'Pengguna\Autentikasi\RegisterController@index')->name('register');
 Route::get('logout', 'Pengguna\Autentikasi\LoginController@logout')->name('logout');
 
 # METHOD POST
@@ -37,22 +36,16 @@ Route::get('akun/{nama_pengguna}', 'Pengguna\Akun\AkunController@index')->name('
 /** Halaman Keranjang & Checkout */
 
 # METHOD GET
-Route::group(['middleware' => 'loginValid'], function() {
-    Route::get('keranjang', 'Pengguna\Keranjang\KeranjangController@index')->name('keranjang');
-});
-
-Route::group(['prefix' => 'api/v1'], function(){
-    Route::get('provinsi', 'Pengguna\Keranjang\KeranjangController@get_provinsi');
-});
+Route::get('keranjang', 'Pengguna\Keranjang\KeranjangController@index')->name('keranjang');
+Route::get('provinsi', 'Pengguna\Keranjang\KeranjangController@get_provinsi');
 
 
 
 /** Halaman Produk*/
 
 # METHOD GET
-Route::group(['prefix'=> 'produk', 'middleware' => 'loginValid'], function() {
-    Route::get('detail', 'Pengguna\Produk\ProdukController@detail_produk')->name('detail_produk');
-});
+Route::get('produk/detail/{id_barang}', 'Pengguna\Produk\ProdukController@detail_produk')->name('detail_produk');
+
 
 
 
@@ -207,6 +200,9 @@ Route::group(['prefix' => 'admin'], function(){
 
     # METHOD GET
     Route::get('transaksi/pengiriman', 'Admin\Transaksi\PengirimanController@index')->name('pengiriman_admin');
+
+    # METHOD PUT
+    Route::put('transaksi/selesai/{id_pesanan}', 'Admin\Transaksi\PengirimanController@selesai');
 
 
 });
