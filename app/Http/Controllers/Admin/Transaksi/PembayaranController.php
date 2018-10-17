@@ -13,7 +13,11 @@ class PembayaranController extends Controller
 
         if($request->session()->exists('email_admin')) {
 
-            $data = DB::table('tbl_pembayaran')->get();
+            $data = DB::table('tbl_pembayaran as pembayaran')
+                ->join('tbl_pesanan as pesanan', 'pesanan.id_pesanan', 'pembayaran.id_pesanan')
+                ->select('pembayaran.*', 'pesanan.status_pesanan')
+                ->where('pembayaran.selesai', 0)
+                ->get();
 
             return view('admin.transaksi.pembayaran', ['data_pembayaran' => $data]);
 
@@ -36,11 +40,11 @@ class PembayaranController extends Controller
 
         if($request->has('simpan') == true) {
 
+            $update_pesanan = DB::table('tbl_pesanan')->where('id_pesanan', $id_pesanan);
+            $data = $update_pesanan->update(['status_pesanan' => $update_pesanan->first()->status_pesanan == 0 ? 1 : 0]);
+
             $update_pembayaran = DB::table('tbl_pembayaran')->where('id_pesanan', $id_pesanan);
             $update_pembayaran->update(['status_pembayaran' => $update_pembayaran->first()->status_pembayaran == 0 ? 1 : 0]);
-
-            $update_pesanan = DB::table('tbl_pesanan')->where('id_pesanan', $id_pesanan);
-            $update_pesanan->update(['status_pesanan' => $update_pesanan->first()->status_pesanan == 0 ? 1 : 0]);
 
             return redirect()->route('pembayaran_admin')->with('success', 'Pembayaran Dengan ID '.$id_pesanan.' Berhasil Di Update');
 

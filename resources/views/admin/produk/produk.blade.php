@@ -103,8 +103,8 @@
                     </div>
                 </div>
                 <div class="box-footer">
-                    <button type="submit" id="simpan" name="simpan" value="true" class="btn btn-primary btn-flat">Simpan kategori</button>
-                    <button type="reset" class="btn btn-danger btn-flat pull-right">Batal</button>
+                    <button type="submit" id="simpan" name="simpan" value="true" class="btn btn-primary btn-flat pull-right">Simpan Produk</button>
+                    <button type="reset" class="btn btn-danger btn-flat">Batal</button>
                 </div>
             {!! Form::close() !!}
         </div>

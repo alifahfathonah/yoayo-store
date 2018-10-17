@@ -8,6 +8,7 @@
 
 /** Halaman Beranda Utama */
 
+# METHOD GET
 Route::get('/', 'Pengguna\BerandaController@index')->name('beranda');
 
 
@@ -15,10 +16,8 @@ Route::get('/', 'Pengguna\BerandaController@index')->name('beranda');
 /** Halaman Autentikasi Pengguna */
 
 # METHOD GET
-Route::group(['middleware' => 'guest'], function() {
-    Route::get('login', 'Pengguna\Autentikasi\LoginController@index')->name('login');
-    Route::get('register', 'Pengguna\Autentikasi\RegisterController@index')->name('register');
-});
+Route::get('login', 'Pengguna\Autentikasi\LoginController@index')->name('login');
+Route::get('register', 'Pengguna\Autentikasi\RegisterController@index')->name('register');
 Route::get('logout', 'Pengguna\Autentikasi\LoginController@logout')->name('logout');
 
 # METHOD POST
@@ -37,22 +36,16 @@ Route::get('akun/{nama_pengguna}', 'Pengguna\Akun\AkunController@index')->name('
 /** Halaman Keranjang & Checkout */
 
 # METHOD GET
-Route::group(['middleware' => 'loginValid'], function() {
-    Route::get('keranjang', 'Pengguna\Keranjang\KeranjangController@index')->name('keranjang');
-});
-
-Route::group(['prefix' => 'api/v1'], function(){
-    Route::get('provinsi', 'Pengguna\Keranjang\KeranjangController@get_provinsi');
-});
+Route::get('keranjang', 'Pengguna\Keranjang\KeranjangController@index')->name('keranjang');
+Route::get('provinsi', 'Pengguna\Keranjang\KeranjangController@get_provinsi');
 
 
 
 /** Halaman Produk*/
 
 # METHOD GET
-Route::group(['prefix'=> 'produk', 'middleware' => 'loginValid'], function() {
-    Route::get('detail', 'Pengguna\Produk\ProdukController@detail_produk')->name('detail_produk');
-});
+Route::get('produk/detail/{id_barang}', 'Pengguna\Produk\ProdukController@detail_produk')->name('detail_produk');
+
 
 
 
@@ -174,13 +167,6 @@ Route::group(['prefix' => 'admin'], function(){
 
 
 
-    /** Halaman Transaksi : Pesanan */
-
-    # METHOD GET
-    Route::get('transaksi/pesanan', 'Admin\Transaksi\PesananController@index')->name('pesanan_admin');
-    Route::get('transaksi/pesanan/detail/{id_pesanan}', 'Admin\Transaksi\PesananController@detail_pesanan')->name('detail_pesanan_admin');
-
-
     /** Halaman Transaksi : Pembayaran */
 
     # METHOD GET
@@ -190,8 +176,36 @@ Route::group(['prefix' => 'admin'], function(){
     # METHOD PUT
     Route::put('transaksi/pembayaran/status/{id_pesanan}', 'Admin\Transaksi\PembayaranController@rubah_status')->name('rubah_status_pembayaran');
 
-});
 
+
+    /** Halaman Transaksi : Pesanan */
+
+    # METHOD GET
+    Route::get('transaksi/pesanan', 'Admin\Transaksi\PesananController@index')->name('pesanan_admin');
+    Route::get('transaksi/pesanan/detail/{id_pesanan}', 'Admin\Transaksi\PesananController@detail_pesanan')->name('detail_pesanan_admin');
+    Route::get('transaksi/get_penerima/{id_pesanan}', 'Admin\Transaksi\PesananController@get_info_penerima'); // AJAX
+
+    # METHOD PUT
+    Route::put('transaksi/proses_pesanan/{id_pesanan}', 'Admin\Transaksi\PesananController@proses_pesanan');
+    Route::put('transaksi/kirim_pesanan/{id_pesanan}', 'Admin\Transaksi\PesananController@kirim_pesanan');
+    Route::put('transaksi/batalkan_pesanan/{id_pesanan}', 'Admin\Transaksi\PesananController@batalkan_pesanan');
+    Route::put('transaksi/edit_pesanan/{id_pesanan}', 'Admin\Transaksi\PesananController@edit_pesanan');
+
+    # METHOD DELETE
+    Route::delete('transaksi/hapus_pesanan/{id_pesanan}', 'Admin\Transaksi\PesananController@hapus_pesanan');
+
+
+
+    /** Halaman Transaksi : Pengiriman */
+
+    # METHOD GET
+    Route::get('transaksi/pengiriman', 'Admin\Transaksi\PengirimanController@index')->name('pengiriman_admin');
+
+    # METHOD PUT
+    Route::put('transaksi/selesai/{id_pesanan}', 'Admin\Transaksi\PengirimanController@selesai');
+
+
+});
 
 /**
  * --------------------------------------------------------------------------

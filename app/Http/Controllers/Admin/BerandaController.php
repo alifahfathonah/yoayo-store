@@ -31,7 +31,14 @@ class BerandaController extends Controller
         foreach($table as $key) {
 
             if($key == 'pengiriman') {
-                $data[] = DB::table('tbl_pesanan')->select('id_pesanan')->count();
+                $data[] = DB::table('tbl_pesanan')->select('id_pesanan')
+                    ->where('status_pesanan', 3)->count();
+            } else if ($key == 'pesanan') {
+                $data[] = DB::table('tbl_pesanan')->select('id_pesanan')
+                    ->whereBetween('status_pesanan', [1, 2])->count();
+            } else if($key == 'pembayaran') {
+                $data[] = DB::table('tbl_pembayaran')->select('id_pesanan')
+                    ->where('selesai', 0)->count();
             } else {
                 $data[] = DB::table('tbl_'.$key)->count();
             }

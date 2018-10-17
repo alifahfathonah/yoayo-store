@@ -1,6 +1,6 @@
 ## PROJECT TUGAS YOAYO STORE (In-Progress)
- - Halaman Admin Progress `79%`
- - Halaman Pengguna Progress `12%`
+ - Halaman Admin Progress `96%`
+ - Halaman Pengguna Progress `20%`
 
 ## Demo User
 `Pastikan Database Sudah Di Update Sesuai Yang Ada Di Repository`

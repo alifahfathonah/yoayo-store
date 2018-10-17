@@ -16,40 +16,44 @@ class PengirimanController extends Controller
 
             $data = DB::table('tbl_pesanan')
                 ->select(
-                    'id_pesanan', 'nama_penerima', 'alamat_tujuan',
-                    'no_telepon', 'status_pesanan', 'tanggal_dikirim'
+                    'id_pesanan', 'nama_penerima', 'alamat_tujuan', 'layanan', 'tanggal_diterima',
+                    'no_telepon', 'no_resi', 'status_pesanan', 'tanggal_dikirim'
                 )->get();
 
             return view('admin.transaksi.pengiriman', ['data_pengiriman' => $data]);
+
+        } else {
+
+            return redirect()->route('login_admin')->with('fail', 'Harap Login Terlebih Dahulu');
 
         }
 
     }
 
-    public function edit_pengiriman(Request $request, $id_pengiriman) {
+    public function selesai(Request $request, $id_pesanan) {
 
-        if ($request->has('simpan') == true) {
+        if ($request->session()->exists('email_admin')) {
 
-            $validasi = Validator::make($request->all(), [
-                'no_resi'        => 'required|alpha_num|max:20',
-                'status_pesanan' => 'required|integer|max:1',
+            $data = DB::table('tbl_pesanan')->where([
+                'id_pesanan'        => $id_pesanan,
+                'status_pesanan'    => 4
             ]);
 
-            if($validasi->fails()) {
+            if(!empty($data->first())) {
 
-                return back()->withErrors($validasi);
+                $data->update(['status_pesanan' => 5]);
 
+                DB::table('tbl_pembayaran')
+                    ->where('id_pesanan', $id_pesanan)
+                    ->update(['selesai' => 1]);
             }
 
-            $data = DB::table('tbl_pesanan')->where('id_pesanan', $id_pesanan);
+            return back()->with('success', 'Pesanan Dengan ID '.$id_pesanan.' Telah Selesai');
 
-            if ($request->input('status_pesanan') == 3) {
-                $data->update([
-                    'no_resi'           => $request->input('no_resi'),
-                    'status_pesanan'    => $request->input('status_pesanan'),
-                    'tanggal_dikirim'   => (new Datetime)->format('Y-m-d H:m:s'),
-                ]);
-            }
+        } else {
+
+            return redirect()->route('login_admin')->with('fail', 'Harap Login Terlebih Dahulu');
+
         }
 
     }

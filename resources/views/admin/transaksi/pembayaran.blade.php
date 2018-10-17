@@ -52,7 +52,7 @@
                             <th>Status Pembayaran</th>
                             <th>Tanggal Upload</th>
                             <th>Batas Waktu</th>
-                            <th>Proses Pesanan</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -101,7 +101,7 @@
                             <th>Status Pembayaran</th>
                             <th>Tanggal Upload</th>
                             <th>Batas Waktu</th>
-                            <th>Proses Pesanan</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -119,9 +119,13 @@
                                 <td>{{ $item->tanggal_upload  }}</td>
                                 <td>{{ $item->batas_pembayaran }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-danger btn-xs proses_pembayaran" data-toggle="modal" data-target="#proses_pembayaran" id="{{ $counter }}">
-                                        <i class="fa fa-close fa-fw"></i> Batalkan Verifikasi
-                                    </button>
+                                    @if($item->status_pesanan >= 3)
+                                        <span class="label bg-green"><i class="fa fa-check fa-fw"></i> Sudah Terkirim</span>
+                                    @else
+                                        <button type="button" class="btn btn-danger btn-xs proses_pembayaran" data-toggle="modal" data-target="#proses_pembayaran" id="{{ $counter }}">
+                                            <i class="fa fa-close fa-fw"></i> Batalkan Verifikasi
+                                        </button>
+                                    @endif
                                 </td>
                             </tr>
                             @endif
