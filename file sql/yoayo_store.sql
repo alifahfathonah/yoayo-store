@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 04, 2018 at 05:12 AM
+-- Generation Time: Oct 17, 2018 at 02:27 AM
 -- Server version: 10.1.35-MariaDB
 -- PHP Version: 7.2.9
 
@@ -44,7 +44,8 @@ CREATE TABLE `tbl_admin` (
 --
 
 INSERT INTO `tbl_admin` (`id_admin`, `nama_lengkap`, `email`, `password`, `foto`, `superadmin`, `diblokir`, `tanggal_bergabung`) VALUES
-('ADM1809251', 'Muhammad Iqbal', 'miqbal.admin@email.com', '$2y$10$mzlS/DKNHNc8q.K8HO3NHO/DLcBMa7i5YrQ2b2HIDcM5ydvWu2QiO', 'muhammad_iqbal.jpg', 1, 0, '2018-09-25 20:28:55');
+('ADM1809251', 'Muhammad Iqbal', 'miqbal.admin@email.com', '$2y$10$unsKNzWw/QYFD.dZXQtMd.gztNCpV4uHUiZXD7FsG17Kw5F7oZAS6', 'muhammad_iqbal.jpg', 1, 0, '2018-09-25 20:28:55'),
+('ADM1810162', 'Dimas Wahyu Pamungkas', 'dimas.admin@email.com', '$2y$10$8V6rBo9CcgmLU6NJNUlZ5.vncUtl9Kg3kmD/FcI92bZkH8Or2ULKC', 'default.png', 0, 0, '2018-10-16 12:08:25');
 
 -- --------------------------------------------------------
 
@@ -54,15 +55,23 @@ INSERT INTO `tbl_admin` (`id_admin`, `nama_lengkap`, `email`, `password`, `foto`
 
 CREATE TABLE `tbl_barang` (
   `id_barang` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nama_barang` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nama_barang` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `id_kategori` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `id_merk` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `deskripsi_barang` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `berat_barang` double NOT NULL,
   `harga_satuan` int(11) NOT NULL,
   `stok_barang` int(11) NOT NULL,
   `foto_barang` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `tanggal_masuk` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `tbl_barang`
+--
+
+INSERT INTO `tbl_barang` (`id_barang`, `nama_barang`, `id_kategori`, `id_merk`, `deskripsi_barang`, `berat_barang`, `harga_satuan`, `stok_barang`, `foto_barang`, `tanggal_masuk`) VALUES
+('BRG1810131', 'Bola Basket Wilson Highlight Original', 'KTG1810131', 'MRK1810131', '<p>WILSON HIGHLIGHT ORIGINAL<br />\r\nWarna: Black/Gold<br />\r\nHarga Retail: IDR 399.000<br />\r\n=============================<br />\r\nHarga kami: 340.000 -Hemat 59.000<br />\r\n=============================<br />\r\nSize: 7<br />\r\nArt #WTB068523<br />\r\n100% Original<br />\r\nMade In China<br />\r\nDesciption: Composite Leather</p>', 1000, 340000, 100, 'BRG1810131.jpg', '2018-10-13 01:53:42');
 
 -- --------------------------------------------------------
 
@@ -73,17 +82,17 @@ CREATE TABLE `tbl_barang` (
 CREATE TABLE `tbl_detail_pengguna` (
   `id_pengguna` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `nama_lengkap` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `jenis_kelamin` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
   `alamat_rumah` text COLLATE utf8mb4_unicode_ci,
-  `no_telepon` varchar(18) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `foto` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `no_telepon` varchar(18) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `tbl_detail_pengguna`
 --
 
-INSERT INTO `tbl_detail_pengguna` (`id_pengguna`, `nama_lengkap`, `alamat_rumah`, `no_telepon`, `foto`) VALUES
-('PGN1809201', 'Muhammad Iqbal', 'Citayam, Jawabarat', '082298277709', NULL);
+INSERT INTO `tbl_detail_pengguna` (`id_pengguna`, `nama_lengkap`, `jenis_kelamin`, `alamat_rumah`, `no_telepon`) VALUES
+('PGN1809201', 'Muhammad Iqbal', 'Laki - Laki', 'Citayam, Jawabarat', '082298277709');
 
 -- --------------------------------------------------------
 
@@ -98,6 +107,13 @@ CREATE TABLE `tbl_detail_pesanan` (
   `subtotal_berat` double NOT NULL,
   `subtotal_biaya` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `tbl_detail_pesanan`
+--
+
+INSERT INTO `tbl_detail_pesanan` (`id_pesanan`, `id_barang`, `jumlah_beli`, `subtotal_berat`, `subtotal_biaya`) VALUES
+('PSN131011', 'BRG1810131', 2, 2000, 680000);
 
 -- --------------------------------------------------------
 
@@ -115,7 +131,7 @@ CREATE TABLE `tbl_kategori` (
 --
 
 INSERT INTO `tbl_kategori` (`id_kategori`, `nama_kategori`) VALUES
-('KTG1810031', 'asd');
+('KTG1810131', 'Bola Basket');
 
 -- --------------------------------------------------------
 
@@ -160,7 +176,7 @@ CREATE TABLE `tbl_merk` (
 --
 
 INSERT INTO `tbl_merk` (`id_merk`, `nama_merk`) VALUES
-('MRK1810031', 'asd asd');
+('MRK1810131', 'Wilson');
 
 -- --------------------------------------------------------
 
@@ -171,10 +187,18 @@ INSERT INTO `tbl_merk` (`id_merk`, `nama_merk`) VALUES
 CREATE TABLE `tbl_pembayaran` (
   `id_pesanan` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `foto_bukti` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status_pembayaran` tinyint(1) NOT NULL,
+  `status_pembayaran` tinyint(1) DEFAULT '0',
   `batas_pembayaran` date NOT NULL,
-  `tanggal_upload` datetime DEFAULT NULL
+  `tanggal_upload` datetime DEFAULT CURRENT_TIMESTAMP,
+  `selesai` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `tbl_pembayaran`
+--
+
+INSERT INTO `tbl_pembayaran` (`id_pesanan`, `foto_bukti`, `status_pembayaran`, `batas_pembayaran`, `tanggal_upload`, `selesai`) VALUES
+('PSN131011', 'PSN131011.jpg', 1, '2018-10-14', '2018-10-13 01:43:27', 1);
 
 -- --------------------------------------------------------
 
@@ -208,13 +232,24 @@ CREATE TABLE `tbl_pesanan` (
   `nama_penerima` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   `alamat_tujuan` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `no_telepon` varchar(18) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `keterangan` text COLLATE utf8mb4_unicode_ci,
+  `layanan` varchar(5) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ongkos_kirim` double NOT NULL,
   `total_bayar` double NOT NULL,
   `no_resi` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status_pesanan` tinyint(4) NOT NULL,
   `dibatalkan` tinyint(1) NOT NULL,
   `tanggal_dikirim` datetime DEFAULT NULL,
+  `tanggal_diterima` datetime DEFAULT NULL,
   `tanggal_pesanan` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `tbl_pesanan`
+--
+
+INSERT INTO `tbl_pesanan` (`id_pesanan`, `id_pengguna`, `nama_penerima`, `alamat_tujuan`, `no_telepon`, `keterangan`, `layanan`, `ongkos_kirim`, `total_bayar`, `no_resi`, `status_pesanan`, `dibatalkan`, `tanggal_dikirim`, `tanggal_diterima`, `tanggal_pesanan`) VALUES
+('PSN131011', 'PGN1809201', 'Muhammad Iqbal', 'Citayam, Jawabarat', '1234567890', 'test pesanan', 'YES', 36000, 716000, 'JNEINIRESIPENGIRIMAN', 5, 0, '2018-10-16 12:10:56', NULL, '2018-10-13 01:43:00');
 
 -- --------------------------------------------------------
 
@@ -327,8 +362,8 @@ ALTER TABLE `tbl_detail_pengguna`
 -- Constraints for table `tbl_detail_pesanan`
 --
 ALTER TABLE `tbl_detail_pesanan`
-  ADD CONSTRAINT `tbl_detail_pesanan_ibfk_1` FOREIGN KEY (`id_barang`) REFERENCES `tbl_barang` (`id_barang`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_detail_pesanan_ibfk_2` FOREIGN KEY (`id_pesanan`) REFERENCES `tbl_pesanan` (`id_pesanan`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `tbl_detail_pesanan_ibfk_1` FOREIGN KEY (`id_barang`) REFERENCES `tbl_barang` (`id_barang`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_detail_pesanan_ibfk_2` FOREIGN KEY (`id_pesanan`) REFERENCES `tbl_pesanan` (`id_pesanan`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `tbl_keranjang`
@@ -341,7 +376,7 @@ ALTER TABLE `tbl_keranjang`
 -- Constraints for table `tbl_pembayaran`
 --
 ALTER TABLE `tbl_pembayaran`
-  ADD CONSTRAINT `tbl_pembayaran_ibfk_1` FOREIGN KEY (`id_pesanan`) REFERENCES `tbl_pesanan` (`id_pesanan`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `tbl_pembayaran_ibfk_1` FOREIGN KEY (`id_pesanan`) REFERENCES `tbl_pesanan` (`id_pesanan`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `tbl_pesanan`
