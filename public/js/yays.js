@@ -295,3 +295,13 @@ $('a.hapus_pesanan').click(function(){
 $('button.lihat_foto').click(function(){
     $('img#foto_bukti').attr('src', 'http://127.0.0.1:8000/storage/pembayaran/'+$('td#id_'+this.id).html()+'.jpg')
 })
+
+
+
+//** ADMIN PENGIRIMAN *///////////////////////////////////////////////////////////////////////////
+
+//** Pesanan Selesai */
+
+$('button.pesanan_selesai').click(function(){
+    $('form#form_pesanan_selesai').attr('action','http://127.0.0.1:8000/admin/transaksi/selesai/'+$('td#id_'+this.id).html())
+})
