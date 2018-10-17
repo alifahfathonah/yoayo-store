@@ -101,6 +101,7 @@
                             <th>No. Resi</th>
                             <th>Status Pesanan</th>
                             <th>Tanggal Di Terima</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -115,6 +116,11 @@
                                 <td>{{ $item->no_resi }}</td>
                                 <td><span class="label bg-green">Telah Di Terima</span></td>
                                 <td>{{ $item->tanggal_diterima }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary btn-xs pesanan_selesai" data-toggle="modal" data-target="#pesanan_selesai" id="{{ $counter }}">
+                                        <i class="fa fa-check fa-fw"></i> Pesanan Selesai
+                                    </button>
+                                </td>
                             </tr>
                             @endif
                         <?php $counter++; ?>
@@ -125,6 +131,29 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('modal')
+<div class="modal modal-default fade" id="pesanan_selesai">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Anda Yakin Ingin Lanjutkan ?</h4>
+            </div>
+            {!! Form::open(['method' => 'PUT', 'id' => 'form_pesanan_selesai']) !!}
+                <div class="modal-footer">
+                    <button type="button" class="btn pull-left" data-dismiss="modal">Batal</button>
+                    <button type="submit" name="simpan" value="true" class="btn btn-success">Pesanan Selesai</button>
+                </div>
+            {!! Form::close() !!}
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 @endsection
 
 @section('extra_js')
