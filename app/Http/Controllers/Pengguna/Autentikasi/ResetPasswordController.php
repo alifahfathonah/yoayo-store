@@ -14,6 +14,13 @@ class ResetPasswordController extends Controller
 
     public function lupa_password(Request $request) {
 
-        return false;
+        $data = DB('tbl_pengguna')->where('email', $request->input('email'));
+
+        if ($data->exists()) {
+
+            
+
+        }
+
     }
 }

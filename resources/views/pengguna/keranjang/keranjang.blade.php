@@ -3,122 +3,179 @@
 
 @section('title', 'Keranjang')
 
-
-@section('extra_css')
-
-    {{ Html::style('user_assets/vendors/bootstrap-selector/css/bootstrap-select.min.css') }}
-    
+@section('breadcrumb')
+<div class="bg-light py-3" data-aos="fade-up" data-aos-delay="100">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 mb-0">
+                <a href="{{ route('beranda') }}">Beranda</a>
+                <span class="mx-2 mb-0">/</span>
+                <strong class="text-black">Keranjang</strong>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
-
 
 @section('content')
 
-@if (empty($data_keranjang[0]))
-    
-<section class="shopping_cart_area my-5">
+@if(!empty($data_keranjang[0]))
+
+<div class="site-section">
     <div class="container">
+        <div class="row mb-5">
+            <div class="col-md-12">
+
+                @if ($errors->any())
+
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong><i class="fa fa-ban fa-fw"></i> ERROR!!</strong><br>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                @elseif(session()->has('success'))
+
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong><i class="fa fa-ban fa-fw"></i> SUCCESS!!</strong> {{ session('success') }} <br>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                @endif
+
+            </div>
+            <div class="site-blocks-table col-md-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="product-thumbnail py-2">Gambar</th>
+                            <th class="product-name py-2">Nama Produk</th>
+                            <th class="product-price py-2">Harga</th>
+                            <th class="product-quantity py-2">Jumlah</th>
+                            <th class="product-total py-2">Subtotal</th>
+                            <th class="product-remove py-2">Hapus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <?php $total = 0; $index = 1?>
+                        @foreach ($data_keranjang as $item)
+
+                        <tr>
+                            <td class="product-thumbnail">
+                                {{ Html::image(asset('storage/produk/'.$item->foto_barang), $item->nama_barang, ['class' => 'img-fluid px-0', 'width' => '100']) }}
+                            </td>
+                            <td class="product-name">
+                                <h2 class="h5 text-black">{{ $item->nama_barang }}<br><small>Berat Satuan : <i>{{ $item->berat_barang.'gram' }}</i></small></h2>
+                            </td>
+                            <td>{{ Rupiah::create($item->harga_satuan) }}</td>
+                            <td width="200">
+                                {{ Form::open(['route' => ['update_keranjang', $item->id_barang], 'method' => 'PUT']) }}
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
+                                    </div>
+                                    <input type="text" class="form-control text-center" name="jumlah_beli" value="{{ $item->jumlah_beli }}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <button type="submit" name="simpan" value="true" class="btn btn-block btn-outline-success"> Update</button>
+                                </div>
+                                {{ Form::close() }}
+                            </td>
+                            <td>{{ Rupiah::create($item->subtotal_biaya) }}</td>
+                            <td>
+                                {{ Form::open(['route' => ['delete_keranjang', $item->id_barang], 'method' => 'DELETE']) }}
+                                    <button type="submit" class="btn btn-primary btn-sm" name="simpan" value="true">
+                                        <span class="icon-close"></span>
+                                    </button>
+                                {{ Form::close() }}
+                            </td>
+                        </tr>
+
+                        <?php $total += $item->subtotal_biaya; $index++;?>
+                        @endforeach
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <div class="row">
-            <div class="col-lg-8">
-                <div class="cart_items">
-                    <h3>Keranjang Belanja</h3>
-                    <div class="table-responsive-md">
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <th scope="row">
-                                        <a href="" style="font-size: 1.5em; color: red;"><i class="fa fa-trash"></i></a>
-                                        {{-- {{ Html::image('user_assets/img/icon/close-icon.png') }} --}}
-                                    </th>
-                                    <td>
-                                        <div class="media">
-                                            <div class="d-flex">
-                                                {{ Html::image('user_assets/img/product/cart-product/cart-3.jpg') }}
-                                            </div>
-                                            <div class="media-body">
-                                                <h4>Round Sunglasses</h4><br>
-                                                <p>Berat: 0.1Kg</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><p class="red">$150</p></td>
-                                    <td>
-                                        <div class="quantity">
-                                            <h6>Quantity</h6>
-                                            <div class="custom">
-                                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;" class="reduced items-count pr-2" type="button"><i class="icon_minus-06"></i></button>
-                                                <input type="text" name="qty" id="sst" maxlength="12" value="1" class="input-text qty" style="width: 100px;">
-                                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;" class="increase items-count pl-2" type="button"><i class="icon_plus"></i></button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><p>$150</p></td>
-                                </tr>
-                            </tbody>
-                        </table>
+            <div class="col-md-6">
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <button class="btn btn-outline-primary btn-sm btn-block">Lanjutkan Belanja</button>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="cart_totals_area">
-                    <h4>Cart Totals</h4>
-                    <div class="cart_t_list">
-                        <div class="media">
-                            <div class="d-flex">
-                                <h5>Subtotal</h5>
-                            </div>
-                            <div class="media-body">
-                                <h6>$14</h6>
+            <div class="col-md-6 pl-5">
+                <div class="row justify-content-end">
+                    <div class="col-md-7">
+                        <div class="row">
+                            <div class="col-md-12 text-right border-bottom mb-5">
+                                <h3 class="text-black h4 text-uppercase">Total Keranjang</h3>
                             </div>
                         </div>
-                        <div class="media">
-                            <div class="d-flex">
-                                <h5>Jasa Kurir</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <span class="text-black h5">Total Biaya</span>
                             </div>
-                            <div class="media-body">
-                                {{ Html::image('user_assets/img/jne.jpg', 'Jne Support', [
-                                    'class' => 'img-fluid mx-auto',
-                                ]) }}
+                            <div class="col-md-6 text-right">
+                                <strong class="text-primary h5" data-total="{{ $total }}">{{ Rupiah::create($total) }}</strong>
+                            </div>
+                            <div class="col-md-12">
+                                <small class="text-muted">Total biaya di atas belum termasuk ongkos kirim.</small>
                             </div>
                         </div>
-                    </div>
-                    <div class="total_amount row m0 row_disable">
-                        <div class="float-left">
-                            Total
+                        <hr class="border">
+                        <div class="row mb-5">
+                            <div class="col-md-12 form-group">
+                                <label for="inp_alamat" class="text-black h5">Pilih Alamat</label>
+                                <select id="inp_alamat" class="form-control" name="pilih_alamat">
+                                    <option selected="selected" value>Pilih Alamat...</option>
+                                    @if($alamat->first()->alamat_rumah != NULL)
+                                    <option value="1">Kirim Ke Alamat Sendiri</option>
+                                    @endif
+                                    <option value="2">Kirim Ke Alamat Lain</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="float-right">
-                            $400
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button class="btn btn-primary btn-lg py-3 btn-block" onclick="window.location='checkout.html'">Proses Checkout</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <button type="submit" value="submit" class="btn subs_btn form-control">Proceed to checkout</button>
             </div>
         </div>
     </div>
-</section>
+</div>
 
 @else
 
-<section class="emty_cart_area my-5">
+<div class="site-section">
     <div class="container">
-        <div class="emty_cart_inner">
-            <i class="icon-handbag icons"></i>
-            <h3>Keranjang Anda Masih Kosong</h3>
-            <h4>Silahkan <a href="{{ route('beranda') }}">Kembali</a></h4>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <span class="icon-shopping_cart display-3 text-success"></span>
+                <h2 class="display-3 text-black">Keranjang Kosong!</h2>
+                <p class="lead mb-5">Silahkan pilih produk favorit anda di katalog kami.</p>
+                <p><a href="{{ route('produk') }}" class="btn btn-sm btn-primary">Lanjut Berbelanja</a></p>
+            </div>
         </div>
     </div>
-</section>
+</div>
 
 @endif
 
-@endsection
-
-@section('extra_js')
-    {{ Html::script('user_assets/vendors/bootstrap-selector/js/bootstrap-select.min.js') }}  
-    <script>
-    $(document).ready(function () {
-        $.get('http://127.0.0.1:8000/api/v1/provinsi').done(function (data) {
-            console.log(data)
-        })
-    })
-    </script>  
 @endsection

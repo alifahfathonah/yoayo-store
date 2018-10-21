@@ -1,188 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <title>YoayoStore &mdash; @yield('title')</title>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        
-        <link rel="icon" href="user_assets/img/fav-icon.png" type="image/x-icon" />
-        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-        <title>YoAyoStore | @yield('title')</title>
-
-        <!-- Icon css link -->
-        {{ Html::style('user_assets/css/font-awesome.min.css') }}
-        {{ Html::style('user_assets/vendors/line-icon/css/simple-line-icons.css') }}
-        {{ Html::style('user_assets/vendors/elegant-icon/style.css') }}
-
-        <!-- Bootstrap -->
-        {{ Html::style('user_assets/css/bootstrap.min.css') }}
-        
-        @yield('extra_css')
-        
-        {{-- Custom style & responsive --}}
-        {{ Html::style('user_assets/css/style.css') }}
-        {{ Html::style('user_assets/css/responsive.css') }}
-
-        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        @include('pengguna.elemen.static_css')
+        @yield('custom_css')
+        <style>
+        .site-navbar .site-navigation .site-menu > li > a.btn:hover {
+            color: #fff;
+        }
+        </style>
     </head>
-    <body class="home_sidebar">
-                
-        <div class="home_box">
-            
-            @include('pengguna.elemen.navbar')        
+    <body>
+        <div class="site-wrap">
+            <header class="site-navbar" role="banner">
+                <div class="site-navbar-top">
+                    <div class="container">
+                        <div class="row align-items-center">
 
-            <!--================Main Content Area =================-->
-            <section class="home_sidebar_area">
-                @yield('content')
-            </section>
-            <!--================End Main Content Area =================-->
-            
-            <!--================World Wide Service Area =================-->
-            <section class="world_service">
-                <div class="container">
-                    <div class="world_service_inner">
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <div class="world_service_item">
-                                    <h4>{{ Html::image('user_assets/img/icon/world-icon-1.png', 'Worldwide Service') }} National Service</h4>
+                            <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
+                                {{ Form::open(['class' => 'site-block-top-search']) }}
+                                    <span class="icon icon-search2"></span>
+                                    {{ Form::text('cari', null, ['class' => 'form-control border-0', 'placeholder' => 'Cari Barang...']) }}
+                                {{ Form::close() }}
+                            </div>
+
+                            <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
+                                <div class="site-logo">
+                                    <a href="{{ route('beranda') }}" class="js-logo-clone">YoayoStore</a>
                                 </div>
                             </div>
-                            <div class="col-lg-3">
-                                <div class="world_service_item">
-                                    <h4>{{ Html::image('user_assets/img/icon/world-icon-2.png', '24/7 Help Center') }} 24/7 Help Center</h4>
+
+                            @if(session('email_pengguna'))
+                            <div class="col-6 col-md-4 order-4 order-md-3 text-right">
+                                <div class="site-top-icons">
+                                    <ul>
+                                        <li><a href="{{ route('info_akun') }}"><span class="icon icon-person" title="Detail Akun"></span></a></li>
+                                        <li>
+                                            <a href="{{ route('keranjang') }}" class="site-cart" title="Keranjang">
+                                                <span class="icon icon-shopping_cart"></span>
+                                                <span class="count" data="keranjang"></span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="cart.html" class="site-cart" title="Pembayaran">
+                                                <span class="icon icon-money"></span>
+                                                <span class="count" data="pembayaran"></span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="cart.html" class="site-cart" title="Pesanan">
+                                                <span class="icon icon-shopping-basket"></span>
+                                                <span class="count" data="pesanan"></span>
+                                            </a>
+                                        </li>
+                                        <li class="d-inline d-md-none ml-md-0">
+                                            <a href="#" class="site-menu-toggle js-menu-toggle ml-2">
+                                                <span class="icon-menu"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div class="col-lg-3">
-                                <div class="world_service_item">
-                                    <h4>{{ Html::image('user_assets/img/icon/world-icon-3.png', 'Safe Payment') }} Safe Payment</h4>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="world_service_item">
-                                    <h4>{{ Html::image('user_assets/img/icon/world-icon-4.png', 'Quick Delivery By JNE') }} Quick Delivery By JNE</h4>
-                                </div>
-                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
-            </section>
-            <!--================End World Wide Service Area =================-->
-            
-            
-            <!--================Footer Area =================-->
-            <div class="container mt-3">
-                <h5 class="text-center pb-1">Delivery Support By</h5>
-                <div class="row">
-                    <div class="col-md-4"></div>
-                    <div class="col-md-4">
-                        {{ Html::image('user_assets/img/jne.jpg', 'Jne Support', [
-                            'class' => 'img-fluid mx-auto',
-                        ]) }}
-                    </div>
-                    <div class="col-md-4"></div>
-                </div>
-                
-            </div>
-            
-            <footer class="footer_area border_none">
+                @include('pengguna.elemen.navbar')
+            </header>
+            @yield('breadcrumb')
+            @yield('content')
+            @yield('modal')
+            <footer class="site-footer border-top">
                 <div class="container">
-                    <div class="footer_widgets">
-                        <div class="row">
-                            <div class="col-lg-4 col-md-4 col-6">
-                                <aside class="f_widget f_about_widget">
-                                    {{ Html::image('user_assets/img/new-logo.png', 'YoAyoStore') }}
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum facilis aliquam expedita rem qui necessitatibus rerum tenetur praesentium et, porro nulla distinctio. Vero distinctio voluptatum nulla eos repellat dolorem atque?</p>
-                                    <h6>Social:</h6>
-                                    <ul>
-                                        <li><a href="#"><i class="social_facebook"></i></a></li>
-                                        <li><a href="#"><i class="social_twitter"></i></a></li>
-                                        <li><a href="#"><i class="social_pinterest"></i></a></li>
-                                        <li><a href="#"><i class="social_instagram"></i></a></li>
-                                        <li><a href="#"><i class="social_youtube"></i></a></li>
+                    <div class="row">
+                        <div class="col-lg-6 mb-5 mb-lg-0">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3 class="footer-heading mb-4">Navigations</h3>
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <ul class="list-unstyled">
+                                        <li><a href="#">Sell online</a></li>
+                                        <li><a href="#">Features</a></li>
+                                        <li><a href="#">Shopping cart</a></li>
+                                        <li><a href="#">Store builder</a></li>
                                     </ul>
-                                </aside>
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <ul class="list-unstyled">
+                                        <li><a href="#">Mobile commerce</a></li>
+                                        <li><a href="#">Dropshipping</a></li>
+                                        <li><a href="#">Website development</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <ul class="list-unstyled">
+                                        <li><a href="#">Point of sale</a></li>
+                                        <li><a href="#">Hardware</a></li>
+                                        <li><a href="#">Software</a></li>
+                                    </ul>
+                                </div>
                             </div>
-                            <div class="col-lg-2 col-md-4 col-6">
-                                <aside class="f_widget link_widget f_info_widget">
-                                    <div class="f_w_title">
-                                        <h3>Information</h3>
-                                    </div>
-                                    <ul>
-                                        <li><a href="#">About us</a></li>
-                                        <li><a href="#">Delivery information</a></li>
-                                        <li><a href="#">Terms & Conditions</a></li>
-                                        <li><a href="#">Help Center</a></li>
-                                        <li><a href="#">Returns & Refunds</a></li>
-                                    </ul>
-                                </aside>
+                        </div>
+                        <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+                            <h3 class="footer-heading mb-4">Promo</h3>
+                            <a href="#" class="block-6">
+                                <img src="{{ asset('user_assets/images/hero_1.jpg') }}" alt="Image placeholder" class="img-fluid rounded mb-4">
+                                <h3 class="font-weight-light  mb-0">Finding Your Perfect Shoes</h3>
+                                <p>Promo from  nuary 15 &mdash; 25, 2019</p>
+                            </a>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="block-5 mb-5">
+                                <h3 class="footer-heading mb-4">Info Kontak</h3>
+                                <ul class="list-unstyled">
+                                    <li class="address">Universitas BSI, Gedung D2, Margonda Depok.</li>
+                                    <li class="phone"><a href="tel://+6212345678910">+62 123 4567 8910</a></li>
+                                    <li class="email">devs@yoayostore.com</li>
+                                </ul>
                             </div>
-                            <div class="col-lg-2 col-md-4 col-6">
-                                <aside class="f_widget link_widget f_service_widget">
-                                    <div class="f_w_title">
-                                        <h3>Customer Service</h3>
+
+                            <div class="block-7">
+                                <form action="#" method="post">
+                                    <label for="email_subscribe" class="footer-heading">Subscribe</label>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control py-4" id="email_subscribe" placeholder="Email">
+                                        <input type="submit" class="btn btn-sm btn-primary" value="Send">
                                     </div>
-                                    <ul>
-                                        <li><a href="#">My account</a></li>
-                                        <li><a href="#">Ordr History</a></li>
-                                        <li><a href="#">Wish List</a></li>
-                                        <li><a href="#">Newsletter</a></li>
-                                        <li><a href="#">Contact Us</a></li>
-                                    </ul>
-                                </aside>
-                            </div>
-                            <div class="col-lg-2 col-md-4 col-6">
-                                <aside class="f_widget link_widget f_extra_widget">
-                                    <div class="f_w_title">
-                                        <h3>Extras</h3>
-                                    </div>
-                                    <ul>
-                                        <li><a href="#">Brands</a></li>
-                                        <li><a href="#">Gift Vouchers</a></li>
-                                        <li><a href="#">Affiliates</a></li>
-                                        <li><a href="#">Specials</a></li>
-                                    </ul>
-                                </aside>
-                            </div>
-                            <div class="col-lg-2 col-md-4 col-6">
-                                <aside class="f_widget link_widget f_account_widget">
-                                    <div class="f_w_title">
-                                        <h3>My Account</h3>
-                                    </div>
-                                    <ul>
-                                        <li><a href="#">My account</a></li>
-                                        <li><a href="#">Ordr History</a></li>
-                                        <li><a href="#">Wish List</a></li>
-                                        <li><a href="#">Newsletter</a></li>
-                                    </ul>
-                                </aside>
+                                </form>
                             </div>
                         </div>
                     </div>
-                    <div class="footer_copyright">
-                        <h5>© <script>document.write(new Date().getFullYear());</script> <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-</h5>
+                    <div class="row pt-5 mt-5 text-center">
+                        <div class="col-md-12">
+                            <p>
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                Copyright &copy;<script data-cfasync="false" src="https://www.cloudflare.com/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank" class="text-primary">Colorlib</a>
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            </p>
+                        </div>
                     </div>
                 </div>
             </footer>
-            <!--================End Footer Area =================-->
-        
         </div>
-        
-        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        {{ Html::script('user_assets/js/jquery-3.2.1.min.js') }}
-        <!-- Include all compiled plugins (below), or include individual files as needed -->
-        {{ Html::script('user_assets/js/popper.min.js') }}
-        {{ Html::script('user_assets/js/bootstrap.min.js') }}
-
-        @yield('extra_js')
-        
-        {{ Html::script('user_assets/js/theme.js') }}
+        @include('pengguna.elemen.static_js')
+        @yield('custom_js')
+        <script>
+            $(document).ready(function(){
+                $.get('{{ route('get_kategori') }}').done(function(data){
+                    var elemen = ''
+                    var index  = 1
+                    for(var values of data) {
+                        var slug = values.replace(' ', '-').toLowerCase()
+                        elemen += '<li><a href="{{ route('produk') }}?nama_kategori='+slug+'">'+values+'</a></li>'
+                    }
+                    $('ul#kategori').html(elemen)
+                })
+                $.get('{{ route('data_counter') }}').done(function(data){
+                    for(var key in data){
+                        $('span[data="'+key+'"]').html(data[key])
+                    }
+                })
+            })
+        </script>
     </body>
 </html>

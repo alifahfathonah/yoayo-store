@@ -1,86 +1,90 @@
 @extends('pengguna.master')
 
-@section('title', 'Register')
+@section('title', 'Daftar')
 
-@section('extra_css')
-
-    {{ Html::style('user_assets/vendors/bootstrap-selector/css/bootstrap-select.min.css') }}
-
-@endsection
-
-@section('content')
-<div class="container">
-    <div class="login_inner">
+@section('breadcrumb')
+<div class="bg-light py-3" data-aos="fade-up" data-aos-delay="100">
+    <div class="container">
         <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-lg-8">
-                <div class="login_title">
-                    <h2 style="text-align: center;">Buat Akun Pelanggan</h2>
-                    <p style="text-align: center;">Nikmati kemudahan berbelanja online dengan membuat akun pelanggan.</p>
-                </div>
-
-                @if ($errors->any())
-
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong><i class="fa fa-ban fa-fw"></i> ERROR!!</strong> Terjadi Kesalahan Saat Menyimpan Data.<br>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                            <li><i>{{ $error }}</i></li>
-                            @endforeach
-                        </ul>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-
-                @elseif (session()->has('success'))
-
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong><i class="fa fa-check fa-fw"></i> Registrasi Berhasil</strong> Data Sukses Disimpan.<br>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-
-                @endif
-
-                {{ Form::open(['route' => 'proses_regis', 'method' => 'POST', 'class' => 'login_form calculate_shoping_form row']) }}
-                    <div class="col-lg-6 form-group">
-                        {{ Form::text('nama_lengkap', null, ['class' => 'form-control', 'placeholder' => 'Nama lengkap']) }}
-                    </div>
-                    <div class="col-lg-6 form-group">
-                        {{ Form::email('email', null, ['class' => 'form-control', 'placeholder' => 'Email']) }}
-                    </div>
-                    <div class="col-lg-6 form-group">
-                        {{ Form::text('no_telepon', null, ['class' => 'form-control', 'placeholder' => 'No. Telepon']) }}
-                    </div>
-                    <div class="col-lg-6 form-group">
-                        {{ Form::password('password', ['class' => 'form-control', 'placeholder' => 'Password']) }}
-                    </div>
-                    <div class="col-lg-6 form-group">
-                        {{ Form::password('password_confirmation', ['class' => 'form-control', 'placeholder' => 'Ulangi Password']) }}
-                    </div>
-                    <div class="col-lg-6 form-group">
-                        <select name="jenis_kelamin" class="selectpicker">
-                            <option value="Laki-laki">Laki - Laki</option>
-                            <option value="Perempuan">Perempuan</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-6 form-group">
-                        <button type="submit" name="simpan" value="true" class="btn subs_btn form-control">register now</button>
-                    </div>
-                    <div class="col-lg-6 form-group">
-                        Sudah punya akun ? <a href="{{ route('login') }}">Login Sekarang</a>
-                    </div>
-                {{ Form::close() }}
+            <div class="col-md-12 mb-0">
+                <a href="{{ route('beranda') }}">Beranda</a>
+                <span class="mx-2 mb-0">/</span>
+                <strong class="text-black">Daftar</strong>
             </div>
         </div>
     </div>
 </div>
 @endsection
 
-@section('extra_js')
+@section('content')
+<div class="site-section">
+    <div class="container">
+        <div class="row" data-aos="fade-up" data-aos-delay="100">
+            <div class="col-md-12">
+                <h2 class="h3 mb-3 text-black text-center">Pendaftaran Akun Baru</h2>
+            </div>
+            <div class="col-md-8 mx-auto">
+                @if ($errors->any())
 
-    {{ Html::script('user_assets/vendors/bootstrap-selector/js/bootstrap-select.min.js') }}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong><i class="fa fa-ban fa-fw"></i> ERROR!!</strong><br>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
 
+                @elseif(session()->has('success'))
+
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong><i class="fa fa-check fa-fw"></i> ERROR!!</strong> {{ session('success') }}<br>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                @endif
+                {{ Form::open(['route' => 'proses_regis']) }}
+                    <div class="p-3 p-lg-5 border row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ Form::label('inp_nama', 'Nama Lengkap', ['class' => 'text-black']) }}
+                                {{ Form::text('nama_lengkap', null, ['class' => 'form-control', 'id' => 'inp_nama']) }}
+                            </div>
+                            <div class="form-group">
+                                {{ Form::label('inp_jenis_kelamin', 'Jenis Kelamin', ['class' => 'text-black']) }}
+                                {{ Form::select('jenis_kelamin', ['Pria' => 'Pria', 'Wanita' => 'Wanita'], null, [
+                                    'placeholder' => 'Pilih Jenis Kelamin..', 'class' => 'form-control', 'id' => 'inp_jenis_kelamin']) }}
+                            </div>
+                            <div class="form-group">
+                                {{ Form::label('inp_email', 'Email', ['class' => 'text-black']) }}
+                                {{ Form::email('email', null, ['class' => 'form-control', 'id' => 'inp_email']) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ Form::label('inp_password', 'Password', ['class' => 'text-black']) }}
+                                {{ Form::password('password', ['class' => 'form-control', 'id' => 'inp_password']) }}
+                            </div>
+                            <div class="form-group">
+                                {{ Form::label('inp_password_confirmation', 'Ulangi Password', ['class' => 'text-black']) }}
+                                {{ Form::password('password_confirmation', ['class' => 'form-control', 'id' => 'inp_password_confirmation']) }}
+                            </div>
+                            <div class="form-group row mt-5">
+                                <div class="col-lg-12">
+                                    <button type="submit" name="simpan" value="true" class="btn btn-primary btn-lg btn-block">Daftar Sekarang</button>
+                                </div>
+                                <div class="col-lg-12 mt-2">
+                                    <p class="my-0 mx-0">Sudah Punya Akun ? <a href="{{ route('login') }}">Silahkan Login</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{ Form::close() }}
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
