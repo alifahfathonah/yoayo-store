@@ -146,7 +146,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Anda Yakin Ingin Lanjutkan ?</h4>
+                <h4 class="modal-title">Foto bukti pembayaran</h4>
             </div>
             <div class="modal-body">
                 {{ Html::image(null, null, ['class' => 'img-responsive', 'id' => 'foto_bukti']) }}

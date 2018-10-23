@@ -45,8 +45,9 @@ class RegisterController extends Controller
             ]);
 
             DB::table('tbl_detail_pengguna')->insert([
-                'id_pengguna'  => $id_pengguna,
-                'nama_lengkap' => $request->input('nama_lengkap')
+                'id_pengguna'   => $id_pengguna,
+                'nama_lengkap'  => $request->input('nama_lengkap'),
+                'jenis_kelamin' => $request->input('jenis_kelamin')
             ]);
 
             return redirect()->route('register')->with('success', 'Registrasi Berhasil');

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 17, 2018 at 02:27 AM
+-- Generation Time: Oct 23, 2018 at 04:40 AM
 -- Server version: 10.1.35-MariaDB
 -- PHP Version: 7.2.9
 
@@ -71,7 +71,7 @@ CREATE TABLE `tbl_barang` (
 --
 
 INSERT INTO `tbl_barang` (`id_barang`, `nama_barang`, `id_kategori`, `id_merk`, `deskripsi_barang`, `berat_barang`, `harga_satuan`, `stok_barang`, `foto_barang`, `tanggal_masuk`) VALUES
-('BRG1810131', 'Bola Basket Wilson Highlight Original', 'KTG1810131', 'MRK1810131', '<p>WILSON HIGHLIGHT ORIGINAL<br />\r\nWarna: Black/Gold<br />\r\nHarga Retail: IDR 399.000<br />\r\n=============================<br />\r\nHarga kami: 340.000 -Hemat 59.000<br />\r\n=============================<br />\r\nSize: 7<br />\r\nArt #WTB068523<br />\r\n100% Original<br />\r\nMade In China<br />\r\nDesciption: Composite Leather</p>', 1000, 340000, 100, 'BRG1810131.jpg', '2018-10-13 01:53:42');
+('BRG1810131', 'Wilson Highlight Original', 'KTG1810131', 'MRK1810131', '<p>WILSON HIGHLIGHT ORIGINAL<br />\r\nWarna: Black/Gold<br />\r\nHarga Retail: IDR 399.000<br />\r\n=============================<br />\r\nHarga kami: 340.000 -Hemat 59.000<br />\r\n=============================<br />\r\nSize: 7<br />\r\nArt #WTB068523<br />\r\n100% Original<br />\r\nMade In China<br />\r\nDesciption: Composite Leather</p>', 500, 340000, 95, 'BRG1810131.jpg', '2018-10-13 01:53:42');
 
 -- --------------------------------------------------------
 
@@ -82,7 +82,7 @@ INSERT INTO `tbl_barang` (`id_barang`, `nama_barang`, `id_kategori`, `id_merk`, 
 CREATE TABLE `tbl_detail_pengguna` (
   `id_pengguna` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `nama_lengkap` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `jenis_kelamin` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `jenis_kelamin` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `alamat_rumah` text COLLATE utf8mb4_unicode_ci,
   `no_telepon` varchar(18) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -92,7 +92,8 @@ CREATE TABLE `tbl_detail_pengguna` (
 --
 
 INSERT INTO `tbl_detail_pengguna` (`id_pengguna`, `nama_lengkap`, `jenis_kelamin`, `alamat_rumah`, `no_telepon`) VALUES
-('PGN1809201', 'Muhammad Iqbal', 'Laki - Laki', 'Citayam, Jawabarat', '082298277709');
+('PGN1809201', 'Muhammad Iqbal', 'Laki - Laki', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor.', '082298277709'),
+('PGN1810212', 'Dimas Wahyu Pamungkas', 'Pria', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -113,7 +114,7 @@ CREATE TABLE `tbl_detail_pesanan` (
 --
 
 INSERT INTO `tbl_detail_pesanan` (`id_pesanan`, `id_barang`, `jumlah_beli`, `subtotal_berat`, `subtotal_biaya`) VALUES
-('PSN131011', 'BRG1810131', 2, 2000, 680000);
+('PSN1810221', 'BRG1810131', 1, 1000, 340000);
 
 -- --------------------------------------------------------
 
@@ -131,7 +132,10 @@ CREATE TABLE `tbl_kategori` (
 --
 
 INSERT INTO `tbl_kategori` (`id_kategori`, `nama_kategori`) VALUES
-('KTG1810131', 'Bola Basket');
+('KTG1810131', 'Basket'),
+('KTG1810172', 'Volley'),
+('KTG1810173', 'Sepak Bola'),
+('KTG1810214', 'Tennis');
 
 -- --------------------------------------------------------
 
@@ -143,9 +147,15 @@ CREATE TABLE `tbl_keranjang` (
   `id_pengguna` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `id_barang` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `jumlah_beli` int(11) NOT NULL,
-  `subtotal_berat` double NOT NULL,
   `subtotal_biaya` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `tbl_keranjang`
+--
+
+INSERT INTO `tbl_keranjang` (`id_pengguna`, `id_barang`, `jumlah_beli`, `subtotal_biaya`) VALUES
+('PGN1809201', 'BRG1810131', 4, 340000);
 
 -- --------------------------------------------------------
 
@@ -186,8 +196,9 @@ INSERT INTO `tbl_merk` (`id_merk`, `nama_merk`) VALUES
 
 CREATE TABLE `tbl_pembayaran` (
   `id_pesanan` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `foto_bukti` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status_pembayaran` tinyint(1) DEFAULT '0',
+  `id_pengguna` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `foto_bukti` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status_pembayaran` tinyint(1) NOT NULL DEFAULT '0',
   `batas_pembayaran` date NOT NULL,
   `tanggal_upload` datetime DEFAULT CURRENT_TIMESTAMP,
   `selesai` tinyint(1) NOT NULL DEFAULT '0'
@@ -197,8 +208,8 @@ CREATE TABLE `tbl_pembayaran` (
 -- Dumping data for table `tbl_pembayaran`
 --
 
-INSERT INTO `tbl_pembayaran` (`id_pesanan`, `foto_bukti`, `status_pembayaran`, `batas_pembayaran`, `tanggal_upload`, `selesai`) VALUES
-('PSN131011', 'PSN131011.jpg', 1, '2018-10-14', '2018-10-13 01:43:27', 1);
+INSERT INTO `tbl_pembayaran` (`id_pesanan`, `id_pengguna`, `foto_bukti`, `status_pembayaran`, `batas_pembayaran`, `tanggal_upload`, `selesai`) VALUES
+('PSN1810221', 'PGN1809201', 'PSN1810221.jpg', 1, '2018-10-23', '2018-10-22 05:26:05', 0);
 
 -- --------------------------------------------------------
 
@@ -218,7 +229,8 @@ CREATE TABLE `tbl_pengguna` (
 --
 
 INSERT INTO `tbl_pengguna` (`id_pengguna`, `email`, `password`, `tanggal_bergabung`) VALUES
-('PGN1809201', 'miqbal.pengguna@email.com', '$2y$10$g0/uyAsGtTSLepUs4iGbje74KRb5YPf2abGHjS1p/k2BBPVnMg3AK', '2018-09-20 19:00:58');
+('PGN1809201', 'miqbal.pengguna@email.com', '$2y$10$g0/uyAsGtTSLepUs4iGbje74KRb5YPf2abGHjS1p/k2BBPVnMg3AK', '2018-09-20 19:00:58'),
+('PGN1810212', 'dimas.pengguna@email.com', '$2y$10$anAwPHhE1a8NoqA1LVliPOAwe1pPlfPOKHdRBPK7Ofx.HEqyqXQpO', '2018-10-21 21:23:23');
 
 -- --------------------------------------------------------
 
@@ -249,7 +261,7 @@ CREATE TABLE `tbl_pesanan` (
 --
 
 INSERT INTO `tbl_pesanan` (`id_pesanan`, `id_pengguna`, `nama_penerima`, `alamat_tujuan`, `no_telepon`, `keterangan`, `layanan`, `ongkos_kirim`, `total_bayar`, `no_resi`, `status_pesanan`, `dibatalkan`, `tanggal_dikirim`, `tanggal_diterima`, `tanggal_pesanan`) VALUES
-('PSN131011', 'PGN1809201', 'Muhammad Iqbal', 'Citayam, Jawabarat', '1234567890', 'test pesanan', 'YES', 36000, 716000, 'JNEINIRESIPENGIRIMAN', 5, 0, '2018-10-16 12:10:56', NULL, '2018-10-13 01:43:00');
+('PSN1810221', 'PGN1809201', 'Muhammad Iqbal', 'Citayam, Jawabarat', '+6212345678910', 'Warna Black - Gold', 'YES', 18000, 358000, 'CONTOHINPUTRESI', 3, 0, '2018-10-22 05:10:52', NULL, '2018-10-22 05:21:00');
 
 -- --------------------------------------------------------
 
@@ -259,8 +271,7 @@ INSERT INTO `tbl_pesanan` (`id_pesanan`, `id_pengguna`, `nama_penerima`, `alamat
 
 CREATE TABLE `tbl_verifikasi_akun` (
   `email` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token_auth` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `expire_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -325,7 +336,8 @@ ALTER TABLE `tbl_merk`
 -- Indexes for table `tbl_pembayaran`
 --
 ALTER TABLE `tbl_pembayaran`
-  ADD UNIQUE KEY `id_pesanan` (`id_pesanan`);
+  ADD UNIQUE KEY `id_pesanan` (`id_pesanan`),
+  ADD KEY `id_pengguna` (`id_pengguna`);
 
 --
 -- Indexes for table `tbl_pengguna`
@@ -376,7 +388,8 @@ ALTER TABLE `tbl_keranjang`
 -- Constraints for table `tbl_pembayaran`
 --
 ALTER TABLE `tbl_pembayaran`
-  ADD CONSTRAINT `tbl_pembayaran_ibfk_1` FOREIGN KEY (`id_pesanan`) REFERENCES `tbl_pesanan` (`id_pesanan`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `tbl_pembayaran_ibfk_1` FOREIGN KEY (`id_pesanan`) REFERENCES `tbl_pesanan` (`id_pesanan`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `tbl_pembayaran_ibfk_2` FOREIGN KEY (`id_pengguna`) REFERENCES `tbl_pesanan` (`id_pengguna`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `tbl_pesanan`
