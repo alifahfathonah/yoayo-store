@@ -133,13 +133,4 @@ class KategoriController extends Controller
             return 'KTG'.(new Datetime)->format('ymd').'1';
         }
     }
-
-    public function check_kategori(){
-
-        $nama_kategori = str_replace('%20', ' ', $_GET['nama_kategori']);
-
-        $data = DB::table('tbl_kategori')->where('nama_kategori', $nama_kategori)->exists();
-
-        return response()->json($data);
-    }
 }

@@ -1,4 +1,7 @@
 <?php
+
+use Illuminate\Http\Request;
+
 /**
  * --------------------------------------------------------------------------
  * ROUTE HALAMAN PENGGUNA
@@ -10,41 +13,116 @@
 
 # METHOD GET
 Route::get('/', 'Pengguna\BerandaController@index')->name('beranda');
+Route::get('get_kategori', function() {
 
+    $kategori = [];
+
+    foreach(DB::table('tbl_kategori')->select('nama_kategori')->get() as $key => $value) {
+        $kategori[] = $value->nama_kategori;
+    }
+
+    return response()->json($kategori);
+
+})->name('get_kategori');
+Route::get('get_data_counter', function() {
+
+    $list = [
+        'keranjang' => DB::table('tbl_keranjang')->where('id_pengguna', session('id_pengguna'))->count(),
+        'pesanan'   => DB::table('tbl_pesanan')->where([['id_pengguna', '=', session('id_pengguna')], ['status_pesanan', '<=', 4]])->count(),
+        'pembayaran'=> DB::table('tbl_pembayaran')->where('id_pengguna', session('id_pengguna'))->count(),
+    ];
+
+    return response()->json($list);
+
+})->name('data_counter');
 
 
 /** Halaman Autentikasi Pengguna */
 
 # METHOD GET
-Route::get('login', 'Pengguna\Autentikasi\LoginController@index')->name('login');
-Route::get('register', 'Pengguna\Autentikasi\RegisterController@index')->name('register');
-Route::get('logout', 'Pengguna\Autentikasi\LoginController@logout')->name('logout');
+Route::get('masuk', 'Pengguna\Autentikasi\LoginController@index')->name('login');
+Route::get('daftar', 'Pengguna\Autentikasi\RegisterController@index')->name('register');
+Route::get('lupa-password', 'Pengguna\Autentikasi\ResetPasswordController@lupa_password')->name('lupa_password');
+Route::get('keluar', 'Pengguna\Autentikasi\LoginController@logout')->name('logout');
 
 # METHOD POST
-Route::post('login', 'Pengguna\Autentikasi\LoginController@login')->name('proses_login');
-Route::post('register', 'Pengguna\Autentikasi\RegisterController@register')->name('proses_regis');
+Route::post('masuk', 'Pengguna\Autentikasi\LoginController@login')->name('proses_login');
+Route::post('daftar', 'Pengguna\Autentikasi\RegisterController@register')->name('proses_regis');
 
 
 
 /** Halaman Akun Pengguna */
 
 # METHOD GET
-Route::get('akun/{nama_pengguna}', 'Pengguna\Akun\AkunController@index')->name('akun_pengguna');
+Route::get('info-akun', 'Pengguna\Akun\AkunController@index')->name('info_akun');
 
 
 
-/** Halaman Keranjang & Checkout */
+/** Halaman Keranjang */
 
 # METHOD GET
 Route::get('keranjang', 'Pengguna\Keranjang\KeranjangController@index')->name('keranjang');
-Route::get('provinsi', 'Pengguna\Keranjang\KeranjangController@get_provinsi');
 
+# METHOD PUT
+Route::put('keranjang/update/{id_barang}', 'Pengguna\Keranjang\KeranjangController@update')->name('update_keranjang');
+
+# METHOD DELETE
+Route::delete('keranjang/delete/{id_barang}', 'Pengguna\Keranjang\KeranjangController@delete')->name('delete_keranjang');
+
+
+/** Halaman Keranjang */
+
+# METHOD GET
+Route::get('get_provinsi', function() {
+    $curl = curl_init();
+
+    curl_setopt_array($curl, [
+        CURLOPT_URL => "https://api.rajaongkir.com/starter/province",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "UTF-8",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => [
+            "key: 1a84ef0ff7cac9bb764f1087e64da8d3"
+        ],
+    ]);
+
+    $result = curl_exec($curl);
+
+    return response()->json($result);
+});
+Route::get('get_kota', function() {
+    $curl = curl_init();
+
+    curl_setopt_array($curl, [
+        CURLOPT_URL => "https://api.rajaongkir.com/starter/city",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "UTF-8",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => [
+            "key: 1a84ef0ff7cac9bb764f1087e64da8d3"
+        ],
+    ]);
+
+    $result = curl_exec($curl);
+
+    return response()->json($result);
+});
 
 
 /** Halaman Produk*/
 
 # METHOD GET
-Route::get('produk/detail/{id_barang}', 'Pengguna\Produk\ProdukController@detail_produk')->name('detail_produk');
+Route::get('produk', 'Pengguna\Produk\ProdukController@index')->name('produk');
+Route::get('produk/detail/{id_barang}', 'Pengguna\Produk\DetailProdukController@index')->name('detail_produk');
+
+# METHOD POST
+Route::post('produk/tambah-keranjang/{id_barang}', 'Pengguna\Produk\DetailProdukController@masukan_keranjang')->name('tambah_keranjang');
 
 
 
@@ -61,7 +139,39 @@ Route::group(['prefix' => 'admin'], function(){
 
     # METHOD GET
     Route::get('/', 'Admin\BerandaController@index')->name('beranda_admin');
-    Route::get('sidebar_counter', 'Admin\BerandaController@sidebar_counter'); // AJAX
+    Route::get('sidebar_counter', function() {
+
+        $table = ['barang', 'kategori', 'merk', 'pengguna', 'admin', 'pesanan', 'pembayaran', 'pengiriman'];
+
+        $data = [];
+
+        foreach($table as $key) {
+
+            if($key == 'pengiriman') {
+
+                $data[] = DB::table('tbl_pesanan')->select('id_pesanan')
+                    ->where('status_pesanan', 3)->count();
+
+            } else if ($key == 'pesanan') {
+
+                $data[] = DB::table('tbl_pesanan')->select('id_pesanan')
+                    ->whereBetween('status_pesanan', [1, 2])->count();
+
+            } else if($key == 'pembayaran') {
+
+                $data[] = DB::table('tbl_pembayaran')->select('id_pesanan')
+                    ->where('selesai', 0)->count();
+
+            } else {
+
+                $data[] = DB::table('tbl_'.$key)->count();
+
+            }
+        }
+
+        return response()->json($data);
+
+    }); // AJAX
 
 
 
@@ -90,7 +200,13 @@ Route::group(['prefix' => 'admin'], function(){
 
     # METHOD GET
     Route::get('produk', 'Admin\Produk\ProdukController@index')->name('list_produk');
-    Route::get('get_produk', 'Admin\Produk\ProdukController@get_barang'); // AJAX
+    Route::get('get_produk/{id_barang}', function($id_barang) {
+
+        $data = DB::table('tbl_barang')->where('id_barang', $id_barang)->first();
+
+        return response()->json($data);
+
+    }); // AJAX
 
     # METHOD POST
     Route::post('produk', 'Admin\Produk\ProdukController@tambah_produk')->name('tambah_produk');
@@ -107,7 +223,15 @@ Route::group(['prefix' => 'admin'], function(){
 
     # METHOD GET
     Route::get('kategori', 'Admin\Produk\KategoriController@index')->name('kategori_produk');
-    Route::get('check_kategori', 'Admin\Produk\KategoriController@check_kategori'); // AJAX
+    Route::get('check_kategori/{nama_kategori}', function($nama_kategori){
+
+        $nama_kategori = str_replace('%20', ' ', $nama_kategori);
+
+        $data = DB::table('tbl_kategori')->where('nama_kategori', $nama_kategori)->exists();
+
+        return response()->json($data);
+
+    }); // AJAX
 
     # METHOD POST
     Route::post('kategori', 'Admin\Produk\KategoriController@tambah_kategori')->name('tambah_kategori');
@@ -215,11 +339,12 @@ Route::group(['prefix' => 'admin'], function(){
  */
 
  # METHOD GET
-Route::get('test', 'Test\TestingController@index');
-Route::get('test/ajax', function(){
+// Route::get('test', 'Test\TestingController@index');
+Route::get('test', function(Request $request) {
     return view('test');
 });
 
+
 # METHOD POST
 Route::post('test', 'Test\TestingController@test')->name('test_form');
-Route::post('/send', 'Email\EmailController@send');
+Route::get('send', 'Pengguna\EmailController@lupa_password');

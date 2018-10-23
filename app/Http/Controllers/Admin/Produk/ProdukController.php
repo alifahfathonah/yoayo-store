@@ -98,7 +98,7 @@ class ProdukController extends Controller
         if($request->has('simpan')) {
 
             $validasi = Validator::make($request->all(), [
-                'nama_barang'   => 'required|regex:/^[a-zA-Z\s]*$/|max:20',
+                'nama_barang'   => 'required|regex:/^[a-zA-Z\s]*$/|max:50',
                 'berat_barang'  => 'required|integer',
                 'harga_satuan'  => 'required|integer',
                 'stok_barang'   => 'required|integer',
@@ -127,26 +127,18 @@ class ProdukController extends Controller
 
             }
 
-            if(DB::table('tbl_barang')->where('nama_barang', $id_barang)->exists() == false) {
+            DB::table('tbl_barang')->where('id_barang', $id_barang)
+                ->update([
+                    'nama_barang'   => $request->input('nama_barang'),
+                    'id_kategori'   => $request->input('id_kategori'),
+                    'id_merk'       => $request->input('id_merk'),
+                    'berat_barang'  => $request->input('berat_barang'),
+                    'harga_satuan'  => $request->input('harga_satuan'),
+                    'stok_barang'   => $request->input('stok_barang'),
+                    'foto_barang'   => $request->hasFile('foto_barang') ? $foto_produk : $data->foto_barang,
+                ]);
 
-                DB::table('tbl_barang')->where('id_barang', $id_barang)
-                    ->update([
-                        'nama_barang'   => $request->input('nama_barang'),
-                        'id_kategori'   => $request->input('id_kategori'),
-                        'id_merk'       => $request->input('id_merk'),
-                        'berat_barang'  => $request->input('berat_barang'),
-                        'harga_satuan'  => $request->input('harga_satuan'),
-                        'stok_barang'   => $request->input('stok_barang'),
-                        'foto_barang'   => $request->hasFile('foto_barang') ? $foto_produk : $data->foto_barang,
-                    ]);
-
-                return redirect()->route('list_produk')->with('success', 'Produk Berhasil DI Simpan');
-
-            } else {
-
-                return back()->withErrors('Produk tidak dapat di simpan karna telah tersedia');
-
-            }
+            return redirect()->route('list_produk')->with('success', 'Produk Berhasil DI Simpan');
 
         } else {
 

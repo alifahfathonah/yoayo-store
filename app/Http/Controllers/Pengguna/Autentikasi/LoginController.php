@@ -12,7 +12,7 @@ class LoginController extends Controller
 {
     public function index(Request $request) {
 
-        (!$request->session()->exists('email') ? true : redirect()->route('beranda'));
+        (!$request->session()->exists('email_pengguna') ? true : redirect()->route('beranda'));
 
         return view('pengguna.autentikasi.login');
     }
@@ -29,30 +29,35 @@ class LoginController extends Controller
             if(!empty($data) && Hash::check($request->input('password'), $data->password)) {
 
                 session([
-                    'id_pengguna'  => $data->id_pengguna,
-                    'email'        => $data->email,
-                    'nama_lengkap' => $data->nama_lengkap
+                    'id_pengguna'       => $data->id_pengguna,
+                    'email_pengguna'    => $data->email,
+                    'nama_lengkap'      => $data->nama_lengkap
                 ]);
 
                 return redirect()->route('beranda');
 
             } else {
 
-                return redirect()->route('login')->with('fail', 'Email atau Password Salah!');
+                return back()->withErrors('Email atau Password Salah!');
 
             }
+
+        } else {
+
+            return back()->withErrors('Terjadi Kesalahan Saat Masuk');
 
         }
     }
 
     public function logout(Request $request) {
 
-        if ($request->session()->exists('email')) {
+        if ($request->session()->exists('email_pengguna')) {
 
             $request->session()->forget([
                 'id_pengguna',
-                'email',
-                'nama_lengkap'
+                'email_pengguna',
+                'nama_lengkap',
+                'kategori'
             ]);
 
             return redirect()->route('login');

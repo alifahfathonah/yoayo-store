@@ -8,7 +8,7 @@ class FormatRupiah extends Controller
 {
     public static function create($jumlah) {
 
-        return 'Rp.'.number_format($jumlah, 0, ',' , '.');
-        
+        return 'Rp '.number_format($jumlah, 0, ',' , '.');
+
     }
 }

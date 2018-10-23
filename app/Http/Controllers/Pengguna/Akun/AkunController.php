@@ -8,9 +8,9 @@ use App\Http\Controllers\Controller;
 
 class AkunController extends Controller
 {
-    public function index(Request $request, $nama_pengguna) {
+    public function index(Request $request) {
 
-        if($request->session()->exists('id_pengguna')) {
+        if($request->session()->exists('email_pengguna')) {
 
             $data = DB::table('tbl_pengguna as pengguna')
                 ->join('tbl_detail_pengguna as detail', 'detail.id_pengguna', 'pengguna.id_pengguna')
@@ -20,7 +20,9 @@ class AkunController extends Controller
             return view('pengguna.akun.akunpengguna', ['data_pengguna' => $data]);
 
         } else {
-            return redirect()->route('login');
+
+            return redirect()->route('login')->withErrors('Harus Login Terlebih Dahulu');
+
         }
     }
 }

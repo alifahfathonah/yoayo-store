@@ -36,7 +36,7 @@ class PenggunaController extends Controller
 
             $data->delete();
 
-            return redirect()->route('superadmin_admin')->with('success', 'Akun Pengguna Berhasil Di Hapus');
+            return redirect()->route('superadmin_pengguna')->with('success', 'Akun Pengguna Berhasil Di Hapus');
 
         } else  {
 

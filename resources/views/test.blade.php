@@ -1,6 +1,3 @@
-{!! Form::open(['route' => 'test_form', 'enctype' => 'multipart/form-data']) !!}
+{{ Form::open(['route' => ['update_keranjang', 'BRG1810211'], 'method' => 'PUT']) }}
 
-{!! Form::file('foto') !!}
-<button type="submit">Simpan</button>
-
-{!! Form::close() !!}
+{{ Form::close() }}

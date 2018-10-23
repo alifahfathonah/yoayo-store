@@ -12,36 +12,84 @@ class KeranjangController extends Controller
 
     public function index(Request $request) {
 
-        $data = DB::table('tbl_keranjang')->where('id_pengguna', session('id_pengguna'))->get();
-        
-        return view('pengguna.keranjang.keranjang', ['data_keranjang', $data]);
+        if(session()->has('id_pengguna')) {
+
+            $data = DB::table('tbl_keranjang as keranjang')
+                ->join('tbl_barang as barang', 'barang.id_barang', 'keranjang.id_barang')
+                ->select('barang.*', 'keranjang.*')->where('id_pengguna', session('id_pengguna'))->get();
+
+            $alamat = DB::table('tbl_detail_pengguna')->where('id_pengguna', session('id_pengguna'));
+
+            return view('pengguna.keranjang.keranjang', [
+                'data_keranjang' => $data,
+                'alamat'         => $alamat,
+            ]);
+
+        } else {
+
+            return redirect()->route('login')->withErrors('Harus Login Terlebih Dahulu');
+
+        }
+
     }
 
-    public static function count_keranjang() {
-        $data = DB::table('tbl_keranjang')
-                ->select(DB::raw('count(id_pengguna) as jumlah_keranjang'))
-                ->where('id_pengguna', session('id_pengguna'))
-                ->first();
-        return $data->jumlah_keranjang;
+    public function update(Request $request, $id_barang) {
+
+        if($request->has('simpan')) {
+
+            $data = DB::table('tbl_keranjang')->where([
+                ['id_barang', $id_barang],
+                ['id_pengguna', session('id_pengguna')]
+            ]);
+
+            if($data->exists()){
+
+                $data->update([
+                    'jumlah_beli' => $request->input('jumlah_beli')
+                ]);
+
+                return back()->with('success', 'Perubahan jumlah beli berhasil di proses');
+
+            } else {
+
+                return back()->withErrors('Terjadi kesalahan saat menyimpan, produk tidak ditemukan!');
+
+            }
+
+        } else {
+
+            return redirect()->route('login')->withErrors('Harus Login Terlebih Dahulu');
+
+        }
+
     }
 
-    public function get_provinsi() {
+    public function delete(Request $request, $id_barang){
 
-        $curl = curl_init();
+        if($request->has('simpan')) {
 
-        curl_setopt_array($curl, [
-            CURLOPT_URL => "https://api.rajaongkir.com/starter/province",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => [
-                "key: 1a84ef0ff7cac9bb764f1087e64da8d3"
-            ],
-        ]);
+            $data = DB::table('tbl_keranjang')->where([
+                ['id_barang', $id_barang],
+                ['id_pengguna', session('id_pengguna')]
+            ]);
 
-        return json_encode(curl_exec($curl), JSON_PRETTY_PRINT);
+            if($data->exists()){
+
+                $data->delete();
+
+                return back()->with('success', 'Produk berhasil di hapus dari keranjang');
+
+            } else {
+
+                return back()->withErrors('Terjadi kesalahan saat menyimpan, produk tidak ditemukan!');
+
+            }
+
+        } else {
+
+            return redirect()->route('login')->withErrors('Harus Login Terlebih Dahulu');
+
+        }
+
     }
 }

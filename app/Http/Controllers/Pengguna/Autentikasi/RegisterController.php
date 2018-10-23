@@ -23,15 +23,17 @@ class RegisterController extends Controller
         if($request->input('simpan')) {
 
             $validasi = Validator::make($request->all(), [
-                'nama_lengkap'    => 'required|string|max:30',
-                'email'           => 'required|email|max:30',
-                'password'        => 'required|alpha_num|max:18|confirmed',
+                'nama_lengkap'          => 'required|string|max:30',
+                'jenis_kelamin'         => 'required|alpha',
+                'email'                 => 'required|email|unique:tbl_pengguna|max:30',
+                'password'              => 'required|alpha_num|max:18|confirmed',
                 'password_confirmation' => 'required|alpha_num|max:18',
-                'no_telepon'      => 'required|string|max:18'
             ]);
 
             if($validasi->fails()) {
-                return redirect()->route('register')->withErrors($validasi);
+
+                return back()->withErrors($validasi);
+
             }
 
             $id_pengguna = $this->set_id_pengguna();
@@ -39,33 +41,37 @@ class RegisterController extends Controller
             DB::table('tbl_pengguna')->insert([
                 'id_pengguna'   =>  $id_pengguna,
                 'email'         =>  $request->input('email'),
-                'password'      =>  Hash::make($request->input('password'), [
-                                        'memory' => 1024,
-                                        'time' => 2,
-                                        'threads' => 2,
-                                    ]),
+                'password'      =>  Hash::make($request->input('password')),
             ]);
 
             DB::table('tbl_detail_pengguna')->insert([
                 'id_pengguna'  => $id_pengguna,
-                'nama_lengkap' => $request->input('nama_lengkap'),
-                'no_telepon'   => $request->input('no_telepon')
+                'nama_lengkap' => $request->input('nama_lengkap')
             ]);
 
             return redirect()->route('register')->with('success', 'Registrasi Berhasil');
+
+        } else {
+
+            return back()->withErrors('Terjadi Kesalahan Saat Menyimpan');
+
         }
     }
 
     protected function set_id_pengguna(){
 
-        $data = DB::table('tbl_pengguna')->select(DB::raw('max(id_pengguna) as id_pengguna'))->first();
+        $data = DB::table('tbl_pengguna')->max('id_pengguna');
 
-        if(!empty($data->id_pengguna)) {
-            $no_urut = substr($data->id_pengguna, 9, 3) + 1;
+        if(!empty($data)) {
+
+            $no_urut = substr($data, 9, 3) + 1;
 
             return 'PGN'.(new Datetime)->format('ymd').$no_urut;
+
         } else {
+
             return 'PGN'.(new Datetime)->format('ymd').'1';
+
         }
     }
 }

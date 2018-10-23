@@ -19,9 +19,9 @@
 @section('content')
 <div class="site-section">
     <div class="container">
-        <div class="row" data-aos="fade-up" data-aos-delay="100">
+        <div class="row" data-aos="fade" data-aos-delay="100">
             <div class="col-md-12">
-                <h2 class="h3 mb-3 text-black text-center">Masuk</h2>
+                <h2 class="h3 mb-3 text-black text-center">Lupa Password</h2>
             </div>
             <div class="col-md-5 mx-auto">
                 {{ Form::open(['route' => 'login']) }}
@@ -43,16 +43,9 @@
                             {{ Form::label('inp_email', 'Email', ['class' => 'text-black']) }}
                             {{ Form::email('email', null, ['class' => 'form-control', 'id' => 'inp_email']) }}
                         </div>
-                        <div class="form-group">
-                            {{ Form::label('inp_password', 'Password', ['class' => 'text-black']) }}
-                            {{ Form::password('password', ['class' => 'form-control', 'id' => 'inp_password']) }}
-                        </div>
                         <div class="form-group row mt-5">
                             <div class="col-lg-12">
-                                <button type="submit" name="simpan" value="true" class="btn btn-primary btn-lg btn-block">Masuk</button>
-                            </div>
-                            <div class="col-lg-12 mt-2">
-                                <p class="my-0 mx-0">Lupa Password ? <a href="#">Klik Di Sini</a></p>
+                                <button type="submit" name="simpan" value="true" class="btn btn-primary btn-lg btn-block">Proses Permintaan</button>
                             </div>
                         </div>
                     </div>
