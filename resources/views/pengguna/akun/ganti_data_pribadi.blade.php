@@ -1,6 +1,6 @@
 @extends('pengguna.master')
 
-@section('title', 'Daftar')
+@section('title', 'Rubah Data Pribadi')
 
 @section('breadcrumb')
 <div class="bg-light py-3" data-aos="fade-up" data-aos-delay="100">
@@ -9,7 +9,9 @@
             <div class="col-md-12 mb-0">
                 <a href="{{ route('beranda') }}">Beranda</a>
                 <span class="mx-2 mb-0">/</span>
-                <strong class="text-black">Daftar</strong>
+                <a href="{{ route('info-akun') }}">Profile</a>
+                <span class="mx-2 mb-0">/</span>
+                <strong class="text-black">Edit Data Pribadi</strong>
             </div>
         </div>
     </div>
@@ -21,9 +23,9 @@
     <div class="container">
         <div class="row" data-aos="fade-up" data-aos-delay="100">
             <div class="col-md-12">
-                <h2 class="h3 mb-3 text-black text-center">Pendaftaran Akun Baru</h2>
+                <h2 class="h3 mb-3 text-black text-center">Edit Data Pribadi</h2>
             </div>
-            <div class="col-md-8 mx-auto">
+            <div class="col-md-8">
                 @if ($errors->any())
 
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -48,36 +50,37 @@
                 @endif
                 {{ Form::open(['route' => 'proses_regis']) }}
                     <div class="p-3 p-lg-5 border row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 {{ Form::label('inp_nama', 'Nama Lengkap', ['class' => 'text-black']) }}
-                                {{ Form::text('nama_lengkap', null, ['class' => 'form-control', 'id' => 'inp_nama']) }}
+                                {{ Form::text('nama_lengkap', $data->nama_lengkap, ['class' => 'form-control', 'id' => 'inp_nama']) }}
                             </div>
                             <div class="form-group">
                                 {{ Form::label('inp_jenis_kelamin', 'Jenis Kelamin', ['class' => 'text-black']) }}
-                                {{ Form::select('jenis_kelamin', ['Pria' => 'Pria', 'Wanita' => 'Wanita'], null, [
+                                {{ Form::select('jenis_kelamin', ['Pria' => 'Pria', 'Wanita' => 'Wanita'], $data->jenis_kelamin, [
                                     'placeholder' => 'Pilih Jenis Kelamin..', 'class' => 'form-control', 'id' => 'inp_jenis_kelamin']) }}
                             </div>
                             <div class="form-group">
                                 {{ Form::label('inp_email', 'Email', ['class' => 'text-black']) }}
-                                {{ Form::email('email', null, ['class' => 'form-control', 'id' => 'inp_email']) }}
+                                {{ Form::email('email', $data->email, ['class' => 'form-control', 'id' => 'inp_email']) }}
+                            </div>
+                            <div class="form-group">
+                                {{ Form::label('inp_no_telepon', 'No. Telepon', ['class' => 'text-black']) }}
+                                {{ Form::text('no_telepon', $data->no_telepon, ['class' => 'form-control', 'id' => 'inp_no_telepon']) }}
+                            </div>
+                            <div class="form-group">
+                                {{ Form::label('inp_alamat', 'Alamat Rumah', ['class' => 'text-black']) }}
+                                {{ Form::textarea('alamat_rumah', $data->alamat_rumah, ['class' => 'form-control', 'id' => 'inp_alamat']) }}
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 {{ Form::label('inp_password', 'Password', ['class' => 'text-black']) }}
                                 {{ Form::password('password', ['class' => 'form-control', 'id' => 'inp_password']) }}
                             </div>
-                            <div class="form-group">
-                                {{ Form::label('inp_password_confirmation', 'Ulangi Password', ['class' => 'text-black']) }}
-                                {{ Form::password('password_confirmation', ['class' => 'form-control', 'id' => 'inp_password_confirmation']) }}
-                            </div>
                             <div class="form-group row mt-5">
                                 <div class="col-lg-12">
                                     <button type="submit" name="simpan" value="true" class="btn btn-primary btn-lg btn-block">Daftar Sekarang</button>
-                                </div>
-                                <div class="col-lg-12 mt-2">
-                                    <p class="my-0 mx-0">Sudah Punya Akun ? <a href="{{ route('login') }}">Silahkan Login</a></p>
                                 </div>
                             </div>
                         </div>

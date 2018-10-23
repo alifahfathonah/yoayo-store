@@ -28,6 +28,12 @@ class DetailProdukController extends Controller
 
         if($request->has('simpan')) {
 
+            if(!session()->has('id_pengguna')) {
+
+                return redirect()->route('login')->withErrors('Harus Login Terlebih Dahulu');
+
+            }
+
             $data = DB::table('tbl_barang')->where('id_barang', $id_barang);
 
             if($data->exists() && $data->first()->stok_barang != 0) {

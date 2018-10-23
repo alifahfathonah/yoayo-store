@@ -29,7 +29,7 @@
                         @if ($errors->any())
 
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <strong><i class="fa fa-ban fa-fw"></i> ERROR!!</strong><br>
+                                <strong><i class="icon-ban"></i> ERROR!!</strong><br>
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>
                                 @endforeach

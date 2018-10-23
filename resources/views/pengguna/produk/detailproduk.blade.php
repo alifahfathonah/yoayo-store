@@ -26,7 +26,7 @@
                 @if ($errors->any())
 
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong><i class="fa fa-ban fa-fw"></i> ERROR!!</strong><br>
+                        <strong><i class="icon-ban"></i> ERROR!!</strong><br>
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
@@ -38,7 +38,7 @@
                 @elseif(session()->has('success'))
 
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <strong><i class="fa fa-ban fa-fw"></i> SUCCESS!!</strong> {{ session('success') }} <br>
+                        <strong><i class="icon-check"></i> SUCCESS!!</strong> {{ session('success') }} <br>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
