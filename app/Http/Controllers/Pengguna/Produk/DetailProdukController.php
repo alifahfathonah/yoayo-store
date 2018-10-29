@@ -34,6 +34,12 @@ class DetailProdukController extends Controller
 
             }
 
+            if($request->input('jumlah_beli') == 0){
+
+                return back()->withErrors('Jumlah Pembelian Minimal 1 Pcs');
+
+            }
+
             $data = DB::table('tbl_barang')->where('id_barang', $id_barang);
 
             if($data->exists() && $data->first()->stok_barang != 0) {

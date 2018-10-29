@@ -57,6 +57,17 @@ Route::post('daftar', 'Pengguna\Autentikasi\RegisterController@register')->name(
 Route::get('info-akun', 'Pengguna\Akun\AkunController@index')->name('info_akun');
 
 
+/** Halaman Produk*/
+
+# METHOD GET
+Route::get('produk', 'Pengguna\Produk\ProdukController@index')->name('produk');
+Route::get('produk/detail/{id_barang}', 'Pengguna\Produk\DetailProdukController@index')->name('detail_produk');
+
+# METHOD POST
+Route::post('produk/tambah-keranjang/{id_barang}', 'Pengguna\Produk\DetailProdukController@masukan_keranjang')->name('tambah_keranjang');
+
+
+
 
 /** Halaman Keranjang */
 
@@ -69,10 +80,17 @@ Route::put('keranjang/update/{id_barang}', 'Pengguna\Keranjang\KeranjangControll
 # METHOD DELETE
 Route::delete('keranjang/delete/{id_barang}', 'Pengguna\Keranjang\KeranjangController@delete')->name('delete_keranjang');
 
+# METHOD POST
+Route::post('keranjang/method', 'Pengguna\Keranjang\KeranjangController@method')->name('checkout_method');
 
-/** Halaman Keranjang */
+
+/** Halaman Checkout */
 
 # METHOD GET
+Route::get('checkout/{method}', 'Pengguna\Keranjang\CheckoutController@index')->name('checkout_keranjang');
+Route::get('selesai', function(){
+    return view('pengguna.keranjang.terimakasih');
+});
 Route::get('get_provinsi', function() {
     $curl = curl_init();
 
@@ -93,11 +111,13 @@ Route::get('get_provinsi', function() {
 
     return response()->json($result);
 });
-Route::get('get_kota', function() {
+Route::get('get_kota', function(Request $request) {
     $curl = curl_init();
 
+    $id = $request->input('provinsi');
+
     curl_setopt_array($curl, [
-        CURLOPT_URL => "https://api.rajaongkir.com/starter/city",
+        CURLOPT_URL => "https://api.rajaongkir.com/starter/city?province=".$id,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => "UTF-8",
         CURLOPT_MAXREDIRS => 10,
@@ -113,17 +133,45 @@ Route::get('get_kota', function() {
 
     return response()->json($result);
 });
+Route::post('get_cost', function(Request $request) {
+    $curl = curl_init();
+
+    $id_city     = $request->input('kota');
+    $berat       = $request->input('berat');
+
+    curl_setopt_array($curl, [
+        CURLOPT_URL => "https://api.rajaongkir.com/starter/cost",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "POST",
+        CURLOPT_POSTFIELDS => "origin=115&destination=".$id_city."&weight=".$berat."&courier=jne",
+        CURLOPT_HTTPHEADER => [
+            'content-type: application/x-www-form-urlencoded',
+            "key: 1a84ef0ff7cac9bb764f1087e64da8d3"
+        ],
+    ]);
+
+    $result = curl_exec($curl);
+
+    return response()->json($result);
+});
 
 
-/** Halaman Produk*/
+/** Halaman Pesanan*/
 
 # METHOD GET
-Route::get('produk', 'Pengguna\Produk\ProdukController@index')->name('produk');
-Route::get('produk/detail/{id_barang}', 'Pengguna\Produk\DetailProdukController@index')->name('detail_produk');
-
-# METHOD POST
-Route::post('produk/tambah-keranjang/{id_barang}', 'Pengguna\Produk\DetailProdukController@masukan_keranjang')->name('tambah_keranjang');
-
+Route::get('pesanan', function(){
+    return view('pengguna.pesanan.pesanan');
+})->name('pesanan');
+Route::get('pembayaran', function(){
+    return view('pengguna.pesanan.pembayaran');
+})->name('pembayaran');
+Route::get('invoice/{id_invoice}', function($id_invoice){
+    return view('pengguna.pesanan.invoice');
+})->name('invoice');
 
 
 
@@ -339,10 +387,10 @@ Route::group(['prefix' => 'admin'], function(){
  */
 
  # METHOD GET
-// Route::get('test', 'Test\TestingController@index');
-Route::get('test', function(Request $request) {
-    return view('test');
-});
+Route::get('test', 'Test\TestingController@index');
+// Route::get('test', function(Request $request) {
+//     return view('test');
+// });
 
 
 # METHOD POST
