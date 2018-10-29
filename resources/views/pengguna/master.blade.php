@@ -4,6 +4,7 @@
         <title>YoayoStore &mdash; @yield('title')</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="_token" content="{{ csrf_token() }}" />
         @include('pengguna.elemen.static_css')
         @yield('custom_css')
         <style>
@@ -44,13 +45,13 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="cart.html" class="site-cart" title="Pembayaran">
+                                            <a href="{{ route('pembayaran') }}" class="site-cart" title="Pembayaran">
                                                 <span class="icon icon-money"></span>
                                                 <span class="count" data="pembayaran"></span>
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="cart.html" class="site-cart" title="Pesanan">
+                                            <a href="{{ route('pesanan') }}" class="site-cart" title="Pesanan">
                                                 <span class="icon icon-shopping-basket"></span>
                                                 <span class="count" data="pesanan"></span>
                                             </a>

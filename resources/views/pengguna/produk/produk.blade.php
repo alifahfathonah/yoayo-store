@@ -35,7 +35,7 @@
                     <div class="col-md-12 mb-5">
                         <div class="float-md-left mb-4">
                             <h2 class="text-black h5">
-                                Katalog Produk {{ !empty($data_filter) ? $data_filter : false }}
+                                Katalog Produk {!! !empty($data_filter) ? '<span class="text-primary">'.$data_filter.'</span>': false !!}
                             </h2>
                         </div>
                         <div class="d-flex">
@@ -116,12 +116,12 @@
                 <div class="border p-4 rounded mb-4">
                     <h3 class="mb-3 h6 text-uppercase text-black d-block">Categories</h3>
                     <ul class="list-unstyled mb-0">
-                        @foreach ($nama_kategori as $item)
+                        @foreach ($kategori as $item)
                             <li class="mb-1">
-                                <a href="{{ route('produk') }}/?nama_kategori={{ strtolower(str_replace(' ', '-', $item->nama_kategori)) }}" class="d-flex">
-                                    <span>{{ $item->nama_kategori }}</span>
+                                <a href="{{ route('produk') }}/?nama_kategori={{ strtolower(str_replace(' ', '-', $item['nama_kategori'])) }}" class="d-flex">
+                                    <span>{{ $item['nama_kategori'] }}</span>
                                     <span class="text-black ml-auto">
-                                        ({{ $jumlah_barang->where('id_kategori', $item->id_kategori)->count() }})
+                                        ({{ $item['jumlah_barang'] }})
                                     </span>
                                 </a>
                             </li>

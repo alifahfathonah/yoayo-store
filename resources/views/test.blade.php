@@ -1,3 +1,3 @@
-{{ Form::open(['route' => ['update_keranjang', 'BRG1810211'], 'method' => 'PUT']) }}
+<script type="text/javascript">
 
-{{ Form::close() }}
+</script>

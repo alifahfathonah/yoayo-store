@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Pengguna\Keranjang;
 
+use Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use function GuzzleHttp\json_encode;
@@ -37,6 +39,12 @@ class KeranjangController extends Controller
 
         if($request->has('simpan')) {
 
+            if($request->input('jumlah_beli') == 0){
+
+                return back()->withErrors('Jumlah Pembelian Minimal 1 Pcs!');
+
+            }
+
             $data = DB::table('tbl_keranjang')->where([
                 ['id_barang', $id_barang],
                 ['id_pengguna', session('id_pengguna')]
@@ -44,8 +52,15 @@ class KeranjangController extends Controller
 
             if($data->exists()){
 
+                $barang = DB::table('tbl_barang')->where([
+                    'id_barang' => $id_barang
+                ])->first();
+
+                $subtotal = $barang->harga_satuan * $request->input('jumlah_beli');
+
                 $data->update([
-                    'jumlah_beli' => $request->input('jumlah_beli')
+                    'jumlah_beli'    => $request->input('jumlah_beli'),
+                    'subtotal_biaya' => $subtotal,
                 ]);
 
                 return back()->with('success', 'Perubahan jumlah beli berhasil di proses');
@@ -84,6 +99,30 @@ class KeranjangController extends Controller
                 return back()->withErrors('Terjadi kesalahan saat menyimpan, produk tidak ditemukan!');
 
             }
+
+        } else {
+
+            return redirect()->route('login')->withErrors('Harus Login Terlebih Dahulu');
+
+        }
+
+    }
+
+    public function method(Request $request) {
+
+        if($request->has('simpan') && session()->has('email_pengguna')) {
+
+            $validasi = Validator::make($request->all(), [
+                'pilih_alamat' => 'required|integer|max:2'
+            ]);
+
+            if($validasi->fails()){
+                return back()->withErrors($validasi);
+            }
+
+            $method = Crypt::encrypt($request->input('pilih_alamat'));
+
+            return redirect()->route('checkout_keranjang', ['method' => $method]);
 
         } else {
 

@@ -137,6 +137,7 @@
                             </div>
                         </div>
                         <hr class="border">
+                        {{ Form::open(['route' => 'checkout_method']) }}
                         <div class="row mb-5">
                             <div class="col-md-12 form-group">
                                 <label for="inp_alamat" class="text-black h5">Pilih Alamat</label>
@@ -151,9 +152,10 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <button class="btn btn-primary btn-lg py-3 btn-block" onclick="window.location='checkout.html'">Proses Checkout</button>
+                                <button type="submit" name="simpan" value="true" class="btn btn-primary btn-lg py-3 btn-block">Proses Checkout</button>
                             </div>
                         </div>
+                        {{ Form::close() }}
                     </div>
                 </div>
             </div>

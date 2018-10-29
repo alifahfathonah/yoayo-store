@@ -1,6 +1,6 @@
 ## PROJECT TUGAS YOAYO STORE (In-Progress)
  - Halaman Admin Progress `96%`
- - Halaman Pengguna Progress `45%`
+ - Halaman Pengguna Progress `75%`
 
 ## Cara Installasi
  - Pastikan GIT sudah terinstall dan siap pakai.
