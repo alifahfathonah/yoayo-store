@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Pengguna\Keranjang;
 
+use DateTime;
 use Validator;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Http\Request;
@@ -47,19 +49,22 @@ class CheckoutController extends Controller
 
     public function save_checkout(Request $request) {
 
-        if(session()->has('email_pengguna')) {
+        if(session()->has('email_pengguna') && $request->input('simpan')) {
 
             $id_pengguna = session('id_pengguna');
             $id_pesanan  = $this->set_id_pesanan();
             $req = $request->all();
 
             $validasi = Validator::make($req, [
-                'nama_penerima' => 'required|regex:/^[a-zA-Z\w]*$/|max:50',
+                'nama_penerima' => 'required|regex:/^[a-zA-Z\s]*$/|max:30',
                 'alamat_tujuan' => 'required|string',
                 'no_telepon'    => 'required|regex:/^[0-9\-\w\+]*$/|max:20',
                 'keterangan'    => 'nullable|string',
-                'layanan'       => 'required|alpha',
-                'ongkos_kirim'  => 'required|integer',
+                'service'       => 'required|alpha',
+                'layanan'       => 'required|integer',
+                'bank'          => 'required|alpha',
+                'atas_nama'     => 'required|regex:/^[a-zA-Z\s]*$/|max:30',
+                'no_rekening'   => 'required|regex:/^[0-9\-\s]*$/'
             ]);
 
             if($validasi->fails()){
@@ -75,13 +80,22 @@ class CheckoutController extends Controller
                 $save_pesanan = DB::table('tbl_pesanan')->insert([
                     'id_pesanan'    => $id_pesanan,
                     'id_pengguna'   => $id_pengguna,
-                    'nama_penerima' => $req->nama_penerima,
-                    'alamat_tujuan' => $req->alamat_tujuan,
-                    'no_telepon'    => $req->no_telepon,
-                    'keterangan'    => !is_null($req->keterangan) ? NULL : $req->keterangan,
-                    'layanan'       => $req->layanan,
-                    'ongkos_kirim'  => $req->ongkir,
+                    'nama_penerima' => $req['nama_penerima'],
+                    'alamat_tujuan' => $req['alamat_tujuan'],
+                    'no_telepon'    => $req['no_telepon'],
+                    'keterangan'    => !is_null($req['keterangan']) ? NULL : $req['keterangan'],
+                    'layanan'       => $req['service'],
+                    'ongkos_kirim'  => $req['layanan'],
                     'total_bayar'   => $keranjang->sum('subtotal_biaya'),
+                ]);
+
+                DB::table('tbl_pembayaran')->insert([
+                    'id_pesanan'       => $id_pesanan,
+                    'id_pengguna'      => $id_pengguna,
+                    'bank'             => $req['bank'],
+                    'atas_nama'        => $req['atas_nama'],
+                    'no_rekening'      => $req['no_rekening'],
+                    'batas_pembayaran' => Carbon::tomorrow()
                 ]);
 
                 if($save_pesanan == True) {
@@ -100,6 +114,10 @@ class CheckoutController extends Controller
 
                     }
 
+                    DB::table('tbl_keranjang')->where('id_pengguna', $id_pengguna)->delete();
+
+                    return redirect()->route('pesanan')->with('success', 'Pesanan Berhasil Di Simpan');
+
                 } else {
 
                     DB::table('tbl_pesanan')->where('id_pesanan', $id_pesanan)->delete();
@@ -113,6 +131,10 @@ class CheckoutController extends Controller
                 return back()->withErrors('Data Keranjang Tidak Ditemukan');
 
             }
+
+        } else {
+
+            return back()->withErrors('Terjadi Kesalahan Saat Menyimpan');
 
         }
 

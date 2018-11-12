@@ -64,25 +64,51 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>#1</td>
-                            <td>#PSN1810281</td>
-                            <td>
-                                <a href="{{ route('invoice', ['id_invoice' => 'INV1810281']) }}" class="btn btn-outline-info btn-xs py-1"><i class="fa fa-search fa-fw"></i> INV1810281</a>
-                            </td>
-                            <td>BRI a/n Lukman Hakim 12345678910</td>
-                            <td>Rp. 340.000</td>
-                            <td>
-                                <span class="badge badge-warning">
-                                    <i class="fa fa-truck fa-fw"></i> Dikirim
-                                </span>
-                            </td>
-                            <td>
-                                <span class="badge badge-danger">
-                                    <i class="fa fa-close fa-fw"></i> Tidak Dapat Dibatalkan
-                                </span>
-                            </td>
-                        </tr>
+                        <?php $count = 0;?>
+                        @forelse ($data_pesanan as $item)
+                            <tr>
+                                <td>{{ '#'.$count }}</td>
+                                <td>{{ '#'.$item->id_pesanan }}</td>
+                                <td>
+                                    @if($item->foto_bukti == NULL)
+                                        <a href="{{ route('upload_bukti', ['id_pesanan' => $item->id_pesanan]) }}" class="btn btn-outline-warning btn-xs py-1">
+                                            <i class="fa fa-upload fa-fw"></i> Upload Bukti
+                                        </a>
+                                        <small class="help-block">Silahkan upload bukti pembayaran.</small>
+                                    @else
+                                        <a href="{{ route('invoice', ['id_invoice' => 'INV1810281']) }}" class="btn btn-outline-info btn-xs py-1">
+                                            <i class="fa fa-search fa-fw"></i> INV1810281
+                                        </a>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($item->foto_bukti != NULL)
+                                        {{ $item->bank.' a/n '.$item->atas_nama.' '.$no_rekening }}
+                                    @else
+                                        <span class="badge badge-secondary">Belum Tersedia</span>
+                                    @endif
+                                </td>
+                                <td>{{ Rupiah::create($item->total_bayar) }}</td>
+                                <td>
+                                    <?php
+                                        $status = [
+                                            'badge' => ['secondary', '']
+                                        ];
+                                    ?>
+                                    <span class="badge badge-warning">
+                                        <i class="fa fa-truck fa-fw"></i> Dikirim
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-danger">
+                                        <i class="fa fa-close fa-fw"></i> Tidak Dapat Dibatalkan
+                                    </span>
+                                </td>
+                            </tr>
+                        @empty
+
+                        @endforelse
+
                     </tbody>
                 </table>
             </div>

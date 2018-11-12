@@ -4,7 +4,6 @@
         <title>YoayoStore &mdash; @yield('title')</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="_token" content="{{ csrf_token() }}" />
         @include('pengguna.elemen.static_css')
         @yield('custom_css')
         <style>
@@ -21,9 +20,9 @@
                         <div class="row align-items-center">
 
                             <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
-                                {{ Form::open(['class' => 'site-block-top-search']) }}
+                                {{ Form::open(['route' => 'produk', 'class' => 'site-block-top-search', 'method' => 'GET']) }}
                                     <span class="icon icon-search2"></span>
-                                    {{ Form::text('cari', null, ['class' => 'form-control border-0', 'placeholder' => 'Cari Barang...']) }}
+                                    {{ Form::text('search', null, ['class' => 'form-control border-0', 'placeholder' => 'Cari Barang...']) }}
                                 {{ Form::close() }}
                             </div>
 

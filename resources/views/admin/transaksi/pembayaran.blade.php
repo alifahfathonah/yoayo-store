@@ -62,17 +62,25 @@
                             <tr>
                                 <td id="id_{{ $counter }}">{{ $item->id_pesanan }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-warning btn-xs lihat_foto" data-toggle="modal" data-target="#lihat_foto" id="{{ $counter }}">
-                                        <i class="fa fa-search fa-fw"></i> Lihat Foto Bukti
-                                    </button>
+                                    @if(!empty($item->foto_bukti))
+                                        <button type="button" class="btn btn-warning btn-xs lihat_foto" data-toggle="modal" data-target="#lihat_foto" id="{{ $counter }}">
+                                            <i class="fa fa-search fa-fw"></i> Lihat Foto Bukti
+                                        </button>
+                                    @else
+                                        <span class="label bg-danger">Belum Di Upload</span>
+                                    @endif
                                 </td>
                                 <td><span class="label bg-gray">Belum Di Verifikasi</span></td>
                                 <td>{{ $item->tanggal_upload  }}</td>
                                 <td>{{ $item->batas_pembayaran }}</td>
                                 <td>
+                                    @if(!empty($item->foto_bukti))
                                     <button type="button" class="btn btn-primary btn-xs proses_pembayaran" data-toggle="modal" data-target="#proses_pembayaran" id="{{ $counter }}">
                                         <i class="fa fa-refresh fa-fw"></i> Proses Pembayaran
                                     </button>
+                                    @else
+                                        <span class="label bg-danger">Belum Dapat Diproses</span>
+                                    @endif
                                 </td>
                             </tr>
                             @endif
@@ -211,12 +219,12 @@
             $('#table_pembayaran1').DataTable({
                 'lengthChange': false,
                 'length': 10,
-                // 'searching': false
+                'searching': false
             })
             $('#table_pembayaran2').DataTable({
                 'lengthChange': false,
                 'length': 10,
-                // 'searching': false
+                'searching': false
             })
         })
     </script>

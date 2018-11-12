@@ -26,10 +26,14 @@ Route::get('get_kategori', function() {
 })->name('get_kategori');
 Route::get('get_data_counter', function() {
 
+    $pembayaran = DB::table('tbl_pembayaran')->where([
+        ['id_pengguna', session('id_pengguna')]
+    ]);
+
     $list = [
         'keranjang' => DB::table('tbl_keranjang')->where('id_pengguna', session('id_pengguna'))->count(),
         'pesanan'   => DB::table('tbl_pesanan')->where([['id_pengguna', '=', session('id_pengguna')], ['status_pesanan', '<=', 4]])->count(),
-        'pembayaran'=> DB::table('tbl_pembayaran')->where('id_pengguna', session('id_pengguna'))->count(),
+        'pembayaran'=> $pembayaran->first()->foto_bukti != NULL ? $pembayaran->count() : '0',
     ];
 
     return response()->json($list);
@@ -54,7 +58,11 @@ Route::post('daftar', 'Pengguna\Autentikasi\RegisterController@register')->name(
 /** Halaman Akun Pengguna */
 
 # METHOD GET
-Route::get('info-akun', 'Pengguna\Akun\AkunController@index')->name('info_akun');
+Route::get('info_akun', 'Pengguna\Akun\AkunController@index')->name('info_akun');
+Route::get('info_akun/edit', 'Pengguna\Akun\InformasiAkunController@index')->name('edit_info_akun');
+
+# METHOD PUT
+Route::put('info_akun/edit', 'Pengguna\Akun\InformasiAkunController@simpan_informasi')->name('simpan_info_akun');
 
 
 /** Halaman Produk*/
@@ -133,6 +141,8 @@ Route::get('get_kota', function(Request $request) {
 
     return response()->json($result);
 });
+
+# METHOD POST
 Route::post('get_cost', function(Request $request) {
     $curl = curl_init();
 
@@ -158,17 +168,27 @@ Route::post('get_cost', function(Request $request) {
 
     return response()->json($result);
 });
+Route::post('checkout', 'Pengguna\Keranjang\CheckoutController@save_checkout')->name('save_checkout');
 
 
 /** Halaman Pesanan*/
 
 # METHOD GET
-Route::get('pesanan', function(){
-    return view('pengguna.pesanan.pesanan');
-})->name('pesanan');
-Route::get('pembayaran', function(){
-    return view('pengguna.pesanan.pembayaran');
-})->name('pembayaran');
+Route::get('pesanan', 'Pengguna\Pesanan\PesananController@index')->name('pesanan');
+
+
+/** Halaman Pembayaran*/
+
+# METHOD GET
+Route::get('pembayaran', 'Pengguna\Keranjang\PembayaranController@index')->name('pembayaran');
+Route::get('pembayaran/upload-bukti/{id_pesanan}', 'Pengguna\Keranjang\PembayaranController@upload_bukti')->name('upload_bukti');
+
+
+# METHOD PUT
+Route::put('pembayaran/upload-bukti/{id_pesanan}', 'Pengguna\Keranjang\PembayaranController@save_bukti')->name('save_bukti');
+
+
+/** Halaman Invoice*/
 Route::get('invoice/{id_invoice}', function($id_invoice){
     return view('pengguna.pesanan.invoice');
 })->name('invoice');

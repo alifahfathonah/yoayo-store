@@ -64,19 +64,28 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <?php $index = 1; ?>
+                        @foreach ($data_pembayaran as $item)
                         <tr>
-                            <td>#1</td>
-                            <td>#PSN1810281</td>
-                            <td>BRI</td>
-                            <td>Lukman Hakim</td>
-                            <td>12345678910</td>
-                            <td>Rp. 340.000</td>
+                            <td>#{{ $index }}</td>
+                            <td>#{{ $item->id_pesanan }}</td>
+                            <td>{{ $item->bank }}</td>
+                            <td>{{ $item->atas_nama }}</td>
+                            <td>{{ $item->no_rekening }}</td>
+                            <td>{{ Rupiah::create($item->total_bayar) }}</td>
                             <td>
+                                @if($item->status_pembayaran == 0)
                                 <span class="badge badge-secondary">
                                     <i class="fa fa-close fa-fw"></i> Belum Di Veifikasi
                                 </span>
+                                @else
+                                <span class="badge badge-success">
+                                    <i class="fa fa-close fa-fw"></i> Telah Di Veifikasi
+                                </span>
+                                @endif
                             </td>
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

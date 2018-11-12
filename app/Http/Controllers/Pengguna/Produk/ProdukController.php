@@ -26,9 +26,22 @@ class ProdukController extends Controller
 
             $kategori = DB::table('tbl_kategori')->where('nama_kategori', $nama_kategori);
 
-            $data_produk = DB::table('tbl_barang')->where('id_kategori',
-                $kategori->exists() ? $kategori->first()->id_kategori : 'tidak-ditemukan'
-            );
+            if($request->has('search')) {
+
+                $search = '%'.$request->input('search').'%';
+
+                $data_produk = DB::table('tbl_barang')->where([
+                    ['id_kategori', $kategori->exists() ? $kategori->first()->id_kategori : ''],
+                    ['nama_barang', 'LIKE', $search]
+                ]);
+
+            } else {
+
+                $data_produk = DB::table('tbl_barang')->where('id_kategori',
+                    $kategori->exists() ? $kategori->first()->id_kategori : ''
+                );
+
+            }
 
             return view('pengguna.produk.produk', [
                 'produk'        => $data_produk->get(),
@@ -39,11 +52,25 @@ class ProdukController extends Controller
 
         } else {
 
-            return view('pengguna.produk.produk', [
-                'produk'        => DB::table('tbl_barang')->get(),
-                'kategori'      => $data,
-                'jumlah_barang' => DB::table('tbl_barang')
-            ]);
+            if($request->has('search')) {
+
+                $search = '%'.$request->input('search').'%';
+
+                return view('pengguna.produk.produk', [
+                    'produk'        => DB::table('tbl_barang')->where('nama_barang', 'LIKE', $search)->get(),
+                    'kategori'      => $data,
+                    'jumlah_barang' => DB::table('tbl_barang')
+                ]);
+
+            } else {
+
+                return view('pengguna.produk.produk', [
+                    'produk'        => DB::table('tbl_barang')->get(),
+                    'kategori'      => $data,
+                    'jumlah_barang' => DB::table('tbl_barang')
+                ]);
+
+            }
 
         }
 

@@ -64,15 +64,28 @@
                     </thead>
                     <tbody>
 
-                        <?php $total = 0; $index = 1?>
+                        <?php $total = 0; $index = 1; $warning = false;?>
                         @foreach ($data_keranjang as $item)
+
+                        @if($item->jumlah_beli > $item->stok_barang)
+                        <tr>
+                            <td colspan="6">
+                                <span class="alert alert-danger">
+                                    <b>Warning!</b> Stok <i>'{{ $item->nama_barang }}'</i> kurang dari jumlah yang ingin di beli. Silahkan check detail produk untuk melihat jumlah stok.
+                                </span>
+                            </td>
+                        </tr>
+                        <?php $warning = true; ?>
+                        @endif
 
                         <tr>
                             <td class="product-thumbnail">
                                 {{ Html::image(asset('storage/produk/'.$item->foto_barang), $item->nama_barang, ['class' => 'img-fluid px-0', 'width' => '100']) }}
                             </td>
                             <td class="product-name">
+                                <a href="{{ route('detail_produk', ['id_barang' => $item->id_barang]) }}">
                                 <h2 class="h5 text-black">{{ $item->nama_barang }}<br><small>Berat Satuan : <i>{{ $item->berat_barang.'gram' }}</i></small></h2>
+                                </a>
                             </td>
                             <td>{{ Rupiah::create($item->harga_satuan) }}</td>
                             <td width="200">
@@ -137,7 +150,11 @@
                             </div>
                         </div>
                         <hr class="border">
-                        {{ Form::open(['route' => 'checkout_method']) }}
+                        @if($warning == true)
+                            {{ Form::open() }}
+                        @else
+                            {{ Form::open(['route' => 'checkout_method']) }}
+                        @endif
                         <div class="row mb-5">
                             <div class="col-md-12 form-group">
                                 <label for="inp_alamat" class="text-black h5">Pilih Alamat</label>
@@ -152,7 +169,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <button type="submit" name="simpan" value="true" class="btn btn-primary btn-lg py-3 btn-block">Proses Checkout</button>
+                                <button @if($warning == true) type="button" @else type="submit" @endif name="simpan" value="true" class="btn btn-primary btn-lg py-3 btn-block">Proses Checkout</button>
                             </div>
                         </div>
                         {{ Form::close() }}
