@@ -3,7 +3,7 @@
 @section('title', 'Rubah Data Pribadi')
 
 @section('breadcrumb')
-<div class="bg-light py-3" data-aos="fade-up" data-aos-delay="100">
+<div class="bg-light py-3" data-aos="fade" data-aos-delay="100">
     <div class="container">
         <div class="row">
             <div class="col-md-12 mb-0">
@@ -21,11 +21,14 @@
 @section('content')
 <div class="site-section">
     <div class="container">
-        <div class="row" data-aos="fade-up" data-aos-delay="100">
-            <div class="col-md-12">
-                <h2 class="h3 mb-3 text-black">Edit Data Pribadi</h2>
+        <div class="row" data-aos="fade" data-aos-delay="100">
+            <div class="col md-12 mb-5">
+                <a href="{{ route('info_akun') }}" class="btn btn-warning">Kembali</a>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-12">
+                <h2 class="h3 mb-3 text-black">Ganti Password</h2>
+            </div>
+            <div class="col-md-5">
                 @if ($errors->any())
 
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -39,7 +42,7 @@
                     </div>
 
                 @endif
-                {{ Form::open(['route' => 'simpan_info_akun', 'method' => 'PUT']) }}
+                {{ Form::open(['route' => 'simpan_password', 'method' => 'PUT']) }}
                     <div class="p-3 p-lg-5 border row">
                         <div class="col-md-12">
                             <div class="form-group">

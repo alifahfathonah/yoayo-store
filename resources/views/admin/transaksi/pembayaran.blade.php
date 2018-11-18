@@ -219,12 +219,10 @@
             $('#table_pembayaran1').DataTable({
                 'lengthChange': false,
                 'length': 10,
-                'searching': false
             })
             $('#table_pembayaran2').DataTable({
                 'lengthChange': false,
                 'length': 10,
-                'searching': false
             })
         })
     </script>

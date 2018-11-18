@@ -285,7 +285,6 @@
             $('#table_admin').DataTable({
                 'lengthChange': false,
                 'length': 10,
-                'searching': false
             })
         })
     </script>

@@ -172,7 +172,6 @@
             $('#table_pengguna').DataTable({
                 'lengthChange': false,
                 'length': 10,
-                'searching': false
             })
         })
     </script>

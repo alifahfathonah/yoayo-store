@@ -27,13 +27,13 @@ Route::get('get_kategori', function() {
 Route::get('get_data_counter', function() {
 
     $pembayaran = DB::table('tbl_pembayaran')->where([
-        ['id_pengguna', session('id_pengguna')]
+        ['id_pengguna', session('id_pengguna')],
     ]);
 
     $list = [
         'keranjang' => DB::table('tbl_keranjang')->where('id_pengguna', session('id_pengguna'))->count(),
         'pesanan'   => DB::table('tbl_pesanan')->where([['id_pengguna', '=', session('id_pengguna')], ['status_pesanan', '<=', 4]])->count(),
-        'pembayaran'=> $pembayaran->first()->foto_bukti != NULL ? $pembayaran->count() : '0',
+        'pembayaran'=> $pembayaran->first()->foto_bukti != NULL && $pembayaran->first()->selesai != 1  ? $pembayaran->count() : '0',
     ];
 
     return response()->json($list);
@@ -60,9 +60,11 @@ Route::post('daftar', 'Pengguna\Autentikasi\RegisterController@register')->name(
 # METHOD GET
 Route::get('info_akun', 'Pengguna\Akun\AkunController@index')->name('info_akun');
 Route::get('info_akun/edit', 'Pengguna\Akun\InformasiAkunController@index')->name('edit_info_akun');
+Route::get('info_akun/ganti_password', 'Pengguna\Akun\GantiPasswordController@index')->name('ganti_password');
 
 # METHOD PUT
 Route::put('info_akun/edit', 'Pengguna\Akun\InformasiAkunController@simpan_informasi')->name('simpan_info_akun');
+Route::put('info_akun/ganti_password', 'Pengguna\Akun\GantiPasswordController@simpan_password')->name('simpan_password');
 
 
 /** Halaman Produk*/
@@ -175,23 +177,29 @@ Route::post('checkout', 'Pengguna\Keranjang\CheckoutController@save_checkout')->
 
 # METHOD GET
 Route::get('pesanan', 'Pengguna\Pesanan\PesananController@index')->name('pesanan');
+Route::get('pesanan/detail_pesanan/{id_pesanan}', 'Pengguna\Pesanan\PesananController@detail_pesanan')->name('detail_pesanan');
+
+
+# METHOD put
+Route::put('pesanan/dibatalkan/{id_pesanan}', 'Pengguna\Pesanan\PesananController@dibatalkan')->name('pesanan_dibatalkan');
+Route::put('pesanan/konfirmasi/{id_pesanan}', 'Pengguna\Pesanan\PesananController@konfirmasi_pesanan')->name('konfirmasi_pesanan');
+
 
 
 /** Halaman Pembayaran*/
 
 # METHOD GET
-Route::get('pembayaran', 'Pengguna\Keranjang\PembayaranController@index')->name('pembayaran');
-Route::get('pembayaran/upload-bukti/{id_pesanan}', 'Pengguna\Keranjang\PembayaranController@upload_bukti')->name('upload_bukti');
+Route::get('pembayaran', 'Pengguna\Pesanan\PembayaranController@index')->name('pembayaran');
+Route::get('pembayaran/upload-bukti/{id_pesanan}', 'Pengguna\Pesanan\PembayaranController@upload_bukti')->name('upload_bukti');
 
 
-# METHOD PUT
-Route::put('pembayaran/upload-bukti/{id_pesanan}', 'Pengguna\Keranjang\PembayaranController@save_bukti')->name('save_bukti');
+# METHOD POST
+Route::post('pembayaran/upload-bukti/{id_pesanan}/save', 'Pengguna\Pesanan\PembayaranController@save_bukti')->name('save_bukti');
 
 
 /** Halaman Invoice*/
-Route::get('invoice/{id_invoice}', function($id_invoice){
-    return view('pengguna.pesanan.invoice');
-})->name('invoice');
+use Illuminate\Support\Facades\DB;
+Route::get('invoice/{id_invoice}', 'Pengguna\Pesanan\PesananController@invoice')->name('invoice');
 
 
 

@@ -3,7 +3,7 @@
 @section('title', 'Rubah Data Pribadi')
 
 @section('breadcrumb')
-<div class="bg-light py-3" data-aos="fade-up" data-aos-delay="100">
+<div class="bg-light py-3" data-aos="fade" data-aos-delay="100">
     <div class="container">
         <div class="row">
             <div class="col-md-12 mb-0">
@@ -21,7 +21,10 @@
 @section('content')
 <div class="site-section">
     <div class="container">
-        <div class="row" data-aos="fade-up" data-aos-delay="100">
+        <div class="row" data-aos="fade" data-aos-delay="100">
+            <div class="col md-12 mb-5">
+                <a href="{{ route('info_akun') }}" class="btn btn-warning">Kembali</a>
+            </div>
             <div class="col-md-12">
                 <h2 class="h3 mb-3 text-black">Edit Data Pribadi</h2>
             </div>

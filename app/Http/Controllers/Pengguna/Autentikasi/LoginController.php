@@ -57,7 +57,6 @@ class LoginController extends Controller
                 'id_pengguna',
                 'email_pengguna',
                 'nama_lengkap',
-                'kategori'
             ]);
 
             return redirect()->route('login');

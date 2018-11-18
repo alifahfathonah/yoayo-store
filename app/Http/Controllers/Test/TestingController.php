@@ -18,7 +18,7 @@ class TestingController extends Controller
         // $keranjang = DB::table('tbl_keranjang')->where('id_pengguna', 'PGN1809201');
         //
         // echo $keranjang->sum('subtotal_biaya');
-        echo Carbon::tomorrow();
+        echo Carbon::now();
     }
 
     public function test(Request $request) {

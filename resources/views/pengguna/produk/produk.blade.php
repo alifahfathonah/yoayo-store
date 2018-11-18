@@ -35,7 +35,11 @@
                     <div class="col-md-12 mb-5">
                         <div class="float-md-left mb-4">
                             <h2 class="text-black h5">
-                                Katalog Produk {!! !empty($data_filter) ? '<span class="text-primary">'.$data_filter.'</span>': false !!}
+                                @if(empty($_GET['search']))
+                                    Katalog Produk {!! !empty($data_filter) ? ' <span class="text-primary">'.$data_filter.'</span>': false !!}
+                                @else
+                                    Hasil Pencarian Produk {!! !empty($_GET['search']) ? ' <span class="text-primary">"'.$_GET['search'].'"</span>': false !!}
+                                @endif
                             </h2>
                         </div>
                         <div class="d-flex">

@@ -273,27 +273,6 @@
             $('th#ongkir').html('Rp. '+$('#inp_layanan').find(':selected').val())
             $('input[name="service"]').val($('#inp_layanan').find(':selected').attr('data-layanan'))
         })
-        // $('button#simpan').click(() => {
-        //     $.ajaxSetup({
-        //         headers: {
-        //             'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        //         }
-        //     });
-        //     $.post('{{ route('save_checkout') }}', {
-        //         'nama_penerima': $('input[name="nama_penerima"]').val(),
-        //         'alamat_tujuan': $('textarea[name="alamat_tujuan"]').val(),
-        //         'no_telepon': $('input[name="no_telepon"]').val(),
-        //         'keterangan': $('input[name="keterangan"]').val(),
-        //         'layanan': $('#inp_layanan').find(':selected').attr('data-layanan'),
-        //         'ongkos_kirim': $('#inp_layanan').find(':selected').val(),
-        //         'bank': $('#bank').find(':selected').val(),
-        //         'atas_nama': $('input[name="atas_nama"]').val(),
-        //         'no_rekening': $('input[name="no_rekening"]').val(),
-        //         'simpan': $(this).val()
-        //     }).done(() => {
-        //         location.reload()
-        //     })
-        // })
     })
 </script>
 @endsection

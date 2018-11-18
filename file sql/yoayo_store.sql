@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 23, 2018 at 04:40 AM
+-- Generation Time: Nov 17, 2018 at 03:14 PM
 -- Server version: 10.1.35-MariaDB
 -- PHP Version: 7.2.9
 
@@ -71,7 +71,8 @@ CREATE TABLE `tbl_barang` (
 --
 
 INSERT INTO `tbl_barang` (`id_barang`, `nama_barang`, `id_kategori`, `id_merk`, `deskripsi_barang`, `berat_barang`, `harga_satuan`, `stok_barang`, `foto_barang`, `tanggal_masuk`) VALUES
-('BRG1810131', 'Wilson Highlight Original', 'KTG1810131', 'MRK1810131', '<p>WILSON HIGHLIGHT ORIGINAL<br />\r\nWarna: Black/Gold<br />\r\nHarga Retail: IDR 399.000<br />\r\n=============================<br />\r\nHarga kami: 340.000 -Hemat 59.000<br />\r\n=============================<br />\r\nSize: 7<br />\r\nArt #WTB068523<br />\r\n100% Original<br />\r\nMade In China<br />\r\nDesciption: Composite Leather</p>', 500, 340000, 95, 'BRG1810131.jpg', '2018-10-13 01:53:42');
+('BRG1810131', 'Wilson Highlight Original', 'KTG1810131', 'MRK1810131', '<p>WILSON HIGHLIGHT ORIGINAL<br />\r\nWarna: Black/Gold<br />\r\nHarga Retail: IDR 399.000<br />\r\n=============================<br />\r\nHarga kami: 340.000 -Hemat 59.000<br />\r\n=============================<br />\r\nSize: 7<br />\r\nArt #WTB068523<br />\r\n100% Original<br />\r\nMade In China<br />\r\nDesciption: Composite Leather</p>', 500, 340000, 95, 'BRG1810131.jpg', '2018-10-13 01:53:42'),
+('BRG1810242', 'Mikasa MG MV 2200 Gold', 'KTG1810172', 'MRK1810242', '<p>Bola Voli Mikasa&nbsp;<br />\r\nBarang 100% Original<br />\r\nLengkap dengan Hologram, pentil, dan jaring Original</p>', 333, 590000, 98, 'BRG1810242.jpg', '2018-10-24 14:22:52');
 
 -- --------------------------------------------------------
 
@@ -93,7 +94,7 @@ CREATE TABLE `tbl_detail_pengguna` (
 
 INSERT INTO `tbl_detail_pengguna` (`id_pengguna`, `nama_lengkap`, `jenis_kelamin`, `alamat_rumah`, `no_telepon`) VALUES
 ('PGN1809201', 'Muhammad Iqbal', 'Laki - Laki', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor.', '082298277709'),
-('PGN1810212', 'Dimas Wahyu Pamungkas', 'Pria', NULL, NULL);
+('PGN1811122', 'Dimas Pamungkas', 'Pria', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis rem sit animi illum esse nam asperiores numquam dignissimos. Sequi quasi necessitatibus adipisci? Distinctio, blanditiis adipisci ipsum id sint labore voluptatibus.', '082298277709');
 
 -- --------------------------------------------------------
 
@@ -114,7 +115,28 @@ CREATE TABLE `tbl_detail_pesanan` (
 --
 
 INSERT INTO `tbl_detail_pesanan` (`id_pesanan`, `id_barang`, `jumlah_beli`, `subtotal_berat`, `subtotal_biaya`) VALUES
-('PSN1810221', 'BRG1810131', 1, 1000, 340000);
+('PSN1811041', 'BRG1810131', 3, 1500, 1020000),
+('PSN1811041', 'BRG1810242', 2, 666, 1180000);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_invoice`
+--
+
+CREATE TABLE `tbl_invoice` (
+  `id_invoice` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id_pesanan` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id_pengguna` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tanggal_dibuat` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_invoice`
+--
+
+INSERT INTO `tbl_invoice` (`id_invoice`, `id_pesanan`, `id_pengguna`, `tanggal_dibuat`) VALUES
+('INV1811171', 'PSN1811041', 'PGN1809201', '2018-11-17 19:03:30');
 
 -- --------------------------------------------------------
 
@@ -155,7 +177,8 @@ CREATE TABLE `tbl_keranjang` (
 --
 
 INSERT INTO `tbl_keranjang` (`id_pengguna`, `id_barang`, `jumlah_beli`, `subtotal_biaya`) VALUES
-('PGN1809201', 'BRG1810131', 4, 340000);
+('PGN1811122', 'BRG1810131', 2, 680000),
+('PGN1811122', 'BRG1810242', 1, 590000);
 
 -- --------------------------------------------------------
 
@@ -186,7 +209,8 @@ CREATE TABLE `tbl_merk` (
 --
 
 INSERT INTO `tbl_merk` (`id_merk`, `nama_merk`) VALUES
-('MRK1810131', 'Wilson');
+('MRK1810131', 'Wilson'),
+('MRK1810242', 'Mikasa');
 
 -- --------------------------------------------------------
 
@@ -197,6 +221,9 @@ INSERT INTO `tbl_merk` (`id_merk`, `nama_merk`) VALUES
 CREATE TABLE `tbl_pembayaran` (
   `id_pesanan` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `id_pengguna` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `bank` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `atas_nama` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `no_rekening` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `foto_bukti` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status_pembayaran` tinyint(1) NOT NULL DEFAULT '0',
   `batas_pembayaran` date NOT NULL,
@@ -208,8 +235,8 @@ CREATE TABLE `tbl_pembayaran` (
 -- Dumping data for table `tbl_pembayaran`
 --
 
-INSERT INTO `tbl_pembayaran` (`id_pesanan`, `id_pengguna`, `foto_bukti`, `status_pembayaran`, `batas_pembayaran`, `tanggal_upload`, `selesai`) VALUES
-('PSN1810221', 'PGN1809201', 'PSN1810221.jpg', 1, '2018-10-23', '2018-10-22 05:26:05', 0);
+INSERT INTO `tbl_pembayaran` (`id_pesanan`, `id_pengguna`, `bank`, `atas_nama`, `no_rekening`, `foto_bukti`, `status_pembayaran`, `batas_pembayaran`, `tanggal_upload`, `selesai`) VALUES
+('PSN1811041', 'PGN1809201', 'Mandiri', 'Lukman Hakim', '12345678910', 'PSN1811041.jpg', 1, '2018-11-05', '2018-11-13 21:06:35', 0);
 
 -- --------------------------------------------------------
 
@@ -229,8 +256,8 @@ CREATE TABLE `tbl_pengguna` (
 --
 
 INSERT INTO `tbl_pengguna` (`id_pengguna`, `email`, `password`, `tanggal_bergabung`) VALUES
-('PGN1809201', 'miqbal.pengguna@email.com', '$2y$10$g0/uyAsGtTSLepUs4iGbje74KRb5YPf2abGHjS1p/k2BBPVnMg3AK', '2018-09-20 19:00:58'),
-('PGN1810212', 'dimas.pengguna@email.com', '$2y$10$anAwPHhE1a8NoqA1LVliPOAwe1pPlfPOKHdRBPK7Ofx.HEqyqXQpO', '2018-10-21 21:23:23');
+('PGN1809201', 'miqbal.pengguna@email.com', '$2y$10$s71/P0ScgkVsBzLgZq7phO7vYcBrhNJHvTlq0vTvHB/Pbk8.MFe.y', '2018-09-20 19:00:58'),
+('PGN1811122', 'dimas.pengguna@email.com', '$2y$10$L1xpd5vnitRTC2GXhSTUcuZ/xW.0PCxLQdbJRaq5qbWgsU4i5Grjy', '2018-11-12 11:22:17');
 
 -- --------------------------------------------------------
 
@@ -249,11 +276,11 @@ CREATE TABLE `tbl_pesanan` (
   `ongkos_kirim` double NOT NULL,
   `total_bayar` double NOT NULL,
   `no_resi` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status_pesanan` tinyint(4) NOT NULL,
-  `dibatalkan` tinyint(1) NOT NULL,
+  `status_pesanan` tinyint(4) NOT NULL DEFAULT '0',
+  `dibatalkan` tinyint(1) NOT NULL DEFAULT '0',
   `tanggal_dikirim` datetime DEFAULT NULL,
   `tanggal_diterima` datetime DEFAULT NULL,
-  `tanggal_pesanan` datetime NOT NULL
+  `tanggal_pesanan` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -261,7 +288,7 @@ CREATE TABLE `tbl_pesanan` (
 --
 
 INSERT INTO `tbl_pesanan` (`id_pesanan`, `id_pengguna`, `nama_penerima`, `alamat_tujuan`, `no_telepon`, `keterangan`, `layanan`, `ongkos_kirim`, `total_bayar`, `no_resi`, `status_pesanan`, `dibatalkan`, `tanggal_dikirim`, `tanggal_diterima`, `tanggal_pesanan`) VALUES
-('PSN1810221', 'PGN1809201', 'Muhammad Iqbal', 'Citayam, Jawabarat', '+6212345678910', 'Warna Black - Gold', 'YES', 18000, 358000, 'CONTOHINPUTRESI', 3, 0, '2018-10-22 05:10:52', NULL, '2018-10-22 05:21:00');
+('PSN1811041', 'PGN1809201', 'Muhammad Iqbal', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor.', '082298277709', NULL, 'REG', 18000, 2200000, 'krirmresi123', 4, 0, '2018-11-17 20:11:08', NULL, '2018-11-04 09:27:03');
 
 -- --------------------------------------------------------
 
@@ -306,6 +333,14 @@ ALTER TABLE `tbl_detail_pengguna`
 ALTER TABLE `tbl_detail_pesanan`
   ADD KEY `tbl_detail_pesanan_id_barang_index` (`id_barang`),
   ADD KEY `id_pesanan` (`id_pesanan`);
+
+--
+-- Indexes for table `tbl_invoice`
+--
+ALTER TABLE `tbl_invoice`
+  ADD PRIMARY KEY (`id_invoice`),
+  ADD UNIQUE KEY `id_pesanan` (`id_pesanan`),
+  ADD KEY `id_pengguna` (`id_pengguna`);
 
 --
 -- Indexes for table `tbl_kategori`

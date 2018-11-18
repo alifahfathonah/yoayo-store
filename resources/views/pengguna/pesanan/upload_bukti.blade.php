@@ -26,7 +26,7 @@
                 <h2 class="h3 mb-3 text-black text-center">Upload Bukti Pembayaran</h2>
             </div>
             <div class="col-md-5 mx-auto">
-                {{ Form::open(['route' => 'login', 'file' => true]) }}
+                {{ Form::open(['route' => ['save_bukti', $id_pesanan], 'files' => true, 'method' => 'PUT']) }}
                     <div class="p-3 p-lg-5 border">
                         @if ($errors->any())
 
@@ -43,12 +43,12 @@
                         @endif
                         <div class="form-group">
                             {{ Form::label('inp_bukti_pembayaran', 'Bukti Pembayaran', ['class' => 'text-black']) }}
-                            {{ Form::file('bukti_pembayaran', ['class' => 'form-control', 'id' => 'inp_bukti_pembayaran']) }}
-                            <span class="help-block">Pastikan format foto yang di upload : jpg, jpeg, atau png</span>
+                            {{ Form::file('bukti_pembayaran', ['class' => 'form-control', 'id' => 'inp_bukti_pembayaran', 'style' => 'border: 0;']) }}
+                            <small class="help-block">Pastikan format foto yang di upload : jpg, jpeg, atau png</small>
                         </div>
                         <div class="form-group row mt-5">
                             <div class="col-lg-12">
-                                <button type="submit" name="simpan" value="true" class="btn btn-primary btn-lg btn-block">Masuk</button>
+                                <button type="submit" name="simpan" value="true" class="btn btn-primary btn-lg btn-block">Upload Bukti</button>
                             </div>
                         </div>
                     </div>

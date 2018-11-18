@@ -64,7 +64,7 @@
             </div>
             <div class="col-md-3">
                 <a href="{{ route('edit_info_akun') }}" class="btn btn-info btn-block"><i class="icon-edit"></i> Edit Data Pribadi</a><hr>
-                <a href="#" class="btn btn-info btn-block"><i class="icon-lock"></i> Ganti Password</a><hr>
+                <a href="{{ route('ganti_password') }}" class="btn btn-info btn-block"><i class="icon-lock"></i> Ganti Password</a><hr>
             </div>
         </div>
     </div>

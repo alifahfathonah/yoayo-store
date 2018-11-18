@@ -298,7 +298,6 @@
             $('#table_produk').DataTable({
                 'lengthChange': false,
                 'length': 10,
-                'searching': false
             })
         })
         CKEDITOR.replace('inp_deskripsi_barang')
