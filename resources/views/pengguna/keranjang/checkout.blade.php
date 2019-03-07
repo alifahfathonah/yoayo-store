@@ -53,6 +53,9 @@
 
                     <div class="form-group row">
                         <div class="col-md-12">
+                            <h5 class="text-black">Informasi Penerima</h5>
+                        </div>
+                        <div class="col-md-12">
                             <label for="inp_nama_penerima" class="text-black">Nama Lengkap <span class="text-danger">*</span></label>
                             {{ Form::text('nama_penerima', !empty($default) ?  $default->nama_lengkap : null, [
                                 'class'         => 'form-control',
@@ -88,7 +91,7 @@
 
                     <div class="form-group row">
                         <div class="col-md-12">
-                            <h5 class="text-black">Estimasi Biaya Ongkos Kirim</h5>
+                            <h5 class="text-black">Pilih Tujuan Pengiriman</h5>
                         </div>
                         <div class="col-md-6">
                             <label for="inp_provinsi" class="text-black">Provinsi</label>
@@ -105,6 +108,7 @@
                             <label for="inp_layanan" class="text-black">Service</label>
                             <select class="form-control" name="layanan" id="inp_layanan"></select>
                             <input type="hidden" name="service">
+                            <input type="hidden" name="destinasi">
                         </div>
                     </div>
 
@@ -151,16 +155,17 @@
                                     <th>Total</th>
                                 </thead>
                                 <tbody id="detail_pesanan">
-                                    <?php $biaya = 0; $berat = 0; ?>
+                                    <?php $biaya = 0; $berat = 0; $total_berat = 0;?>
                                     @foreach ($data_checkout as $item)
+                                    <?php $total_berat = $item->berat_barang * $item->jumlah_beli; ?>
                                         <tr>
                                             <td>
                                                 {{ $item->nama_barang }} <strong class="mx-2">x</strong> {{ $item->jumlah_beli }}<br>
-                                                <small>Berat Barang : {{ $item->berat_barang.'gram' }}</small>
+                                                <small>Berat : {!! $item->berat_barang.'gram - <strong>Total Berat : '.$total_berat.'gram</strong>' !!}</small>
                                             </td>
                                             <td>{{ Rupiah::create($item->subtotal_biaya) }}</td>
                                         </tr>
-                                        <?php $biaya += $item->subtotal_biaya; $berat += $item->berat_barang * $item->jumlah_beli; ?>
+                                        <?php $biaya += $item->subtotal_biaya; $berat += $total_berat; ?>
                                     @endforeach
                                 </tbody>
                                 <tfoot>
@@ -272,6 +277,9 @@
         $('#inp_layanan').click(() => {
             $('th#ongkir').html('Rp. '+$('#inp_layanan').find(':selected').val())
             $('input[name="service"]').val($('#inp_layanan').find(':selected').attr('data-layanan'))
+            $('input[name="destinasi"]').val(
+                $('#inp_kota').find(':selected').html()+", "+$('#inp_provinsi').find(':selected').html()
+            )
         })
     })
 </script>

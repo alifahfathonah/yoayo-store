@@ -11,7 +11,7 @@
                 <div class="intro-text text-center text-md-left">
                     <p class="mb-4 text-white">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus at iaculis quam. Integer accumsan tincidunt fringilla. </p>
                     <p>
-                        <a href="#" class="btn btn-sm btn-primary">Belanja Sekarang</a>
+                        <a href="{{ route('produk') }}" class="btn btn-sm btn-primary">Belanja Sekarang</a>
                     </p>
                 </div>
             </div>
@@ -60,9 +60,14 @@
 
 <div class="site-section site-blocks-2">
     <div class="container">
+        <div class="row justify-content-center" data-aos="fade-up">
+            <div class="col-md-12 site-section-heading text-center pt-4 pb-5">
+                <h2>Lihat Koleksi Terbaru</h2>
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade" data-aos-delay="">
-                <a class="block-2-item item1" href="{{ route('produk') }}?nama_kategori=sepak-bola">
+                <a class="block-2-item item1" href="{{ route('produk') }}?kategori=sepak-bola">
                     <figure class="image">
                         <img src="{{ asset('user_assets/images/soccer.jpg') }}" alt="" class="img-fluid">
                     </figure>
@@ -73,7 +78,7 @@
                 </a>
             </div>
             <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
-                <a class="block-2-item item2" href="{{ route('produk') }}?nama_kategori=basket">
+                <a class="block-2-item item2" href="{{ route('produk') }}?kategori=basket">
                     <figure class="image">
                         <img src="{{ asset('user_assets/images/basketball.jpg') }}" alt="" class="img-fluid">
                     </figure>
@@ -84,7 +89,7 @@
                 </a>
             </div>
             <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="200">
-                <a class="block-2-item item3" href="{{ route('produk') }}?nama_kategori=tennis">
+                <a class="block-2-item item3" href="{{ route('produk') }}?kategori=tennis">
                     <figure class="image">
                         <img src="{{ asset('user_assets/images/tennis.jpg') }}" alt="" class="img-fluid">
                     </figure>

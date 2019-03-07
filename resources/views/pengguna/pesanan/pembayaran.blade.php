@@ -65,9 +65,9 @@
                     </thead>
                     <tbody>
                         <?php $index = 1; ?>
-                        @foreach ($data_pembayaran as $item)
+                        @forelse ($data_pembayaran as $item)
                         <tr>
-                            <td>#{{ $index }}</td>
+                            <td @if(empty($item->foto_bukti)) rowspan="2" @endif>#{{ $index }}</td>
                             <td>#{{ $item->id_pesanan }}</td>
                             <td>{{ $item->bank }}</td>
                             <td>{{ $item->atas_nama }}</td>
@@ -85,7 +85,21 @@
                                 @endif
                             </td>
                         </tr>
-                        @endforeach
+                        @if(empty($item->foto_bukti))
+                        <tr style="background-color: rgba(108, 117, 125, 0.16)!important;">
+                            <td class="py-2 text-left" colspan="7">
+                                <b>Batas Waktu Pembayaran : </b><code>{{ $item->batas_pembayaran }}</code>
+                            </td>
+                        </tr>
+                        @endif
+                        <?php $index++; ?>
+                        @empty
+                        <tr>
+                            <td class="py-2 text-center" colspan="8">
+                                Belum Ada Pembayaran Yang Masuk...
+                            </td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

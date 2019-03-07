@@ -7,7 +7,8 @@
     <title>Document</title>
 </head>
 <body>
-Hi, {{ $nama }}<br><br>
+Dari : {{ $nama }}<br><br>
+Pesan : <br>
 {!! $pesan !!}
 </body>
 </html>

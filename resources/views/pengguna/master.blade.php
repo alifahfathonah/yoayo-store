@@ -23,6 +23,9 @@
                                 {{ Form::open(['route' => 'produk', 'class' => 'site-block-top-search', 'method' => 'GET']) }}
                                     <span class="icon icon-search2"></span>
                                     {{ Form::text('search', null, ['class' => 'form-control border-0', 'placeholder' => 'Cari Barang...']) }}
+                                    @if(!empty($_GET['kategori']))
+                                    {{ Form::hidden('kategori', $_GET['kategori']) }}
+                                    @endif
                                 {{ Form::close() }}
                             </div>
 
@@ -75,42 +78,39 @@
             <footer class="site-footer border-top">
                 <div class="container">
                     <div class="row">
-                        <div class="col-lg-6 mb-5 mb-lg-0">
+                        <div class="col-lg-5 mb-5 mb-lg-0" id="kontak">
+                            {{ Form::open(['route' => 'hubungi_kami']) }}
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h3 class="footer-heading mb-4">Navigations</h3>
+                                    <h3 class="footer-heading mb-4">Hubungi Kami</h3>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input type="text" name="nama" class="form-control" placeholder="Nama Pengguna">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <input type="email" name="email" class="form-control" placeholder="Email Pengguna">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-12">
+                                    <div class="form-group">
+                                        <input type="text" name="subject" class="form-control" placeholder="subject">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-12">
+                                    <div class="form-group">
+                                        <input type="text" name="pesan" class="form-control" placeholder="Isi Pesan">
+                                    </div>
                                 </div>
                                 <div class="col-md-6 col-lg-4">
-                                    <ul class="list-unstyled">
-                                        <li><a href="#">Sell online</a></li>
-                                        <li><a href="#">Features</a></li>
-                                        <li><a href="#">Shopping cart</a></li>
-                                        <li><a href="#">Store builder</a></li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-6 col-lg-4">
-                                    <ul class="list-unstyled">
-                                        <li><a href="#">Mobile commerce</a></li>
-                                        <li><a href="#">Dropshipping</a></li>
-                                        <li><a href="#">Website development</a></li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-6 col-lg-4">
-                                    <ul class="list-unstyled">
-                                        <li><a href="#">Point of sale</a></li>
-                                        <li><a href="#">Hardware</a></li>
-                                        <li><a href="#">Software</a></li>
-                                    </ul>
+                                    <div class="form-group">
+                                        <input type="submit" class="btn btn-primary" value="Kirim Pesan">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
-                            <h3 class="footer-heading mb-4">Promo</h3>
-                            <a href="#" class="block-6">
-                                <img src="{{ asset('user_assets/images/hero_1.jpg') }}" alt="Image placeholder" class="img-fluid rounded mb-4">
-                                <h3 class="font-weight-light  mb-0">Finding Your Perfect Shoes</h3>
-                                <p>Promo from  nuary 15 &mdash; 25, 2019</p>
-                            </a>
+                            {{ Form::close() }}
                         </div>
                         <div class="col-md-6 col-lg-3">
                             <div class="block-5 mb-5">
@@ -121,17 +121,15 @@
                                     <li class="email">devs@yoayostore.com</li>
                                 </ul>
                             </div>
-
-                            <div class="block-7">
-                                <form action="#" method="post">
-                                    <label for="email_subscribe" class="footer-heading">Subscribe</label>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control py-4" id="email_subscribe" placeholder="Email">
-                                        <input type="submit" class="btn btn-sm btn-primary" value="Send">
-                                    </div>
-                                </form>
-                            </div>
                         </div>
+                        <div class="col-md-6 col-lg-4">
+                                <div class="block-5 mb-5">
+                                    <h3 class="footer-heading mb-4">Tentang Kami</h3>
+                                    <p class="text-justify">
+                                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Commodi dolor fugit laudantium velit voluptatibus voluptas, voluptates et quia similique tempora cum temporibus culpa pariatur molestiae, provident, aspernatur animi ad magnam.
+                                    </p>
+                                </div>
+                            </div>
                     </div>
                     <div class="row pt-5 mt-5 text-center">
                         <div class="col-md-12">
@@ -154,7 +152,7 @@
                     var index  = 1
                     for(var values of data) {
                         var slug = values.replace(' ', '-').toLowerCase()
-                        elemen += '<li><a href="{{ route('produk') }}?nama_kategori='+slug+'">'+values+'</a></li>'
+                        elemen += '<li><a href="{{ route('produk') }}?kategori='+slug+'">'+values+'</a></li>'
                     }
                     $('ul#kategori').html(elemen)
                 })

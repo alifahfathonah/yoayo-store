@@ -30,6 +30,40 @@ class PengirimanController extends Controller
 
     }
 
+    public function batalkan_pesanan(Request $request, $id_pesanan) {
+
+        if($request->has('simpan') == true) {
+
+            $data = DB::table('tbl_pesanan')->where('id_pesanan', $id_pesanan);
+
+            $status = $data->first()->dibatalkan;
+
+            if($data->exists()) {
+
+                $data->update([
+                    'dibatalkan'        => 1,
+                    'status_pesanan'    => 1,
+                    'no_resi'           => NULL,
+                    'tanggal_dikirim'   => NULL
+                ]);
+
+                return redirect()->route('pengiriman_admin')->with('success',
+                    $status == 0 ? 'Pesanan Berhasil Di Batalkan' : 'Pembatalan Pesanan Berhasil Di Cabut');
+
+            } else {
+
+                return back()->withErrors('Terjadi Kesalahan Saat Menyimpan Data');
+
+            }
+
+        } else {
+
+            return back()->withErrors('Terjadi Kesalahan Saat Menyimpan Data');
+
+        }
+
+    }
+
     public function selesai(Request $request, $id_pesanan) {
 
         if ($request->session()->exists('email_admin')) {

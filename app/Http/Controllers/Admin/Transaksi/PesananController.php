@@ -35,7 +35,10 @@ class PesananController extends Controller
                 // 'Telah Di Kirim', 'Telah Di Terima', 'Selesai'
             ];
 
-            $data = DB::table('tbl_pesanan')->get();
+            $data = DB::table('tbl_pesanan as pesanan')
+                ->join('tbl_pembayaran as pembayaran', 'pembayaran.id_pesanan', 'pesanan.id_pesanan')
+                ->select('pesanan.*', 'pembayaran.*')
+                ->get();
 
             return view('admin.transaksi.pesanan', [
                 'data_pesanan'  => $data,
@@ -65,6 +68,7 @@ class PesananController extends Controller
             ];
 
             $data_pesanan = DB::table('tbl_pesanan')->where('id_pesanan', $id_pesanan)->first();
+            $data_pembayaran = DB::table('tbl_pembayaran')->where('id_pesanan', $id_pesanan)->first();
             $data_detail  = DB::table('tbl_detail_pesanan')
                 ->join('tbl_barang', 'tbl_barang.id_barang', 'tbl_detail_pesanan.id_barang')
                 ->select('tbl_barang.*', 'tbl_detail_pesanan.*')
@@ -72,6 +76,7 @@ class PesananController extends Controller
 
             return view('admin.transaksi.detail_pesanan', [
                 'data_pesanan'  => $data_pesanan,
+                'pembayaran'    => $data_pembayaran,
                 'data_detail'   => $data_detail,
                 'status'        => $status,
                 'invoice'       => true
@@ -105,7 +110,7 @@ class PesananController extends Controller
 
             $data = DB::table('tbl_pesanan')->where('id_pesanan', $id_pesanan);
 
-            if($data->status_pesanan == 2) {
+            if($data->first()->status_pesanan <= 2) {
 
                 $data->update([
 
@@ -115,7 +120,7 @@ class PesananController extends Controller
 
                 ]);
 
-                return redirect()->route('pengiriman_admin')->with('success', 'Data Pengiriman Berhasil Di Simpan');
+                return redirect()->route('pesanan_admin')->with('success', 'Data Pengiriman Berhasil Di Simpan');
 
             } else {
 
@@ -276,4 +281,5 @@ class PesananController extends Controller
         }
 
     }
+
 }

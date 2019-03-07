@@ -3,7 +3,7 @@
 @section('title', 'Lupa Password')
 
 @section('breadcrumb')
-<div class="bg-light py-3" data-aos="fade-up" data-aos-delay="100">
+<div class="bg-light py-3" data-aos="fade" data-aos-delay="100">
     <div class="container">
         <div class="row">
             <div class="col-md-12 mb-0">
@@ -21,10 +21,10 @@
     <div class="container">
         <div class="row" data-aos="fade" data-aos-delay="100">
             <div class="col-md-12">
-                <h2 class="h3 mb-3 text-black text-center">Lupa Password</h2>
+                <h2 class="h3 mb-3 text-black text-center">Buat Password</h2>
             </div>
             <div class="col-md-5 mx-auto">
-                {{ Form::open(['route' => 'send_token']) }}
+                {{ Form::open(['route' => 'proses_password', 'method' => 'PUT']) }}
                     <div class="p-3 p-lg-5 border">
                         @if ($errors->any())
 
@@ -39,13 +39,20 @@
                             </div>
 
                         @endif
+                        <input type="hidden" name="user_token" value="{{ $_GET['_token'] }}">
+                        <input type="hidden" name="_user" value="{{ $_GET['_user'] }}">
                         <div class="form-group">
-                            {{ Form::label('inp_email', 'Email', ['class' => 'text-black']) }}
-                            {{ Form::email('email', null, ['class' => 'form-control', 'id' => 'inp_email']) }}
+                            {{ Form::label('inp_password', 'Password Baru', ['class' => 'text-black']) }}
+                            {{ Form::password('password', ['class' => 'form-control', 'id' => 'inp_password']) }}
+                            <small class="help-block">Passtikan buat password yang sulit contoh : <code><?=str_random(16)?></code></small>
+                        </div>
+                        <div class="form-group">
+                            {{ Form::label('inp_password_confirmation', 'Ulangi Password', ['class' => 'text-black']) }}
+                            {{ Form::password('password_confirmation', ['class' => 'form-control', 'id' => 'inp_password_confirmation']) }}
                         </div>
                         <div class="form-group row mt-5">
                             <div class="col-lg-12">
-                                <button type="submit" name="simpan" value="true" class="btn btn-primary btn-lg btn-block">Proses Permintaan</button>
+                                <button type="submit" name="simpan" value="true" class="btn btn-primary btn-lg btn-block">Reset Password</button>
                             </div>
                         </div>
                     </div>

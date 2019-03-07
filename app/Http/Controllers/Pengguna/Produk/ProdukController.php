@@ -20,9 +20,9 @@ class ProdukController extends Controller
             ];
         }
 
-        if($request->has('nama_kategori')) {
+        if($request->has('kategori')) {
 
-            $nama_kategori = str_replace('-', ' ', ucwords($request->input('nama_kategori'), '-'));
+            $nama_kategori = str_replace('-', ' ', ucwords($request->input('kategori'), '-'));
 
             $kategori = DB::table('tbl_kategori')->where('nama_kategori', $nama_kategori);
 

@@ -45,10 +45,29 @@
                     </div>
 
                 @endif
-
-                <h3 class="text-black">Daftar Pesanan</h3>
+                <div class="row">
+                    <div class="col-md-6"><h3 class="text-black">Daftar Pesanan</h3></div>
+                    <div class="col-md-6">
+                        <a href="{{ route('riwayat_pesanan') }}" class="btn btn-warning btn-xs py-2 float-right">Riwayat Pesanan</a>
+                    </div>
+                </div>
                 <hr>
 
+            </div>
+            <div class="site-blocks-table col-md-12">
+                <div class="alert alert-success">
+                    <h5>INFO PEMBAYARAN!</h5>
+                    <div class="py-2">
+                        <p class="mb-0 text-black">
+                            Silahkan Transfer Ke Rekening Di Bawah :<br>
+                            {{ Html::image(asset('user_assets/images/mandiri_logo.jpg')) }} <br> 12345678910 a/n nanda nurjanah<br>
+                            Untuk saat ini kami hanya menggunakan rekening yang tertera di atas, <br>
+                            jika anda transfer pembayaran selain rekening di atas kami tidak bertanggung jawab.
+                            <hr>
+                            <strong>Note : Setelah transfer pembayaran pada rekening di atas di harapkan untuk segera mengupload bukti pembayaran.</strong>
+                        </p>
+                    </div>
+                </div>
             </div>
             <div class="site-blocks-table col-md-12">
                 <table class="table table-bordered">
@@ -68,7 +87,7 @@
                                          'Telah Di Kirim', 'Telah Di Terima', 'Selesai'] ?>
                         @forelse ($data_pesanan as $item)
                             <tr>
-                                <td class="py-2">{{ '#'.$count }}</td>
+                                <td class="py-2" rowspan="2">{{ '#'.$count }}</td>
                                 <td class="py-2">
                                     {{ '#'.$item->id_pesanan }}<br>
                                     <a href="{{ route('detail_pesanan', ['id_pesanan' => $item->id_pesanan]) }}">
@@ -77,9 +96,15 @@
                                         </span>
                                     </a>
                                 </td>
+                                <?php $carbon = new Carbon\Carbon(); ?>
+                                @if($carbon::parse(explode(' ', $carbon::now())[0])->lessThanOrEqualTo($carbon::parse($item->batas_pembayaran)) || !is_null($item->foto_bukti))
                                 <td class="py-2">
-                                    <?php $inv = $invoice->where('id_pesanan', $item->id_pesanan)->first(); ?>
-                                    @if($item->foto_bukti == NULL)
+                                    <?php $inv = DB::table('tbl_invoice')->where('id_pesanan', $item->id_pesanan)->first(); ?>
+                                    @if($item->dibatalkan == 1)
+                                        <span class="badge badge-danger">
+                                            <i class="fa fa-close fa-fw"></i> Dibatalkan
+                                        </span>
+                                    @elseif($item->foto_bukti == NULL)
                                         <a href="{{ route('upload_bukti', ['id_pesanan' => $item->id_pesanan]) }}" class="btn btn-outline-warning btn-xs py-1">
                                             <i class="fa fa-upload fa-fw"></i> Upload Bukti
                                         </a><br>
@@ -87,10 +112,6 @@
                                     @elseif($item->foto_bukti != NULL && $item->status_pembayaran == 0)
                                         <span class="badge badge-secondary">
                                             <i class="fa fa-close fa-fw"></i> Menunggu Verifikasi
-                                        </span>
-                                    @elseif($item->dibatalkan == 1)
-                                        <span class="badge badge-danger">
-                                            <i class="fa fa-close fa-fw"></i> Dibatalkan
                                         </span>
                                     @else
                                         <a href="{{ route('invoice', ['id_invoice' => $inv->id_invoice]) }}" target="_blank" class="btn btn-outline-info btn-xs py-1">
@@ -117,18 +138,58 @@
                                         {{ Form::open() }}
                                     @endif
                                 </td>
+                                @else
+                                <td class="py-2 text-center" colspan="6">
+                                    <code>TELAH MELAMPAUI BATAS PEMBAYARAN</code>
+                                </td>
+                                @endif
                             </tr>
-                            @if($item->status_pesanan >= 3 && $item->status_pesanan < 5)
+                            @if($item->dibatalkan == 1)
                             <tr style="background-color: rgba(108, 117, 125, 0.16)!important;">
                                 <td class="py-2 text-left" colspan="6">
-                                    <b>Resi Pengiriman : </b> <code>{{ $item->no_resi }}</code> | Dikirim Pada : {{ $item->tanggal_dikirim }} |
-                                    Layanan Pengiriman : JNE - {{ $item->layanan }}
-                                    <br> <i><small>Jika Barang telah di terima harap konfirmasi pnerimaan pesanan</small></i>
-                                    <span class="badge badge-warning"><a href="{{ route('detail_pesanan', ['id_pesanan' => $item->id_pesanan]) }}" class="text-black">Konfirmasi Pesanan</a></span>
-                                    <i><small> | Track Pesanan :  </small></i><span class="badge badge-warning"><a href="https://jne.co.id" class="text-black">Tracking Pesanan</a></span>
+                                   <code>Pesanan Telah Di Batalkan</code>
                                 </td>
                             </tr>
+                            @else
+                                @if($item->status_pesanan >= 3 && $item->status_pesanan < 5 && $item->dibatalkan == 0)
+                                <tr style="background-color: rgba(108, 117, 125, 0.16)!important;">
+                                    <td class="py-2 text-left" colspan="6">
+                                        <b>Resi Pengiriman : </b> <code>{{ $item->no_resi }}</code> | Dikirim Pada : {{ $item->tanggal_dikirim }} |
+                                        Layanan Pengiriman : JNE - {{ $item->layanan }}
+                                        @if($item->status_pesanan == 4)
+                                        | Diterima Pada : {{ $item->tanggal_diterima }}
+                                        @else
+                                        <br> <i><small>Jika Barang telah di terima harap konfirmasi pnerimaan pesanan</small></i>
+                                        <span class="badge badge-warning"><a href="{{ route('detail_pesanan', ['id_pesanan' => $item->id_pesanan]) }}" class="text-black">Konfirmasi Pesanan</a></span>
+                                        <i><small> | Track Pesanan :  </small></i><span class="badge badge-warning"><a href="https://jne.co.id" target="_blank" class="text-black">Tracking Pesanan</a></span>
+                                        <br><code>NOTE:</code>Jika kedapatan masalah saat pengiriman atau ingin mengajukan pembatalan pesanan silahkan hubungi kami pada kontak di bawah.</a>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @elseif(empty($item->foto_bukti) && $item->dibatalkan == 0)
+                                <tr style="background-color: rgba(108, 117, 125, 0.16)!important;">
+                                    <td class="py-2 text-left" colspan="6">
+                                        Batas Waktu Pembayaran : <code>{{ $item->batas_pembayaran }}</code>
+                                    </td>
+                                </tr>
+                                @else
+                                <tr style="background-color: rgba(108, 117, 125, 0.16)!important;">
+                                    <td class="py-2 text-left" colspan="6">
+                                        <code>PERHATIAN!! Pembatalan Pesanan Dapat Di Lakukan Sebelum Pesanan Di Kirim.
+                                    </td>
+                                </tr>
+                                @endif
                             @endif
+
+                                {{-- @if($item->status_pesanan <= 2 && $item->status_pesanan > 0 && $item->dibatalkan == 0)
+                                <tr style="background-color: rgba(108, 117, 125, 0.16)!important;">
+                                    <td class="py-2 text-left" colspan="6">
+                                        <code>PERHATIAN!! Pembatalan Pesanan Dapat Di Lakukan Sebelum Pesanan Di Kirim. <br> Silahkan Hubungi Kontak Di Bawah Sebelum Melakukan Pembatalan.
+                                    </td>
+                                </tr>
+                                @endif --}}
+
+                            <?php $count++; ?>
                         @empty
                             <tr>
                                 <td colspan="6" class="text-center py-2">Tidak Ada Data...</td>

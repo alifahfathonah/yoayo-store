@@ -35,8 +35,6 @@
     <div class="col-sm-4 invoice-col">
         From
         <address>
-            <table>
-            </table>
             <strong>YoayoStore.</strong><br>
             Universitas BSI Gedung D2,<br>
             Margonda Depok, Indonesia<br>
@@ -49,9 +47,9 @@
         To
         <address>
             <strong>{{ $data_pesanan->nama_penerima }}</strong><br>
-            {{ $data_pesanan->alamat_tujuan }}<br>
-            Phone: {{ $data_pesanan->no_telepon }}<br>
-            {{-- Email: john.doe@example.com --}}
+            {{ explode('|', $data_pesanan->alamat_tujuan)[0] }}<br>
+            No. Telepon : {{ $data_pesanan->no_telepon }}<br>
+            Destinasi : <strong>{{ explode('|', $data_pesanan->alamat_tujuan)[1] }}</strong>
         </address>
     </div>
     <!-- /.col -->
@@ -61,7 +59,7 @@
         @if($data_pesanan->status_pesanan >= 3)
         <b>No. Resi:</b> <i>{{ $data_pesanan->no_resi }}</i><br>
         <b>Tanggal Dikirim:</b> <i>{{ $data_pesanan->tanggal_dikirim }}</i><br>
-        @if($data_pesanan->status_pesanan == 4)
+        @if($data_pesanan->status_pesanan > 4)
             <b>Tanggal DiTerima:</b> <i>{{ $data_pesanan->tanggal_diterima }}</i><br>
         @endif
         @endif
@@ -109,9 +107,8 @@
   <div class="col-xs-6">
     <p class="lead">Metode Pembayaran:</p>
     <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-      labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
-      ut aliquip ex ea commodo consequat.
+      Transfer Bank <br>
+      No. Rekening : {{ $pembayaran->bank.' '.$pembayaran->no_rekening.' a/n '.$pembayaran->atas_nama }} <br>
     </p>
   </div>
   <!-- /.col -->
@@ -141,7 +138,7 @@
 <!-- /.row -->
 
 <!-- this row will not appear when printing -->
-<div class="row no-print">
+{{-- <div class="row no-print">
   <div class="col-xs-12">
     <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>
     <button type="button" class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment
@@ -150,7 +147,7 @@
       <i class="fa fa-download"></i> Generate PDF
     </button>
   </div>
-</div>
+</div> --}}
 @endsection
 
 @section('extra_js')

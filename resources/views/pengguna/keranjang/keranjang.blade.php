@@ -126,7 +126,7 @@
             <div class="col-md-6">
                 <div class="row mb-5">
                     <div class="col-md-6">
-                        <button class="btn btn-outline-primary btn-sm btn-block">Lanjutkan Belanja</button>
+                        <a href="{{ route('produk') }}" class="btn btn-outline-primary btn-sm btn-block">Lanjutkan Belanja</a>
                     </div>
                 </div>
             </div>

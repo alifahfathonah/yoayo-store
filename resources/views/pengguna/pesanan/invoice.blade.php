@@ -52,8 +52,9 @@
                                     <b class="text-black">Informasi Penerima</b><hr>
                                     <i>To,</i>
                                     <b>{{ $data_invoice->nama_penerima }}</b><br>
-                                    {{ $data_invoice->alamat_tujuan}}<br>
-                                    No. Telepon: {{ $data_invoice->no_telepon }}
+                                    {{ explode('|', $data_invoice->alamat_tujuan)[0] }}<br>
+                                    No. Telepon: {{ $data_invoice->no_telepon }}<br>
+                                    Pengiriman : {{ explode('|', $data_invoice->alamat_tujuan)[1] }}
                                 </div>
                                 <div class="col-md-4">
                                     <b class="text-black">Informasi Pembayaran</b><hr>

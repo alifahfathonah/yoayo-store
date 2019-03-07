@@ -61,7 +61,7 @@
                                 <button type="submit" name="simpan" value="true" class="btn btn-primary btn-lg btn-block">Masuk</button>
                             </div>
                             <div class="col-lg-12 mt-2">
-                                <p class="my-0 mx-0">Lupa Password ? <a href="#">Klik Di Sini</a></p>
+                                <p class="my-0 mx-0">Lupa Password ? <a href="{{ route('lupa_password') }}">Klik Di Sini</a></p>
                             </div>
                         </div>
                     </div>

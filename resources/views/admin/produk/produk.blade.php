@@ -38,87 +38,126 @@
                 {{ session('success') }}
             </div>
         @endif
-        <div class="box box-solid box-primary">
+        <div class="box box-primary collapsed-box">
             <div class="box-header">
                 <h3 class="box-title">
                     Form Input Produk
                 </h3>
+                <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                    <i class="fa fa-plus"></i>
+                </button>
+                </div>
             </div>
-            {!! Form::open(['route' => 'tambah_produk', 'files' => true]) !!}
-                @csrf
-                <div class="box-body row">
-                    <div class="col-sm-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('inp_nama_barang', 'Nama Produk') !!}
-                            {!! Form::text('nama_barang',  null, ['id' => 'inp_nama_barang', 'class' => 'form-control']) !!}
-                            <span class="help-block"><small>Masukan nama produk tanpa karakter khusus dan angka</small></span>
-                        </div>
-                        <div class="form-group has-feedback">
-                            {!! Form::label('inp_id_kategori', 'Pilih Kategori Produk') !!}
-                            <select name="id_kategori" id="inp_id_kategori" class="form-control">
-                                <option>=== PILIH KATEGORI ===</option>
-                                @foreach ($data_kategori as $item)
-                                    <option value="{{ $item->id_kategori }}">{{ $item->nama_kategori }}</option>
-                                @endforeach
-                            </select>
-                            <span class="help-block"><small>Silahkan pilih kategori produk yang sesuai</small></span>
-                        </div>
-                        <div class="form-group has-feedback">
-                            {!! Form::label('inp_id_merk', 'Pilih Merk Produk') !!}
-                            <select name="id_merk" id="inp_id_merk" class="form-control">
-                                <option> === PILIH MERK ===</option>
-                                @foreach ($data_merk as $item)
-                                    <option value="{{ $item->id_merk }}">{{ $item->nama_merk }}</option>
-                                @endforeach
-                            </select>
-                            <span class="help-block"><small>Silahkan pilih merk produk yang sesuai</small></span>
-                        </div>
-                        <div class="form-group has-feedback">
-                            {!! Form::label('inp_deskripsi_barang', 'Deskripsi Barang') !!}
-                            {!! Form::textarea('deskripsi_barang', null, ['id' => 'inp_deskripsi_barang', 'class' => 'form-control']) !!}
-                            <span class="help-block"><small>Silahkan Masukan Deskripsi Produk</small></span>
-                        </div>
+            <div class="box-body row">
+                {!! Form::open(['route' => 'tambah_produk', 'files' => true]) !!}
+                <div class="col-sm-6">
+                    <div class="form-group has-feedback">
+                        {!! Form::label('inp_nama_barang', 'Nama Produk') !!}
+                        {!! Form::text('nama_barang',  null, ['id' => 'inp_nama_barang', 'class' => 'form-control']) !!}
+                        <span class="help-block"><small>Masukan nama produk tanpa karakter khusus dan angka</small></span>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('inp_berat_barang', 'Berat Barang @gram') !!}
-                            {!! Form::number('berat_barang',  null, ['id' => 'inp_berat_barang', 'class' => 'form-control']) !!}
-                            <span class="help-block"><small>Silahkan masukan berat barang dengan satuan gram</small></span>
-                        </div>
-                        <div class="form-group has-feedback">
-                            {!! Form::label('inp_harga_satuan', 'Harga Satuan') !!}
-                            {!! Form::number('harga_satuan',  null, ['id' => 'inp_harga_satuan', 'class' => 'form-control']) !!}
-                            <span class="help-block"><small>Silahkan masukan harga satuan produk tanpa karakter khusus dan alphabet</small></span>
-                        </div>
-                        <div class="form-group has-feedback">
-                            {!! Form::label('inp_stok_barang', 'Stok Barang') !!}
-                            {!! Form::number('stok_barang',  null, ['id' => 'inp_stok_barang', 'class' => 'form-control']) !!}
-                            <span class="help-block"><small>Silahkan masukan stok produk yanpa karakter khusus dan alphabet</small></span>
-                        </div>
-                        <div class="form-group has-feedback">
-                            {!! Form::label('inp_foto_barang', 'Foto Product') !!}
-                            {!! Form::file('foto_barang', ['id' => 'inp_foto_barang', 'class' => 'form-control' , 'style' => 'border: none;', 'accept' => '.jpg, .jpeg, .png']) !!}
-                            <span class="help-block"><small>Silahkan pilih foto product</small></span>
-                        </div>
+                    <div class="form-group has-feedback">
+                        {!! Form::label('inp_id_kategori', 'Pilih Kategori Produk') !!}
+                        <select name="id_kategori" id="inp_id_kategori" class="form-control">
+                            <option>=== PILIH KATEGORI ===</option>
+                            @foreach ($data_kategori as $item)
+                                <option value="{{ $item->id_kategori }}">{{ $item->nama_kategori }}</option>
+                            @endforeach
+                        </select>
+                        <span class="help-block"><small>Silahkan pilih kategori produk yang sesuai</small></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        {!! Form::label('inp_id_merk', 'Pilih Merk Produk') !!}
+                        <select name="id_merk" id="inp_id_merk" class="form-control">
+                            <option> === PILIH MERK ===</option>
+                            @foreach ($data_merk as $item)
+                                <option value="{{ $item->id_merk }}">{{ $item->nama_merk }}</option>
+                            @endforeach
+                        </select>
+                        <span class="help-block"><small>Silahkan pilih merk produk yang sesuai</small></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        {!! Form::label('inp_deskripsi_barang', 'Deskripsi Barang') !!}
+                        {!! Form::textarea('deskripsi_barang', null, ['id' => 'inp_deskripsi_barang', 'class' => 'form-control']) !!}
+                        <span class="help-block"><small>Silahkan Masukan Deskripsi Produk</small></span>
                     </div>
                 </div>
-                <div class="box-footer">
-                    <button type="submit" id="simpan" name="simpan" value="true" class="btn btn-primary btn-flat pull-right">Simpan Produk</button>
-                    <button type="reset" class="btn btn-danger btn-flat">Batal</button>
+                <div class="col-sm-6">
+                    <div class="form-group has-feedback">
+                        {!! Form::label('inp_berat_barang', 'Berat Barang @gram') !!}
+                        {!! Form::number('berat_barang',  null, ['id' => 'inp_berat_barang', 'class' => 'form-control']) !!}
+                        <span class="help-block"><small>Silahkan masukan berat barang dengan satuan gram</small></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        {!! Form::label('inp_harga_satuan', 'Harga Satuan') !!}
+                        {!! Form::number('harga_satuan',  null, ['id' => 'inp_harga_satuan', 'class' => 'form-control']) !!}
+                        <span class="help-block"><small>Silahkan masukan harga satuan produk tanpa karakter khusus dan alphabet</small></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        {!! Form::label('inp_stok_barang', 'Stok Barang') !!}
+                        {!! Form::number('stok_barang',  null, ['id' => 'inp_stok_barang', 'class' => 'form-control']) !!}
+                        <span class="help-block"><small>Silahkan masukan stok produk yanpa karakter khusus dan alphabet</small></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        {!! Form::label('inp_foto_barang', 'Foto Product') !!}
+                        {!! Form::file('foto_barang', ['id' => 'inp_foto_barang', 'class' => 'form-control' , 'style' => 'border: none;', 'accept' => '.jpg, .jpeg, .png']) !!}
+                        <span class="help-block"><small>Silahkan pilih foto product</small></span>
+                    </div>
                 </div>
-            {!! Form::close() !!}
+                <div class="col-md-12">
+                    <div class="form-group has-feedback">
+                        <button type="submit" id="simpan" name="simpan" value="true" class="btn btn-primary btn-flat pull-right">Simpan Produk</button>
+                        <button type="reset" class="btn btn-danger btn-flat">Batal</button>
+                    </div>
+                </div>
+                {!! Form::close() !!}
+            </div>
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-md-12 col-sm-12">
-        <div class="box box-solid box-success">
+        <div class="box box-success">
             <div class="box-header">
                 <h3 class="box-title">
                     Table Produk
                 </h3>
             </div>
             <div class="box-body">
+                {{ Form::open(['method' => 'GET']) }}
+                <div class="form-group">
+                    <label>Filter Data Produk</label>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <select name="kategori" class="form-control">
+                                <option value>Pilih Kategori...</option>
+                                @foreach ($data_kategori as $item)
+                                <option value="{{ $item->nama_kategori }}">{{ $item->nama_kategori }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <select name="merk" class="form-control">
+                                <option value>Pilih Merk...</option>
+                                @foreach ($data_merk as $item)
+                                <option value="{{ $item->nama_merk }}">{{ $item->nama_merk }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-warning">Filter</button>
+                            <a class="btn btn-primary" href="{{ route('list_produk') }}">Reset</a>
+                        </div>
+                    </div>
+                </div>
+                {{ Form::close() }}
                 <table class="table table-bordered table-hover" id="table_produk">
                     <thead>
                         <tr>

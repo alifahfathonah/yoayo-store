@@ -42,8 +42,9 @@
                                     <b class="text-black">Informasi Penerima</b><hr>
                                     <i>To,</i>
                                     <b>{{ $data_detail->nama_penerima }}</b><br>
-                                    {{ $data_detail->alamat_tujuan}}<br>
-                                    No. Telepon: {{ $data_detail->no_telepon }}
+                                    {{ explode('|', $data_detail->alamat_tujuan)[0] }}<br>
+                                    No. Telepon: {{ $data_detail->no_telepon }}<br>
+                                    Pengiriman : {{ explode('|', $data_detail->alamat_tujuan)[1] }}
                                 </div>
                                 <div class="col-md-4">
                                     <b class="text-black">Informasi Pembayaran</b><hr>
@@ -120,19 +121,37 @@
             <div class="col-md-12">
                 <div class="card text-black">
                     <div class="card-body row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <?php $status = ['Belum Di Proses', 'Telah Di Verifikasi', 'Sedang Di Proses',
-                                             'Telah Di Kirim', 'Telah Di Terima', 'Selesai'] ?>
-                            <b>Status Pesanan : </b>{{ $status[$data_detail->status_pesanan] }}
-                            @if($data_detail->status_pesanan >= 4)
-                            <br><b>Di Terima Pada : </b> {{ $data_detail->tanggal_diterima }}
-                            @endif
+                                'Telah Di Kirim', 'Telah Di Terima', 'Selesai'] ?>
+                            <table class="table">
+                                <tr>
+                                @if($data_detail->dibatalkan == 0)
+                                        <th><b>Status Pesanan : </b></th>
+                                        <td>{{ $status[$data_detail->status_pesanan] }}</td>
+                                    @if($data_detail->status_pesanan >= 3)
+                                        <th><b>Di Kirim Pada : </b></th>
+                                        <td>{{ $data_detail->tanggal_dikirim }}</td>
+                                    @endif
+                                    </tr>
+                                    @if($data_detail->status_pesanan >= 3)
+                                    <tr>
+                                        <th><b>Di Terima Pada : </b></th>
+                                        <td>{{ !empty($data_detail->tanggal_diterima) ? $data_detail->tanggal_diterima  : '-' }}</td>
+                                        <th><b>No. Resi Pengiriman :</b></th>
+                                        <td><code>{{ $data_detail->no_resi }}</code></td>
+                                    </tr>
+                                    @endif
+                                @else
+                                    <th><b>Status Pesanan : </b></th>
+                                    <td>Dibatalkan</td>
+                                @endif
+                            </table>
                         </div>
                         @if($data_detail->status_pesanan == 3)
-                            <div class="col-md-6">
+                            <div class="col-md-12 text-center">
                                 {{ Form::open(['route' => ['konfirmasi_pesanan', $item->id_pesanan], 'method' => 'PUT', 'class' => 'my-0']) }}
-                                    <input type="submit" class="btn btn-warning btn-xs py-1 float-right" name="simpan" value="Konfirmasi Pesanan">
-                                    <span class="help-block">Konfirmasi Penerimaan Pesanan : </span>
+                                    <input type="submit" class="btn btn-warning btn-xs py-1" name="simpan" value="Konfirmasi Pesanan">
                                 {{ Form::open() }}
                             </div>
                         @endif

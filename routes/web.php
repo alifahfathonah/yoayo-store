@@ -33,12 +33,15 @@ Route::get('get_data_counter', function() {
     $list = [
         'keranjang' => DB::table('tbl_keranjang')->where('id_pengguna', session('id_pengguna'))->count(),
         'pesanan'   => DB::table('tbl_pesanan')->where([['id_pengguna', '=', session('id_pengguna')], ['status_pesanan', '<=', 4]])->count(),
-        'pembayaran'=> $pembayaran->first()->foto_bukti != NULL && $pembayaran->first()->selesai != 1  ? $pembayaran->count() : '0',
+        'pembayaran'=> !empty($pembayaran->first()->foto_bukti) && $pembayaran->first()->selesai != 1  ? $pembayaran->count() : '0',
     ];
 
     return response()->json($list);
 
 })->name('data_counter');
+
+# METHOD POST
+Route::post('hubungi', 'Pengguna\EmailController@kontak')->name('hubungi_kami');
 
 
 /** Halaman Autentikasi Pengguna */
@@ -46,13 +49,24 @@ Route::get('get_data_counter', function() {
 # METHOD GET
 Route::get('masuk', 'Pengguna\Autentikasi\LoginController@index')->name('login');
 Route::get('daftar', 'Pengguna\Autentikasi\RegisterController@index')->name('register');
-Route::get('lupa-password', 'Pengguna\Autentikasi\ResetPasswordController@lupa_password')->name('lupa_password');
 Route::get('keluar', 'Pengguna\Autentikasi\LoginController@logout')->name('logout');
 
 # METHOD POST
 Route::post('masuk', 'Pengguna\Autentikasi\LoginController@login')->name('proses_login');
 Route::post('daftar', 'Pengguna\Autentikasi\RegisterController@register')->name('proses_regis');
 
+
+/** Halaman Lupa Password Pengguna */
+
+# METHOD GET
+Route::get('lupa-password', 'Pengguna\Autentikasi\ResetPasswordController@index')->name('lupa_password');
+Route::get('lupa-password/reset', 'Pengguna\Autentikasi\ResetPasswordController@reset_page')->name('reset_page');
+
+# METHOD POST
+Route::post('lupa-password/send', 'Pengguna\Autentikasi\ResetPasswordController@send_token')->name('send_token');
+
+# METHOD PUT
+Route::put('lupa-password/proses', 'Pengguna\Autentikasi\ResetPasswordController@reset_password')->name('proses_password');
 
 
 /** Halaman Akun Pengguna */
@@ -178,7 +192,7 @@ Route::post('checkout', 'Pengguna\Keranjang\CheckoutController@save_checkout')->
 # METHOD GET
 Route::get('pesanan', 'Pengguna\Pesanan\PesananController@index')->name('pesanan');
 Route::get('pesanan/detail_pesanan/{id_pesanan}', 'Pengguna\Pesanan\PesananController@detail_pesanan')->name('detail_pesanan');
-
+Route::get('pesanan/riwayat', 'Pengguna\Pesanan\PesananController@riwayat_pesanan')->name('riwayat_pesanan');
 
 # METHOD put
 Route::put('pesanan/dibatalkan/{id_pesanan}', 'Pengguna\Pesanan\PesananController@dibatalkan')->name('pesanan_dibatalkan');
@@ -194,11 +208,11 @@ Route::get('pembayaran/upload-bukti/{id_pesanan}', 'Pengguna\Pesanan\PembayaranC
 
 
 # METHOD POST
-Route::post('pembayaran/upload-bukti/{id_pesanan}/save', 'Pengguna\Pesanan\PembayaranController@save_bukti')->name('save_bukti');
+Route::put('pembayaran/upload-bukti/{id_pesanan}/save', 'Pengguna\Pesanan\PembayaranController@save_bukti')->name('save_bukti');
 
 
 /** Halaman Invoice*/
-use Illuminate\Support\Facades\DB;
+
 Route::get('invoice/{id_invoice}', 'Pengguna\Pesanan\PesananController@invoice')->name('invoice');
 
 
@@ -403,7 +417,16 @@ Route::group(['prefix' => 'admin'], function(){
 
     # METHOD PUT
     Route::put('transaksi/selesai/{id_pesanan}', 'Admin\Transaksi\PengirimanController@selesai');
+    Route::put('transaksi/dibatalkan/{id_pesanan}', 'Admin\Transaksi\PengirimanController@batalkan_pesanan');
 
+
+    /** Halaman Laporan : Transaksi */
+
+    # METHOD GET
+    Route::get('laporan/transaksi', 'Admin\Laporan\TransaksiController@index')->name('laporan_transaksi');
+
+    # METHOD POST
+    Route::post('laporan/transaksi/print', 'Admin\Laporan\TransaksiController@print_transaksi')->name('print_transaksi');
 
 });
 
@@ -415,7 +438,8 @@ Route::group(['prefix' => 'admin'], function(){
  */
 
  # METHOD GET
-Route::get('test', 'Test\TestingController@index');
+Route::get('test', 'Test\TestingController@index')->name('test');
+Route::get('page', 'Test\TestingController@page')->name('page_test');
 // Route::get('test', function(Request $request) {
 //     return view('test');
 // });

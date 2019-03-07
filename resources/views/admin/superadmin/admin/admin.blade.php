@@ -48,7 +48,7 @@
                 {{ session('success') }}
             </div>
         @endif
-        <div class="box box-solid box-success">
+        <div class="box box-success">
             <div class="box-header">
                 <h3 class="box-title">
                     Table Akun Admin

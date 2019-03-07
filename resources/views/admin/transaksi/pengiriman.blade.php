@@ -37,7 +37,7 @@
                 {{ session('success') }}
             </div>
         @endif
-        <div class="box box-solid box-danger">
+        <div class="box box-danger">
             <div class="box-header">
                 <h3 class="box-title">
                     Table Data Pesanan Terkirim
@@ -70,7 +70,12 @@
                                 <td>{{ $item->no_telepon  }}</td>
                                 <td>JNE ({{ $item->layanan }})</td>
                                 <td>{{ $item->no_resi }}</td>
-                                <td><span class="label bg-navy">Telah Di Kirim</span></td>
+                                <td>
+                                    <span class="label bg-navy">Telah Di Kirim</span>
+                                    <button type="button" class="btn btn-danger btn-xs batalkan" data-toggle="modal" data-target="#batal" id="{{ $counter }}" data-pesanan="{{ $item->id_pesanan }}">
+                                        <i class="fa fa-close fa-fw"></i> Batalkan
+                                    </button>
+                                </td>
                                 <td>{{ $item->tanggal_dikirim }}</td>
                             </tr>
                             @endif
@@ -84,7 +89,7 @@
 </div>
 <div class="row">
     <div class="col-md-12 col-sm-12">
-        <div class="box box-solid box-success">
+        <div class="box box-success">
             <div class="box-header">
                 <h3 class="box-title">
                     Table Data Pesanan Selesai
@@ -154,6 +159,26 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+<div class="modal modal-default fade" id="batal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Anda Yakin Ingin Dibatalkan ?</h4>
+                </div>
+                {!! Form::open(['method' => 'PUT', 'id' => 'form_pesanan_dibatalkan']) !!}
+                    <div class="modal-footer">
+                        <button type="button" class="btn pull-left" data-dismiss="modal">Batal</button>
+                        <button type="submit" name="simpan" value="true" class="btn btn-danger">Pesanan Dibatalkan</button>
+                    </div>
+                {!! Form::close() !!}
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 @endsection
 
 @section('extra_js')
@@ -173,6 +198,10 @@
                 'length': 10,
                 // 'searching': false
             })
+        })
+        $('button.batalkan').click(function() {
+            var url = 'http://'+window.location.host
+            $('form#form_pesanan_dibatalkan').attr('action', url+'/admin/transaksi/dibatalkan/'+$('button.batalkan').data('pesanan'))
         })
     </script>
 
