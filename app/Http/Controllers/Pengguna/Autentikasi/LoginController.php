@@ -57,10 +57,9 @@ class LoginController extends Controller
                 'id_pengguna',
                 'email_pengguna',
                 'nama_lengkap',
-                'kategori'
             ]);
 
-            return redirect()->route('login');
+            return redirect()->route('login')->with('success', 'Anda telah logout');
         }
 
         return redirect()->route('beranda');

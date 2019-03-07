@@ -17,6 +17,6 @@
     <li><a href="{{ route('pesanan_admin') }}"><i class="fa fa-shopping-cart"></i> <span>Pesanan <span class="label bg-red pull-right" id="jml_pesanan"></span></span></a></li>
     <li><a href="{{ route('pengiriman_admin') }}"><i class="fa fa-truck"></i> <span>Pengiriman <span class="label bg-red pull-right" id="jml_pengiriman"></span></span></a></li>
     <li class="header">LAPORAN</li>
-    <li><a href="#"><i class="fa fa-file-text-o"></i> <span>Transaksi</span></a></li>
+    <li><a href="{{ route('laporan_transaksi') }}"><i class="fa fa-file-text-o"></i> <span>Transaksi</span></a></li>
 </ul>
 <!-- /.sidebar-menu -->

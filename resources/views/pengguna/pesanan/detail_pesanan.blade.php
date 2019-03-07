@@ -1,35 +1,25 @@
+@extends('pengguna.master')
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Invoice #INV1810281</title>
-    @include('pengguna.elemen.static_css')
-    <style type="text/css">
-    .site-navbar .site-logo span{
-        text-transform: uppercase;
-        color: #25262a;
-        letter-spacing: .2em;
-        font-size: 20px;
-        padding-left: 10px;
-        padding-right: 10px;
-        border: 2px solid #25262a;
-    }
-    </style>
-</head>
-<body onload="print()">
-<header class="site-navbar mt-lg-5" role="banner">
+
+@section('title', 'Pesanan')
+
+@section('breadcrumb')
+<div class="bg-light py-3" data-aos="fade-up" data-aos-delay="100">
     <div class="container">
-        <div class="text-center">
-            <div class="site-logo">
-                <span>YoayoStore</span>
+        <div class="row">
+            <div class="col-md-12 mb-0">
+                <a href="{{ route('beranda') }}">Beranda</a>
+                <span class="mx-2 mb-0">/</span>
+                <a href="{{ route('pesanan') }}">Pesanan</a>
+                <span class="mx-2 mb-0">/</span>
+                <strong class="text-black">Detail</strong>
             </div>
         </div>
-        <hr class="mb-0" style="background-color: #00000082;">
     </div>
-</header>
+</div>
+@endsection
+
+@section('content')
 <div class="site-section pt-5">
     <div class="container">
         <div class="row mb-5">
@@ -51,16 +41,16 @@
                                 <div class="col-md-4">
                                     <b class="text-black">Informasi Penerima</b><hr>
                                     <i>To,</i>
-                                    <b>{{ $data_invoice->nama_penerima }}</b><br>
-                                    {{ explode('|', $data_invoice->alamat_tujuan)[0] }}<br>
-                                    No. Telepon: {{ $data_invoice->no_telepon }}<br>
-                                    Pengiriman : {{ explode('|', $data_invoice->alamat_tujuan)[1] }}
+                                    <b>{{ $data_detail->nama_penerima }}</b><br>
+                                    {{ explode('|', $data_detail->alamat_tujuan)[0] }}<br>
+                                    No. Telepon: {{ $data_detail->no_telepon }}<br>
+                                    Pengiriman : {{ explode('|', $data_detail->alamat_tujuan)[1] }}
                                 </div>
                                 <div class="col-md-4">
                                     <b class="text-black">Informasi Pembayaran</b><hr>
-                                    <b>ID Pesanan:</b><br>{{ $data_invoice->id_pesanan }}<br>
-                                    <b>No. Rekening:</b><br> {{ $data_invoice->bank.' '.$data_invoice->no_rekening.' a/n '.$data_invoice->atas_nama }}<br>
-                                    <b>Tanggal Upload:</b><br> {{ $data_invoice->tanggal_upload }}
+                                    <b>ID Pesanan:</b><br>{{ $data_detail->id_pesanan }}<br>
+                                    <b>No. Rekening:</b><br> {{ $data_detail->bank.' '.$data_detail->no_rekening.' a/n '.$data_detail->atas_nama }}<br>
+                                    <b>Tanggal Upload:</b><br> {{ $data_detail->tanggal_upload }}
                                 </div>
                             </div>
                         </div>
@@ -114,7 +104,7 @@
                                 <tr>
                                     <td>Ongkir</td>
                                     <td>:</td>
-                                    <td>{{ $data_invoice->ongkos_kirim }}</td>
+                                    <td>{{ $data_detail->ongkos_kirim }}</td>
                                 </tr>
                                 <tr>
                                     <td>Total Biaya</td>
@@ -127,10 +117,48 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card text-black">
+                    <div class="card-body row">
+                        <div class="col-md-12">
+                            <?php $status = ['Belum Di Proses', 'Telah Di Verifikasi', 'Sedang Di Proses',
+                                'Telah Di Kirim', 'Telah Di Terima', 'Selesai'] ?>
+                            <table class="table">
+                                <tr>
+                                @if($data_detail->dibatalkan == 0)
+                                        <th><b>Status Pesanan : </b></th>
+                                        <td>{{ $status[$data_detail->status_pesanan] }}</td>
+                                    @if($data_detail->status_pesanan >= 3)
+                                        <th><b>Di Kirim Pada : </b></th>
+                                        <td>{{ $data_detail->tanggal_dikirim }}</td>
+                                    @endif
+                                    </tr>
+                                    @if($data_detail->status_pesanan >= 3)
+                                    <tr>
+                                        <th><b>Di Terima Pada : </b></th>
+                                        <td>{{ !empty($data_detail->tanggal_diterima) ? $data_detail->tanggal_diterima  : '-' }}</td>
+                                        <th><b>No. Resi Pengiriman :</b></th>
+                                        <td><code>{{ $data_detail->no_resi }}</code></td>
+                                    </tr>
+                                    @endif
+                                @else
+                                    <th><b>Status Pesanan : </b></th>
+                                    <td>Dibatalkan</td>
+                                @endif
+                            </table>
+                        </div>
+                        @if($data_detail->status_pesanan == 3)
+                            <div class="col-md-12 text-center">
+                                {{ Form::open(['route' => ['konfirmasi_pesanan', $item->id_pesanan], 'method' => 'PUT', 'class' => 'my-0']) }}
+                                    <input type="submit" class="btn btn-warning btn-xs py-1" name="simpan" value="Konfirmasi Pesanan">
+                                {{ Form::open() }}
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-@include('pengguna.elemen.static_js')
-</body>
-</html>
-
-{{-- @endsection --}}
+@endsection

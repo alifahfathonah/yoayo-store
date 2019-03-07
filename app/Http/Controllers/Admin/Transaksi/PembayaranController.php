@@ -6,6 +6,7 @@ use Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Transaksi\InvoiceController;
 
 class PembayaranController extends Controller
 {
@@ -40,11 +41,25 @@ class PembayaranController extends Controller
 
         if($request->has('simpan') == true) {
 
-            $update_pesanan = DB::table('tbl_pesanan')->where('id_pesanan', $id_pesanan);
-            $data = $update_pesanan->update(['status_pesanan' => $update_pesanan->first()->status_pesanan == 0 ? 1 : 0]);
+            $pesanan = DB::table('tbl_pesanan')->where('id_pesanan', $id_pesanan);
+            $pembayaran = DB::table('tbl_pembayaran')->where('id_pesanan', $id_pesanan);
 
-            $update_pembayaran = DB::table('tbl_pembayaran')->where('id_pesanan', $id_pesanan);
-            $update_pembayaran->update(['status_pembayaran' => $update_pembayaran->first()->status_pembayaran == 0 ? 1 : 0]);
+            $invoice = new InvoiceController();
+
+            if ($pembayaran->first()->status_pembayaran == 0) {
+
+                $invoice->save_invoice($id_pesanan, $pesanan->first()->id_pengguna);
+
+            } else {
+
+                $inv = DB::table('tbl_invoice')->where('id_pesanan', $id_pesanan)->first();
+
+                $invoice->delete_invoice($inv->id_invoice);
+
+            }
+
+            $data = $pesanan->update(['status_pesanan' => $pesanan->first()->status_pesanan == 0 ? 1 : 0]);
+            $pembayaran->update(['status_pembayaran' => $pembayaran->first()->status_pembayaran == 0 ? 1 : 0]);
 
             return redirect()->route('pembayaran_admin')->with('success', 'Pembayaran Dengan ID '.$id_pesanan.' Berhasil Di Update');
 

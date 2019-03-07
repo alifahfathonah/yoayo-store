@@ -37,7 +37,7 @@
                 {{ session('success') }}
             </div>
         @endif
-        <div class="box box-solid box-danger">
+        <div class="box box-danger">
             <div class="box-header">
                 <h3 class="box-title">
                     Table Pembayaran Yang Belum Di Verifikasi
@@ -58,24 +58,51 @@
                     <tbody>
                         <?php $counter = 1; ?>
                         @foreach ($data_pembayaran as $item)
-                            @if($item->status_pembayaran == 0)
-                            <tr>
-                                <td id="id_{{ $counter }}">{{ $item->id_pesanan }}</td>
-                                <td>
-                                    <button type="button" class="btn btn-warning btn-xs lihat_foto" data-toggle="modal" data-target="#lihat_foto" id="{{ $counter }}">
-                                        <i class="fa fa-search fa-fw"></i> Lihat Foto Bukti
-                                    </button>
-                                </td>
-                                <td><span class="label bg-gray">Belum Di Verifikasi</span></td>
-                                <td>{{ $item->tanggal_upload  }}</td>
-                                <td>{{ $item->batas_pembayaran }}</td>
-                                <td>
-                                    <button type="button" class="btn btn-primary btn-xs proses_pembayaran" data-toggle="modal" data-target="#proses_pembayaran" id="{{ $counter }}">
-                                        <i class="fa fa-refresh fa-fw"></i> Proses Pembayaran
-                                    </button>
-                                </td>
-                            </tr>
+                        @if($item->status_pembayaran == 0)
+                            <?php $carbon = new Carbon\Carbon(); ?>
+                            <?php $limit_check = $carbon::parse(explode(' ', $carbon::now())[0])->greaterThanOrEqualTo($carbon::parse($item->batas_pembayaran)) ?>
+                            @if($limit_check && empty($item->foto_bukti))
+                                <tr>
+                                    <td id="id_{{ $counter }}">{{ $item->id_pesanan }}</td>
+                                    <td><code>Expired</code></td>
+                                    <td><code>Expired</code></td>
+                                    <td><code>Expired</code></td>
+                                    <td><code>Expired</code></td>
+                                    <td><code>Expired</code></td>
+                                </tr>
+                            @else
+                                <tr>
+                                    <td id="id_{{ $counter }}">{{ $item->id_pesanan }}</td>
+                                    <td>
+                                        @if(!empty($item->foto_bukti))
+                                            <button type="button" class="btn btn-warning btn-xs lihat_foto" data-toggle="modal" data-target="#lihat_foto" id="{{ $counter }}">
+                                                <i class="fa fa-search fa-fw"></i> Lihat Foto Bukti
+                                            </button>
+                                        @else
+                                            <span class="label label-warning">Belum Di Upload</span>
+                                        @endif
+                                    </td>
+                                    <td><span class="label bg-gray">Belum Di Verifikasi</span></td>
+                                    <td>
+                                        @if(!empty($item->tanggal_upload))
+                                            {{ $item->tanggal_upload  }}
+                                        @else
+                                            <span class="label label-warning">Belum Di Upload</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $item->batas_pembayaran }}</td>
+                                    <td>
+                                        @if(!empty($item->foto_bukti))
+                                            <button type="button" class="btn btn-primary btn-xs proses_pembayaran" data-toggle="modal" data-target="#proses_pembayaran" id="{{ $counter }}">
+                                                <i class="fa fa-refresh fa-fw"></i> Proses Pembayaran
+                                            </button>
+                                        @else
+                                            <span class="label label-warning">Belum Dapat Diproses</span>
+                                        @endif
+                                    </td>
+                                </tr>
                             @endif
+                        @endif
                         <?php $counter++; ?>
                         @endforeach
                     </tbody>
@@ -86,7 +113,7 @@
 </div>
 <div class="row">
     <div class="col-md-12 col-sm-12">
-        <div class="box box-solid box-success">
+        <div class="box box-success">
             <div class="box-header">
                 <h3 class="box-title">
                     Table Pembayaran Yang Sudah Di Verifikasi
@@ -109,7 +136,8 @@
                         @foreach ($data_pembayaran as $item)
                             @if($item->status_pembayaran == 1)
                             <tr>
-                                <td id="id_{{ $counter }}">{{ $item->id_pesanan }}</td>
+                                <td id="id_{{ $counter }}">{{ $item->id_pesanan }}</a>
+                                </td>
                                 <td>
                                     <button type="button" class="btn btn-warning btn-xs lihat_foto" data-toggle="modal" data-target="#lihat_foto" id="{{ $counter }}">
                                         <i class="fa fa-search fa-fw"></i> Lihat Foto Bukti
@@ -211,12 +239,10 @@
             $('#table_pembayaran1').DataTable({
                 'lengthChange': false,
                 'length': 10,
-                // 'searching': false
             })
             $('#table_pembayaran2').DataTable({
                 'lengthChange': false,
                 'length': 10,
-                // 'searching': false
             })
         })
     </script>

@@ -37,7 +37,7 @@
                 {{ session('success') }}
             </div>
         @endif
-        <div class="box box-solid box-success">
+        <div class="box box-success">
             <div class="box-header">
                 <h3 class="box-title">
                     Table Pesanan Yang Sedang Di Proses
@@ -75,39 +75,52 @@
                                 </td>
                                 <td>
                                     @if($item->dibatalkan == 0)
-                                        @if($item->status_pesanan == 1)
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
-                                                    Action <span class="caret"></span>
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li>
-                                                        <a href="{{ route('detail_pesanan_admin', [$item->id_pesanan]) }}"><i class="fa fa-user fa-fw"></i> Detail pesanan</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" class="proses_pesanan" data-toggle="modal" data-target="#proses_pesanan" id="{{ $counter1 }}">
-                                                            <i class="fa fa-refresh fa-fw"></i> Proses Pesanan
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" class="edit_pesanan" data-toggle="modal" data-target="#edit_pesanan" id="{{ $counter1 }}">
-                                                            <i class="fa fa-trash fa-fw"></i> Rubah Data Penerima
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" class="batalkan_pesanan" data-toggle="modal" data-target="#batalkan_pesanan" id="{{ $counter1 }}">
-                                                            <i class="fa fa-ban fa-fw"></i> Batalkan pesanan
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" class="hapus_pesanan" data-toggle="modal" data-target="#hapus_pesanan" id="{{ $counter1 }}">
-                                                            <i class="fa fa-trash fa-fw"></i> Hapus pesanan
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                        <?php $carbon = new Carbon\Carbon(); ?>
+                                        <?php //$limit_check = $carbon::parse(explode(' ', $carbon::now())[0])->greaterThanOrEqualTo($carbon::parse($item->batas_pembayaran)) ?>
+                                        {{-- @if($limit_check && !is_null($item->foto_bukti)) --}}
+                                        @if($carbon::parse(explode(' ', $carbon::now())[0])->lessThanOrEqualTo($carbon::parse($item->batas_pembayaran)))
+                                            @if($item->status_pesanan == 1)
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
+                                                        Action <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a href="{{ route('detail_pesanan_admin', [$item->id_pesanan]) }}"><i class="fa fa-user fa-fw"></i> Detail pesanan</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#" class="proses_pesanan" data-toggle="modal" data-target="#proses_pesanan" id="{{ $counter1 }}">
+                                                                <i class="fa fa-refresh fa-fw"></i> Proses Pesanan
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#" class="edit_pesanan" data-toggle="modal" data-target="#edit_pesanan" id="{{ $counter1 }}">
+                                                                <i class="fa fa-trash fa-fw"></i> Rubah Data Penerima
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#" class="batalkan_pesanan" data-toggle="modal" data-target="#batalkan_pesanan" id="{{ $counter1 }}">
+                                                                <i class="fa fa-ban fa-fw"></i> Batalkan pesanan
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#" class="hapus_pesanan" data-toggle="modal" data-target="#hapus_pesanan" id="{{ $counter1 }}">
+                                                                <i class="fa fa-trash fa-fw"></i> Hapus pesanan
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            @else
+                                                <span class="label bg-yellow">Menunggu Pembayaran</span>
+                                                    <a href="#" class="batalkan_pesanan" data-toggle="modal" data-target="#batalkan_pesanan" id="{{ $counter1 }}">
+                                                        <span class="label label-danger"><i class="fa fa-ban fa-fw"></i> Batalkan</span>
+                                                    </a>
+                                            @endif
                                         @else
-                                            <span class="label bg-red">Menunggu Pembayaran</span>
+                                            <span class="label bg-red">Expired</span>
+                                            <a href="#" class="label bg-red hapus_pesanan" data-toggle="modal" data-target="#hapus_pesanan" id="{{ $counter1 }}">
+                                                <i class="fa fa-trash fa-fw"></i> Hapus
+                                            </a>
                                         @endif
                                     @else
                                         <div class="btn-group">
@@ -142,7 +155,7 @@
         </div>
     </div>
     <div class="col-md-12 col-sm-12">
-        <div class="box box-solid box-primary">
+        <div class="box box-primary">
             <div class="box-header">
                 <h3 class="box-title">
                     Table Pesanan Yang Siap Di Kirim
@@ -252,7 +265,7 @@
                     </div>
                     <div class="form-group">
                         {{ Form::label('inp_alamat_tujuan', 'Alamat Tujuan') }}
-                        {{ Form::textarea('alamat_tujuan', null, ['id' => 'inp_alamat_tujuan', 'class' => 'form-control']) }}
+                        {{ Form::textarea('alamat_tujuan', null, ['id' => 'inp_alamat_tujuan', 'class' => 'form-control', 'rows' => 5]) }}
                     </div>
                     <div class="form-group">
                         {{ Form::label('inp_no_telepon', 'No. Telepon') }}

@@ -81,6 +81,6 @@ class LoginController extends Controller
             'superadmin'
         ]);
 
-        return redirect()->route('login_admin');
+        return redirect()->route('login_admin')->with('success', 'Anda telah logout');
     }
 }

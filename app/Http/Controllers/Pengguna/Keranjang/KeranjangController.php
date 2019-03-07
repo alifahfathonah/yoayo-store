@@ -56,6 +56,10 @@ class KeranjangController extends Controller
                     'id_barang' => $id_barang
                 ])->first();
 
+                if($barang->stok_barang < $request->input('jumlah_beli')){
+                    return back()->withErrors('Jumlah beli melebihi stok!!');
+                }
+
                 $subtotal = $barang->harga_satuan * $request->input('jumlah_beli');
 
                 $data->update([

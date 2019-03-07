@@ -266,7 +266,9 @@ $('a.edit_pesanan').click(function() {
     $('form#form_edit_pesanan').attr('action','http://'+url.host+'/admin/transaksi/edit_pesanan/'+$('td#id_'+this.id).html())
     $.get('http://'+url.host+'/admin/transaksi/get_penerima/'+$('td#id_'+this.id).html())
     .done(function(data){
-        console.log(data)
+        $('input#inp_nama_penerima').val(data.nama_penerima)
+        $('textarea#inp_alamat_tujuan').val(data.alamat_tujuan)
+        $('input#inp_no_telepon').val(data.no_telepon)
     })
 })
 

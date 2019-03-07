@@ -38,6 +38,15 @@
                                 </button>
                             </div>
 
+                        @elseif(session()->has('success'))
+
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <strong><i class="icon-check"></i> SUCCESS!!</strong> {{ session('success') }}<br>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
                         @endif
                         <div class="form-group">
                             {{ Form::label('inp_email', 'Email', ['class' => 'text-black']) }}
@@ -52,7 +61,7 @@
                                 <button type="submit" name="simpan" value="true" class="btn btn-primary btn-lg btn-block">Masuk</button>
                             </div>
                             <div class="col-lg-12 mt-2">
-                                <p class="my-0 mx-0">Lupa Password ? <a href="#">Klik Di Sini</a></p>
+                                <p class="my-0 mx-0">Lupa Password ? <a href="{{ route('lupa_password') }}">Klik Di Sini</a></p>
                             </div>
                         </div>
                     </div>

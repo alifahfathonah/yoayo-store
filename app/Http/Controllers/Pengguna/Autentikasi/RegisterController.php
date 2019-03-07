@@ -23,7 +23,7 @@ class RegisterController extends Controller
         if($request->input('simpan')) {
 
             $validasi = Validator::make($request->all(), [
-                'nama_lengkap'          => 'required|string|max:30',
+                'nama_lengkap'          => 'required|regex:/^[a-zA-Z\s]*$/|max:30',
                 'jenis_kelamin'         => 'required|alpha',
                 'email'                 => 'required|email|unique:tbl_pengguna|max:30',
                 'password'              => 'required|alpha_num|max:18|confirmed',

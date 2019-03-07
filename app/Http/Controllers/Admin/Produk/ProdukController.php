@@ -15,11 +15,49 @@ class ProdukController extends Controller
 
         if($request->session()->exists('email_admin')) {
 
-            $data = DB::table('tbl_barang')
+            if(!empty($request->input('merk')) && !empty($request->input('kategori'))) {
+
+                $id_kategori = DB::table('tbl_kategori')->where('nama_kategori', ucfirst($request->input('kategori')))->first();
+                $id_merk = DB::table('tbl_merk')->where('nama_merk', ucfirst($request->input('merk')))->first();
+
+                $data = DB::table('tbl_barang')
+                    ->join('tbl_kategori', 'tbl_kategori.id_kategori', 'tbl_barang.id_kategori')
+                    ->join('tbl_merk', 'tbl_merk.id_merk', 'tbl_barang.id_merk')
+                    ->select('tbl_barang.*', 'tbl_kategori.*', 'tbl_merk.*')
+                    ->where([
+                        ['tbl_merk.id_merk', $id_merk->id_merk],
+                        ['tbl_kategori.id_kategori', $id_kategori->id_kategori]
+                    ])->get();
+
+            } else if (!empty($request->input('kategori'))) {
+
+                $id_kategori = DB::table('tbl_kategori')->where('nama_kategori', ucfirst($request->input('kategori')))->first();
+
+                $data = DB::table('tbl_barang')
+                    ->join('tbl_kategori', 'tbl_kategori.id_kategori', 'tbl_barang.id_kategori')
+                    ->join('tbl_merk', 'tbl_merk.id_merk', 'tbl_barang.id_merk')
+                    ->select('tbl_barang.*', 'tbl_kategori.*', 'tbl_merk.*')
+                    ->where('tbl_kategori.id_kategori', $id_kategori->id_kategori)->get();
+
+            } else if(!empty($request->input('merk'))) {
+
+                $id_merk = DB::table('tbl_merk')->where('nama_merk', ucfirst($request->input('merk')))->first();
+
+                $data = DB::table('tbl_barang')
+                    ->join('tbl_kategori', 'tbl_kategori.id_kategori', 'tbl_barang.id_kategori')
+                    ->join('tbl_merk', 'tbl_merk.id_merk', 'tbl_barang.id_merk')
+                    ->select('tbl_barang.*', 'tbl_kategori.nama_kategori', 'tbl_merk.*')
+                    ->where('tbl_merk.id_merk', $id_merk->id_merk)->get();
+
+            } else {
+
+                $data = DB::table('tbl_barang')
                     ->join('tbl_kategori', 'tbl_kategori.id_kategori', 'tbl_barang.id_kategori')
                     ->join('tbl_merk', 'tbl_merk.id_merk', 'tbl_barang.id_merk')
                     ->select('tbl_barang.*', 'tbl_kategori.nama_kategori', 'tbl_merk.nama_merk')
                     ->get();
+            }
+
 
             $merk = DB::table('tbl_merk')->get();
             $kategori = DB::table('tbl_kategori')->get();

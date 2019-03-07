@@ -64,19 +64,42 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <?php $index = 1; ?>
+                        @forelse ($data_pembayaran as $item)
                         <tr>
-                            <td>#1</td>
-                            <td>#PSN1810281</td>
-                            <td>BRI</td>
-                            <td>Lukman Hakim</td>
-                            <td>12345678910</td>
-                            <td>Rp. 340.000</td>
+                            <td @if(empty($item->foto_bukti)) rowspan="2" @endif>#{{ $index }}</td>
+                            <td>#{{ $item->id_pesanan }}</td>
+                            <td>{{ $item->bank }}</td>
+                            <td>{{ $item->atas_nama }}</td>
+                            <td>{{ $item->no_rekening }}</td>
+                            <td>{{ Rupiah::create($item->total_bayar) }}</td>
                             <td>
+                                @if($item->status_pembayaran == 0)
                                 <span class="badge badge-secondary">
                                     <i class="fa fa-close fa-fw"></i> Belum Di Veifikasi
                                 </span>
+                                @else
+                                <span class="badge badge-success">
+                                    <i class="fa fa-close fa-fw"></i> Telah Di Veifikasi
+                                </span>
+                                @endif
                             </td>
                         </tr>
+                        @if(empty($item->foto_bukti))
+                        <tr style="background-color: rgba(108, 117, 125, 0.16)!important;">
+                            <td class="py-2 text-left" colspan="7">
+                                <b>Batas Waktu Pembayaran : </b><code>{{ $item->batas_pembayaran }}</code>
+                            </td>
+                        </tr>
+                        @endif
+                        <?php $index++; ?>
+                        @empty
+                        <tr>
+                            <td class="py-2 text-center" colspan="8">
+                                Belum Ada Pembayaran Yang Masuk...
+                            </td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

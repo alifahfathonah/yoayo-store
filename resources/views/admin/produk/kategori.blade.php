@@ -39,7 +39,7 @@
                 {{ session('success') }}
             </div>
         @endif
-        <div class="box box-solid box-primary">
+        <div class="box box-primary">
             <div class="box-header">
                 <h3 class="box-title">
                     Form Input Kategori Produk
@@ -66,7 +66,7 @@
         </div>
     </div>
     <div class="col-md-6 col-sm-12">
-        <div class="box box-solid box-success">
+        <div class="box box-success">
             <div class="box-header">
                 <h3 class="box-title">
                     Table Kategori

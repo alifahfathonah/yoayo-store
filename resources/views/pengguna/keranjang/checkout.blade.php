@@ -21,17 +21,45 @@
 @section('content')
 <div class="site-section">
     <div class="container">
-        <div class="row">
+        <div class="col-md-12">
+            @if ($errors->any())
+
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong><i class="icon-ban"></i> ERROR!!</strong><br>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+            @elseif(session()->has('success'))
+
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><i class="fa fa-ban fa-fw"></i> SUCCESS!!</strong> {{ session('success') }} <br>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+            @endif
+        </div>
+        {{ Form::open(['route' => 'save_checkout', 'class' => 'row']) }}
+            <div class="col-md-12 mb-4"><a href="{{ route('keranjang') }}" class="btn btn-outline-info">Kembali</a></div>
             <div class="col-md-6 mb-5 mb-md-0">
-                <h2 class="h3 mb-3 text-black">Billing Details</h2>
+                <h2 class="h3 mb-3 text-black">Detail Pengiriman</h2>
                 <div class="p-3 p-lg-5 border">
 
                     <div class="form-group row">
                         <div class="col-md-12">
-                            <label for="inp_nama_lengkap" class="text-black">Nama Lengkap <span class="text-danger">*</span></label>
-                            {{ Form::text('nama_lengkap', !empty($default) ?  $default->nama_lengkap : null, [
+                            <h5 class="text-black">Informasi Penerima</h5>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="inp_nama_penerima" class="text-black">Nama Lengkap <span class="text-danger">*</span></label>
+                            {{ Form::text('nama_penerima', !empty($default) ?  $default->nama_lengkap : null, [
                                 'class'         => 'form-control',
-                                'id'            => 'inp_nama_lengkap',
+                                'id'            => 'inp_nama_penerima',
                                 'placeholder'   => 'Nama Penerima'
                             ]) }}
                         </div>
@@ -50,10 +78,10 @@
 
                     <div class="form-group row">
                         <div class="col-md-12">
-                            <label for="inp_alamat_rumah" class="text-black">Alamat <span class="text-danger">*</span></label>
-                            {{ Form::textarea('alamat_rumah', !empty($default) ?  $default->alamat_rumah : null, [
+                            <label for="inp_alamat_tujuan" class="text-black">Alamat <span class="text-danger">*</span></label>
+                            {{ Form::textarea('alamat_tujuan', !empty($default) ?  $default->alamat_rumah : null, [
                                 'class'         => 'form-control',
-                                'id'            => 'inp_alamat_rumah',
+                                'id'            => 'inp_alamat_tujuan',
                                 'rows'          => '5',
                                 'placeholder'   => 'Tulis Alamat Tujuan'
                             ]) }}
@@ -63,7 +91,7 @@
 
                     <div class="form-group row">
                         <div class="col-md-12">
-                            <h5 class="text-black">Pilih Tujuan</h5>
+                            <h5 class="text-black">Pilih Tujuan Pengiriman</h5>
                         </div>
                         <div class="col-md-6">
                             <label for="inp_provinsi" class="text-black">Provinsi</label>
@@ -79,6 +107,8 @@
                         <div class="col-md-12">
                             <label for="inp_layanan" class="text-black">Service</label>
                             <select class="form-control" name="layanan" id="inp_layanan"></select>
+                            <input type="hidden" name="service">
+                            <input type="hidden" name="destinasi">
                         </div>
                     </div>
 
@@ -88,7 +118,7 @@
                         </div>
                         <div class="col-md-4">
                             <label for="inp_bank" class="text-black">Nama Bank</label>
-                            <select class="form-control" name="bank">
+                            <select class="form-control" name="bank" id="bank">
                                 <option value>Pilih Bank...</option>
                                 <option value="Mandiri">Mandiri</option>
                                 <option value="BCA">BCA</option>
@@ -117,7 +147,7 @@
             <div class="col-md-6">
                 <div class="row mb-5">
                     <div class="col-md-12">
-                        <h2 class="h3 mb-3 text-black">Your Order</h2>
+                        <h2 class="h3 mb-3 text-black">Detail Tagihan</h2>
                         <div class="p-3 p-lg-5 border">
                             <table class="table site-block-order-table mb-5">
                                 <thead>
@@ -125,16 +155,17 @@
                                     <th>Total</th>
                                 </thead>
                                 <tbody id="detail_pesanan">
-                                    <?php $biaya = 0; $berat = 0; ?>
+                                    <?php $biaya = 0; $berat = 0; $total_berat = 0;?>
                                     @foreach ($data_checkout as $item)
+                                    <?php $total_berat = $item->berat_barang * $item->jumlah_beli; ?>
                                         <tr>
                                             <td>
                                                 {{ $item->nama_barang }} <strong class="mx-2">x</strong> {{ $item->jumlah_beli }}<br>
-                                                <small>Berat Barang : {{ $item->berat_barang.'gram' }}</small>
+                                                <small>Berat : {!! $item->berat_barang.'gram - <strong>Total Berat : '.$total_berat.'gram</strong>' !!}</small>
                                             </td>
                                             <td>{{ Rupiah::create($item->subtotal_biaya) }}</td>
                                         </tr>
-                                        <?php $biaya += $item->subtotal_biaya; $berat += $item->berat_barang; ?>
+                                        <?php $biaya += $item->subtotal_biaya; $berat += $total_berat; ?>
                                     @endforeach
                                 </tbody>
                                 <tfoot>
@@ -171,7 +202,7 @@
                             </div>
 
                             <div class="form-group">
-                                <button type="button" class="btn btn-primary btn-lg py-3 btn-block" disabled>Proses Pesanan</button>
+                                <button type="submit" id="simpan" name="simpan" value="true" class="btn btn-primary btn-lg py-3 btn-block">Proses Pesanan</button>
                             </div>
 
                         </div>
@@ -179,7 +210,7 @@
                 </div>
 
             </div>
-        </div>
+        {{ Form::close() }}
         <!-- </form> -->
      </div>
 </div>
@@ -201,54 +232,55 @@
                 alert('Terjadi Kesalahan Saat Menghubungi Server')
             }
         })
-    })
-    $('#inp_provinsi').click(() => {
-        var url = 'http://'+window.location.host
-        var results = $('#inp_provinsi').find(':selected').val()
-        $.get(url+'/get_kota?provinsi', {'provinsi': results}).done(function(result){
-            if($.parseJSON(result)['rajaongkir']['status']['code'] == 200) {
-                var data = $.parseJSON(result)['rajaongkir']['results']
-                var elemen = '<option value>Pilih Kota...</option>'
-                $('#inp_kota').html(' ')
-                for(var value of data){
-                    if(value['type'] == "Kota") {
-                        elemen += '<option value="'+value['city_id']+'">Kota. '+value['city_name']+'</option>'
-                    } else {
-                        elemen += '<option value="'+value['city_id']+'">Kab. '+value['city_name']+'</option>'
+        $('#inp_provinsi').click(() => {
+            var results = $('#inp_provinsi').find(':selected').val()
+            $.get(url+'/get_kota?provinsi', {'provinsi': results}).done(function(result){
+                if($.parseJSON(result)['rajaongkir']['status']['code'] == 200) {
+                    var data = $.parseJSON(result)['rajaongkir']['results']
+                    var elemen = '<option value>Pilih Kota...</option>'
+                    $('#inp_kota').html(' ')
+                    for(var value of data){
+                        if(value['type'] == "Kota") {
+                            elemen += '<option value="'+value['city_id']+'">Kota. '+value['city_name']+'</option>'
+                        } else {
+                            elemen += '<option value="'+value['city_id']+'">Kab. '+value['city_name']+'</option>'
+                        }
                     }
+                    $('select#inp_kota').append(elemen)
+                } else {
+                    alert('Terjadi Kesalahan Saat Menghubungi Server')
                 }
-                $('select#inp_kota').append(elemen)
-            } else {
-                alert('Terjadi Kesalahan Saat Menghubungi Server')
-            }
+            })
         })
-    })
-    $('#inp_kota').click(() => {
-        var url = 'http://'+window.location.host
-        var kota = $('#inp_kota').find(':selected').val()
-        var berat = {{ $berat }}
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-        $.post(url+'/get_cost', {'kota': kota, 'berat': berat}).done(function(result){
-            if($.parseJSON(result)['rajaongkir']['status']['code'] == 200) {
-                var data = $.parseJSON(result)['rajaongkir']['results'][0]['costs']
-                var elemen = '<option value>Pilih Service...</option>'
-                $('#inp_layanan').html(' ')
-                for(var value of data){
-                    console.log(value)
-                    elemen += '<option value="'+value['cost'][0]['value']+'">'+value['service']+' '+value['cost'][0]['etd']+' hari Rp. '+value['cost'][0]['value']+'</option>'
+        $('#inp_kota').click(() => {
+            var kota = $('#inp_kota').find(':selected').val()
+            var berat = {{ $berat }}
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 }
-                $('select#inp_layanan').append(elemen)
-            } else {
-                alert('Terjadi Kesalahan Saat Menghubungi Server')
-            }
+            });
+            $.post(url+'/get_cost', {'kota': kota, 'berat': berat}).done(function(result){
+                if($.parseJSON(result)['rajaongkir']['status']['code'] == 200) {
+                    var data = $.parseJSON(result)['rajaongkir']['results'][0]['costs']
+                    var elemen = '<option value>Pilih Service...</option>'
+                    $('#inp_layanan').html(' ')
+                    for(var value of data){
+                        elemen += '<option data-layanan="'+value['service']+'" value="'+value['cost'][0]['value']+'">'+value['service']+' '+value['cost'][0]['etd']+' hari Rp. '+value['cost'][0]['value']+'</option>'
+                    }
+                    $('select#inp_layanan').append(elemen)
+                } else {
+                    alert('Terjadi Kesalahan Saat Menghubungi Server')
+                }
+            })
         })
-    })
-    $('#inp_layanan').click(() => {
-        $('th#ongkir').html('Rp. '+$('#inp_layanan').find(':selected').val())
+        $('#inp_layanan').click(() => {
+            $('th#ongkir').html('Rp. '+$('#inp_layanan').find(':selected').val())
+            $('input[name="service"]').val($('#inp_layanan').find(':selected').attr('data-layanan'))
+            $('input[name="destinasi"]').val(
+                $('#inp_kota').find(':selected').html()+", "+$('#inp_provinsi').find(':selected').html()
+            )
+        })
     })
 </script>
 @endsection
